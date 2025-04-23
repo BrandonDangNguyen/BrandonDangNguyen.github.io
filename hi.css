@@ -1,0 +1,94 @@
+/* Global Styles */
+body {
+  background-color: #000;
+  color: #fff;
+  font-family: "Times New Roman", Times, serif;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Container */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* Links */
+a {
+  color: #fff;
+  text-decoration: underline;
+}
+a:hover {
+  opacity: 0.8;
+}
+
+/* Header & Footer */
+header,
+footer {
+  background-color: #000;
+  color: #fff;
+  padding: 1rem 0;
+}
+
+/* Navigation */
+.nav-list {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  padding: 0;
+  margin: 0;
+}
+
+/* Intro */
+.intro h2,
+.intro p {
+  color: #fff;
+}
+
+/* Posts */
+.posts article {
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #fff;
+  padding-bottom: 1rem;
+}
+.posts h2 a {
+  color: #fff;
+}
+.posts time {
+  color: #ccc;
+  font-size: 0.9rem;
+}
+
+/* Sidebar */
+.sidebar {
+  margin-top: 2rem;
+  background-color: #000;
+  padding: 1rem;
+  border-radius: 8px;
+}
+.widget h3 {
+  color: #fff;
+  margin-top: 0;
+}
+.widget p {
+  color: #ddd;
+}
+
+/* Footer Text */
+footer p {
+  text-align: center;
+  margin: 0.5rem 0;
+  color: #aaa;
+}
+
+/* Animation CSS */
+.animate-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.animate-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
