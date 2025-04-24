@@ -1,47 +1,139 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Devotions by Brandon Nguyen</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Personal devotional blog by Brandon Nguyen sharing spiritual insights and reflections">
+    <meta name="keywords" content="devotional, Christian blog, faith, spiritual growth, Brandon Nguyen">
+    <meta name="author" content="Brandon Nguyen">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    
+    <!-- Social Media Meta Tags -->
+    <meta property="og:title" content="Devotions by Brandon Nguyen">
+    <meta property="og:description" content="Personal devotional blog sharing spiritual insights and reflections">
+    <meta property="og:image" content="og-image.jpg">
+    <meta property="og:url" content="https://yourwebsite.com">
+    <meta name="twitter:card" content="summary_large_image">
+    
+    <title>Devotions by Brandon Nguyen</title>
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Preconnect to Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <header>
-    <div class="container header-container">
-      <h1 class="site-title">Brandon Nguyen</h1>
-    </div>
-  </header>
+    <header class="site-header">
+        <div class="container header-container">
+            <h1 class="site-title">
+                <a href="index.html">Brandon Nguyen</a>
+            </h1>
+            <nav class="main-nav" aria-label="Main navigation">
+                <ul>
+                    <li><a href="index.html" aria-current="page">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="archive.html">Archive</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-  <main class="container">
-    <section class="devos">
-      <!-- Devotional Post #1 -->
-      <article class="devo">
-        <h2>
-          <a href="devo1.html">Why I’m Starting a Devotional Blog</a>
-        </h2>
-        <p><em>April 23, 2025</em></p>
-        <p>I am starting a devotional blog because…</p>
-      </article>
+    <main class="container" id="main-content">
+        <section class="devos" aria-label="Devotional Posts">
+            <!-- Devotional Post #1 -->
+            <article class="devo">
+                <header class="devo-header">
+                    <h2>
+                        <a href="devo1.html">Why I'm Starting a Devotional Blog</a>
+                    </h2>
+                    <div class="post-meta">
+                        <time datetime="2025-04-23">April 23, 2025</time>
+                        <span class="reading-time">5 min read</span>
+                        <span class="category">Personal Growth</span>
+                    </div>
+                </header>
+                <p>I am starting a devotional blog because…</p>
+                <footer class="post-footer">
+                    <a href="devo1.html" class="read-more" aria-label="Read more about Why I'm Starting a Devotional Blog">Read More</a>
+                </footer>
+            </article>
 
-      <!-- Devotional Post #2 -->
-      <article class="devo">
-        <h2>
-          <a href="devo2.html">Trusting God in Uncertain Times</a>
-        </h2>
-        <p><em>April 16, 2025</em></p>
-        <p>When the future feels unclear, we can rest in the promise that…</p>
-      </article>
+            <!-- Devotional Post #2 -->
+            <article class="devo">
+                <header class="devo-header">
+                    <h2>
+                        <a href="devo2.html">Trusting God in Uncertain Times</a>
+                    </h2>
+                    <div class="post-meta">
+                        <time datetime="2025-04-16">April 16, 2025</time>
+                        <span class="reading-time">7 min read</span>
+                        <span class="category">Faith</span>
+                    </div>
+                </header>
+                <p>When the future feels unclear, we can rest in the promise that…</p>
+                <footer class="post-footer">
+                    <a href="devo2.html" class="read-more" aria-label="Read more about Trusting God in Uncertain Times">Read More</a>
+                </footer>
+            </article>
+        </section>
 
-      <!-- Add more entries in the same pattern -->
-    </section>
-  </main>
+        <aside class="sidebar">
+            <div class="about-widget">
+                <h2>About Me</h2>
+                <img src="profile.jpg" alt="Brandon Nguyen" class="profile-image">
+                <p>Welcome to my devotional blog where I share my spiritual journey and reflections.</p>
+                <a href="about.html" class="btn">Learn More</a>
+            </div>
+            
+            <div class="categories-widget">
+                <h2>Categories</h2>
+                <ul>
+                    <li><a href="#faith">Faith</a></li>
+                    <li><a href="#prayer">Prayer</a></li>
+                    <li><a href="#personal-growth">Personal Growth</a></li>
+                    <li><a href="#bible-study">Bible Study</a></li>
+                </ul>
+            </div>
+        </aside>
+    </main>
 
-  <footer>
-    <div class="container">
-      <p>&copy; 2025 Brandon Nguyen. All rights reserved.</p>
-    </div>
-  </footer>
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Connect</h3>
+                    <ul class="social-links">
+                        <li><a href="#" aria-label="Follow on Twitter">Twitter</a></li>
+                        <li><a href="#" aria-label="Connect on LinkedIn">LinkedIn</a></li>
+                        <li><a href="#" aria-label="Subscribe to RSS feed">RSS</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Subscribe</h3>
+                    <form class="subscribe-form" action="/subscribe" method="POST">
+                        <label for="email" class="visually-hidden">Email address</label>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                        <button type="submit">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            <p class="copyright">&copy; 2025 Brandon Nguyen. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Add dark mode toggle script -->
+    <script>
+        // Check for saved dark mode preference
+        if (localStorage.getItem('darkMode') === 'false') {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
 </body>
 </html>
