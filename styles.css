@@ -6,6 +6,12 @@
   --text-light: #4a5568;
 }
 
+.devo-header {
+  background-color: var(--background);
+  padding: 1rem 0;   /* you can tweak this for vertical spacing */
+  margin: 0 -1rem;   /* if you’ve padded your article, this will let the header span full width */
+}
+
 html.dark {
   --background: #1a202c;
   --text: #f7fafc;
