@@ -128,12 +128,25 @@
         </div>
     </footer>
 
-    <!-- Add dark mode toggle script -->
+    <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode">
+        <span class="light-icon">☀️</span>
+        <span class="dark-icon">🌙</span>
+    </button>
+
     <script>
+        // Dark mode toggle functionality
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const html = document.documentElement;
+        
         // Check for saved dark mode preference
         if (localStorage.getItem('darkMode') === 'false') {
-            document.documentElement.classList.remove('dark');
+            html.classList.remove('dark');
         }
+        
+        darkModeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            localStorage.setItem('darkMode', html.classList.contains('dark'));
+        });
     </script>
 </body>
 </html>
