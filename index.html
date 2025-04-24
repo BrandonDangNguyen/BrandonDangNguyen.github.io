@@ -26,7 +26,7 @@
     <!-- Preconnect to Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <header class="site-header">
@@ -45,63 +45,57 @@
         </div>
     </header>
 
-    <main class="container" id="main-content">
-        <section class="devos" aria-label="Devotional Posts">
-            <!-- Devotional Post #1 -->
-            <article class="devo">
-                <header class="devo-header">
-                    <h2>
-                        <a href="devo1.html">Why I'm Starting a Devotional Blog</a>
-                    </h2>
-                    <div class="post-meta">
-                        <time datetime="2025-04-23">April 23, 2025</time>
-                        <span class="reading-time">5 min read</span>
-                        <span class="category">Personal Growth</span>
-                    </div>
-                </header>
-                <p>I am starting a devotional blog because…</p>
-                <footer class="post-footer">
-                    <a href="devo1.html" class="read-more" aria-label="Read more about Why I'm Starting a Devotional Blog">Read More</a>
-                </footer>
-            </article>
+    <main class="container">
+        <div class="content-wrapper">
+            <section class="devos" aria-label="Devotional Posts">
+                <article class="devo">
+                    <header class="devo-header">
+                        <h2>
+                            <a href="devo1.html">Why I'm Starting a Devotional Blog</a>
+                        </h2>
+                        <div class="post-meta">
+                            <time datetime="2025-04-23">April 23, 2025</time>
+                            <span>5 min read</span>
+                        </div>
+                    </header>
+                    <p>I am starting a devotional blog because…</p>
+                    <a href="devo1.html" class="read-more">Read More</a>
+                </article>
 
-            <!-- Devotional Post #2 -->
-            <article class="devo">
-                <header class="devo-header">
-                    <h2>
-                        <a href="devo2.html">Trusting God in Uncertain Times</a>
-                    </h2>
-                    <div class="post-meta">
-                        <time datetime="2025-04-16">April 16, 2025</time>
-                        <span class="reading-time">7 min read</span>
-                        <span class="category">Faith</span>
-                    </div>
-                </header>
-                <p>When the future feels unclear, we can rest in the promise that…</p>
-                <footer class="post-footer">
-                    <a href="devo2.html" class="read-more" aria-label="Read more about Trusting God in Uncertain Times">Read More</a>
-                </footer>
-            </article>
-        </section>
+                <article class="devo">
+                    <header class="devo-header">
+                        <h2>
+                            <a href="devo2.html">Trusting God in Uncertain Times</a>
+                        </h2>
+                        <div class="post-meta">
+                            <time datetime="2025-04-16">April 16, 2025</time>
+                            <span>7 min read</span>
+                        </div>
+                    </header>
+                    <p>When the future feels unclear, we can rest in the promise that…</p>
+                    <a href="devo2.html" class="read-more">Read More</a>
+                </article>
+            </section>
 
-        <aside class="sidebar">
-            <div class="about-widget">
-                <h2>About Me</h2>
-                <img src="profile.jpg" alt="Brandon Nguyen" class="profile-image">
-                <p>Welcome to my devotional blog where I share my spiritual journey and reflections.</p>
-                <a href="about.html" class="btn">Learn More</a>
-            </div>
-            
-            <div class="categories-widget">
-                <h2>Categories</h2>
-                <ul>
-                    <li><a href="#faith">Faith</a></li>
-                    <li><a href="#prayer">Prayer</a></li>
-                    <li><a href="#personal-growth">Personal Growth</a></li>
-                    <li><a href="#bible-study">Bible Study</a></li>
-                </ul>
-            </div>
-        </aside>
+            <aside class="sidebar">
+                <div class="about-widget">
+                    <h2>About Me</h2>
+                    <img src="profile.jpg" alt="Brandon Nguyen" class="profile-image">
+                    <p>Welcome to my devotional blog where I share my spiritual journey and reflections.</p>
+                    <a href="about.html" class="read-more">Learn More</a>
+                </div>
+                
+                <div class="categories-widget">
+                    <h2>Categories</h2>
+                    <ul>
+                        <li><a href="#faith">Faith</a></li>
+                        <li><a href="#prayer">Prayer</a></li>
+                        <li><a href="#personal-growth">Personal Growth</a></li>
+                        <li><a href="#bible-study">Bible Study</a></li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
     </main>
 
     <footer class="site-footer">
