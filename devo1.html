@@ -148,7 +148,7 @@
 
     // IntersectionObserver for animations
     document.addEventListener('DOMContentLoaded', () => {
-      const items = document.querySelectorAll('.animate-in');
+      const article = document.querySelector('.devo-full');
       const io = new IntersectionObserver(entries => {
         entries.forEach(e => {
           if (e.isIntersecting) {
@@ -156,8 +156,14 @@
             io.unobserve(e.target);
           }
         });
-      }, { threshold: 0.1 });
-      items.forEach(el => io.observe(el));
+      }, { 
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      });
+      
+      if (article) {
+        io.observe(article);
+      }
     });
   </script>
 </body>
