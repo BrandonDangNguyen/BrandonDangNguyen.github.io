@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Contact Brandon Nguyen">
+  <meta name="keywords" content="contact, Brandon Nguyen, UCLA">
+  <meta name="author" content="Brandon Nguyen">
+
+  <title>Contact - Brandon Nguyen</title>
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sorts+Mill+Goudy:ital@0;1&display=swap" rel="stylesheet">
+
+  <!-- Page-specific styling -->
+  <style>
+    main.container {
+      display: flex;
+      justify-content: center;
+      padding: 4rem 2rem;
+      font-family: 'Sorts Mill Goudy', serif;
+      width: 75%;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    article.contact-full {
+      flex: 0 1 900px;
+      font-family: 'Sorts Mill Goudy', serif;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    /* Title styling */
+    .contact-full h2 {
+      font-size: 3.5rem;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      font-family: 'Sorts Mill Goudy', serif;
+      text-align: center;
+      letter-spacing: 0.02em;
+      line-height: 1.2;
+    }
+    .contact-info {
+      text-align: center;
+      margin: 1.5rem 0;
+    }
+    /* Reduce paragraph margins */
+    .contact-info p {
+      font-size: 1.5rem;
+      line-height: 1.7;
+      margin: 0.5rem 0;
+      font-family: 'Sorts Mill Goudy', serif;
+    }
+    .contact-info a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+      transition: border-color 0.2s ease;
+      font-size: 1.5rem;
+    }
+    .contact-info a:hover {
+      border-color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-container">
+      <h1 class="site-title"><a href="index.html">Brandon Nguyen</a></h1>
+      <nav class="main-nav" aria-label="Main navigation">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html" aria-current="page">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <article class="contact-full animate-in">
+      <h2>Contact Me</h2>
+      <div class="contact-info">
+        <p>Feel free to reach out to me with any questions, thoughts, or just to connect.</p>
+        <p>Email: <a href="mailto:brnd0nnguyen2006@gmail.com">brnd0nnguyen2006@gmail.com</a></p>
+      </div>
+    </article>
+  </main>
+
+  <footer class="site-footer animate-in">
+    <div class="container">
+      <p class="copyright">&copy; 2025 Brandon Nguyen. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode"></button>
+
+  <script>
+    const html = document.documentElement;
+    const toggle = document.getElementById('darkModeToggle');
+    if (localStorage.getItem('darkMode') === 'false') html.classList.remove('dark');
+    toggle.addEventListener('click', () => { html.classList.toggle('dark'); localStorage.setItem('darkMode', html.classList.contains('dark')); });
+    document.addEventListener('DOMContentLoaded', () => {
+      const items = document.querySelectorAll('.animate-in');
+      const io = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } }); }, { threshold: 0.1 });
+      items.forEach(el => io.observe(el));
+    });
+  </script>
+</body>
+</html>

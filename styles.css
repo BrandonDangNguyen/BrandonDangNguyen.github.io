@@ -9,7 +9,7 @@
 .devo-header {
   background-color: var(--background);
   padding: 1rem 0;   /* you can tweak this for vertical spacing */
-  margin: 0 -1rem;   /* if you’ve padded your article, this will let the header span full width */
+  margin: 0 -1rem;   /* if you've padded your article, this will let the header span full width */
 }
 
 html.dark {
@@ -27,11 +27,12 @@ html.dark {
 }
 
 body {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: 'Sorts Mill Goudy', serif;
   background-color: var(--background);
   color: var(--text);
   line-height: 1.6;
 }
+
 
 .container {
   width: 90%;
@@ -133,8 +134,8 @@ html.dark .devo {
 }
 
 .devo-header time, .post-meta span {
-  color: var(--text-light);
-  font-size: 0.875rem;
+  color: var(--text);
+  font-size: 1.2rem;
 }
 
 .read-more {
@@ -280,3 +281,30 @@ html.dark .devo {
 .dark-mode-toggle:hover {
   transform: scale(1.1);
 }
+/* 1) define the fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 2) apply it to your devotional article */
+.devo-full {
+  opacity: 0;                        /* start invisible */
+  animation: fadeIn 0.8s ease-out forwards;
+  animation-delay: 0.2s;            /* pause before it starts */
+}
+
+/* 3) (optional) if you want heading and paragraphs to fade-in one after another */
+.devo-full h2,
+.devo-full p {
+  opacity: 0;
+  animation: fadeIn 0.8s ease-out forwards;
+}
+.devo-full h2 { animation-delay: 0.2s; }
+.devo-full p  { animation-delay: 0.5s; }

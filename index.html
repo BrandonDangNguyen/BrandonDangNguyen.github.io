@@ -23,11 +23,17 @@
   <title>Devotions by Brandon Nguyen</title>
   <link rel="stylesheet" href="styles.css">
 
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-</head>
+ <!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+  href="https://fonts.googleapis.com/css2?family=Sorts+Mill+Goudy:ital@0;1&display=swap"
+  rel="stylesheet"
+>
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+  rel="stylesheet"
+>
 
 <body>
   <header class="site-header">
@@ -37,7 +43,6 @@
         <ul>
           <li><a href="index.html" aria-current="page">Home</a></li>
           <li><a href="about.html">About</a></li>
-          <li><a href="archive.html">Archive</a></li>
           <li><a href="contact.html">Contact</a></li>
         </ul>
       </nav>
@@ -50,11 +55,9 @@
         <header class="devo-header">
           <h2><a href="devo1.html">Why I'm Starting a Devotional Blog</a></h2>
           <div class="post-meta">
-            <time datetime="2025-04-23">April 23, 2025</time>
-            <span>5 min read</span>
+            <p class="post-meta">April 23, 2025 · 1 min read</p>
           </div>
         </header>
-        <p>I am starting a devotional blog because…</p>
         <a href="devo1.html" class="read-more">Read More</a>
       </article>
     </section>
@@ -62,48 +65,19 @@
     <aside class="sidebar animate-in">
       <div class="about-widget widget">
         <h2>About Me</h2>
-        <img src="profile.jpg" alt="Brandon Nguyen" class="profile-image">
-        <p>Welcome to my devotional blog where I share my spiritual journey and reflections.</p>
+        <p>Currently in Progress.</p>
         <a href="about.html" class="read-more">Learn More</a>
-      </div>
-      
-      <div class="categories-widget widget">
-        <h2>Categories</h2>
-        <ul>
-          <li><a href="#faith">Faith</a></li>
-          <li><a href="#prayer">Prayer</a></li>
-          <li><a href="#personal-growth">Personal Growth</a></li>
-          <li><a href="#bible-study">Bible Study</a></li>
-        </ul>
       </div>
     </aside>
   </main>
 
   <footer class="site-footer animate-in">
-    <div class="container footer-content">
-      <div class="footer-section">
-        <h3>Connect</h3>
-        <ul class="social-links">
-          <li><a href="#" aria-label="Follow on Twitter">Twitter</a></li>
-          <li><a href="#" aria-label="Connect on LinkedIn">LinkedIn</a></li>
-          <li><a href="#" aria-label="Subscribe to RSS feed">RSS</a></li>
-        </ul>
-      </div>
-      <div class="footer-section">
-        <h3>Subscribe</h3>
-        <form class="subscribe-form" action="/subscribe" method="POST">
-          <label for="email" class="visually-hidden">Email address</label>
-          <input type="email" id="email" name="email" placeholder="Enter your email" required>
-          <button type="submit">Subscribe</button>
-        </form>
-      </div>
+    <div class="container">
+      <p class="copyright">&copy; 2025 Brandon Nguyen. All rights reserved.</p>
     </div>
-    <p class="copyright">&copy; 2025 Brandon Nguyen. All rights reserved.</p>
   </footer>
 
   <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode">
-    <span class="light-icon">☀️</span>
-    <span class="dark-icon">🌙</span>
   </button>
 
   <script>

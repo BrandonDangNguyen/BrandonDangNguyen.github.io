@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="About Brandon Nguyen - Statistics and Data Science student at UCLA">
+  <meta name="keywords" content="Brandon Nguyen, UCLA, Statistics, Data Science">
+  <meta name="author" content="Brandon Nguyen">
+
+  <title>About Brandon Nguyen</title>
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sorts+Mill+Goudy:ital@0;1&display=swap" rel="stylesheet">
+
+  <!-- Content styling -->
+  <style>
+    /* Center the article within its container */
+    main.container {
+      display: flex;
+      justify-content: center;
+      padding: 4rem 2rem;
+      font-family: 'Sorts Mill Goudy', serif;
+      width: 75%;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    article.about-full {
+      flex: 0 1 900px;
+      font-family: 'Sorts Mill Goudy', serif;
+      padding: 0;
+    }
+    /* Profile image styling */
+    .profile-container {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .profile-image {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 0 auto 1.5rem;
+      display: block;
+    }
+    /* Title styling */
+    .about-full h2 {
+      font-size: 3.5rem;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      font-family: 'Sorts Mill Goudy', serif;
+      text-align: center;
+      letter-spacing: 0.02em;
+      line-height: 1.2;
+    }
+    /* Paragraph styling */
+    .about-full p {
+      font-size: 1.15rem;
+      line-height: 1.7;
+      margin: 1.5rem auto;
+      max-width: 750px;
+      font-family: 'Sorts Mill Goudy', serif;
+      text-align: left;
+      letter-spacing: 0.01em;
+    }
+    /* Footer center */
+    .site-footer {
+      font-family: 'Sorts Mill Goudy', serif;
+      margin-top: 4rem;
+    }
+    /* Header styling */
+    .site-header {
+      font-family: 'Sorts Mill Goudy', serif;
+      margin-bottom: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-container">
+      <h1 class="site-title"><a href="index.html">Brandon Nguyen</a></h1>
+      <nav class="main-nav" aria-label="Main navigation">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html" aria-current="page">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <article class="about-full animate-in">
+      <div class="profile-container">
+        <img src="images/profile.jpg" alt="Brandon Nguyen" class="profile-image">
+      </div>
+      <h2>About Me</h2>
+      <p>I'm Brandon Nguyen, a 19 year old freshmen currently studying Statistics and Data Science at UCLA.</p>
+    </article>
+  </main>
+
+  <footer class="site-footer animate-in">
+    <div class="container">
+      <p class="copyright">&copy; 2025 Brandon Nguyen. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode">
+  </button>
+
+  <script>
+    // Theme toggle
+    const html = document.documentElement;
+    const toggle = document.getElementById('darkModeToggle');
+
+    // Initialize from localStorage
+    if (localStorage.getItem('darkMode') === 'false') {
+      html.classList.remove('dark');
+    }
+
+    toggle.addEventListener('click', () => {
+      html.classList.toggle('dark');
+      localStorage.setItem('darkMode', html.classList.contains('dark'));
+    });
+
+    // IntersectionObserver for animations
+    document.addEventListener('DOMContentLoaded', () => {
+      const items = document.querySelectorAll('.animate-in');
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            io.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      items.forEach(el => io.observe(el));
+    });
+  </script>
+</body>
+</html>
