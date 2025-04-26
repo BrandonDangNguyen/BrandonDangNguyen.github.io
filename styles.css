@@ -278,11 +278,24 @@ html.dark .devo {
   transform: translateY(0);
 }
 
-.devo-full .meta {
+.devo-full h2 {
   opacity: 0;
   transform: translateY(15px);
   transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s,
               transform 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
+  will-change: opacity, transform;
+}
+
+.devo-full.visible h2 {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.devo-full .meta {
+  opacity: 0;
+  transform: translateY(15px);
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.4s,
+              transform 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.4s;
   will-change: opacity, transform;
 }
 
@@ -294,8 +307,8 @@ html.dark .devo {
 .devo-full p {
   opacity: 0;
   transform: translateY(15px);
-  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.4s,
-              transform 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.4s;
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.5s,
+              transform 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.5s;
   will-change: opacity, transform;
 }
 
@@ -324,30 +337,3 @@ html.dark .devo {
 .dark-mode-toggle:hover {
   transform: scale(1.1);
 }
-/* 1) define the fade-in animation */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* 2) apply it to your devotional article */
-.devo-full {
-  opacity: 0;                        /* start invisible */
-  animation: fadeIn 0.8s ease-out forwards;
-  animation-delay: 0.2s;            /* pause before it starts */
-}
-
-/* 3) (optional) if you want heading and paragraphs to fade-in one after another */
-.devo-full h2,
-.devo-full p {
-  opacity: 0;
-  animation: fadeIn 0.8s ease-out forwards;
-}
-.devo-full h2 { animation-delay: 0.2s; }
-.devo-full p  { animation-delay: 0.5s; }
