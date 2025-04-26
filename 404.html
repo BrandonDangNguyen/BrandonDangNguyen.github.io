@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Page Not Found</title>
+    <script>
+        // Remove trailing slash if present
+        var path = window.location.pathname.replace(/\/$/, '');
+        
+        // If path doesn't end in .html, add it and redirect
+        if (!path.endsWith('.html') && path !== '') {
+            window.location.href = path + '.html';
+        }
+    </script>
+</head>
+<body>
+    <h1>Page Not Found</h1>
+    <p>The page you're looking for could not be found.</p>
+    <p><a href="/">Return to Homepage</a></p>
+</body>
+</html> 
