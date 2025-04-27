@@ -128,7 +128,7 @@
   <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode"></button>
 
   <script>
-    // Theme toggle (identical to 1 Peter page)
+    // Theme toggle (identical to 1 Peter page)
     const html = document.documentElement;
     const toggle = document.getElementById('darkModeToggle');
 
@@ -142,7 +142,7 @@
       localStorage.setItem('darkMode', html.classList.contains('dark'));
     });
 
-    // IntersectionObserver for fade‑in (copied from 1 Peter page)
+    // IntersectionObserver for fade‑in (copied from 1 Peter page)
     document.addEventListener('DOMContentLoaded', () => {
       const article = document.querySelector('.devo-full');
       const io = new IntersectionObserver(entries => {
@@ -153,8 +153,8 @@
           }
         });
       }, {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
+        threshold: 0,
+        rootMargin: '0px'
       });
 
       if (article) {

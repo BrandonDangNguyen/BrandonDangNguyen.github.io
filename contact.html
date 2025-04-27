@@ -116,7 +116,10 @@
     toggle.addEventListener('click', () => { html.classList.toggle('dark'); localStorage.setItem('darkMode', html.classList.contains('dark')); });
     document.addEventListener('DOMContentLoaded', () => {
       const items = document.querySelectorAll('.animate-in');
-      const io = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } }); }, { threshold: 0.1 });
+      const io = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } }); }, { 
+        threshold: 0,
+        rootMargin: '0px'
+      });
       items.forEach(el => io.observe(el));
     });
   </script>
