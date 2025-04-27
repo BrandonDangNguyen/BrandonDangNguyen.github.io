@@ -41,6 +41,8 @@
       flex: 0 1 900px;
       font-family: 'Sorts Mill Goudy', serif;
       padding: 0;
+      opacity: 1;
+      transform: none;
     }
     /* Title styling */
     .devo-full h2 {
@@ -51,6 +53,8 @@
       text-align: center;
       letter-spacing: 0.02em;
       line-height: 1.2;
+      opacity: 1;
+      transform: none;
     }
     /* Meta date styling */
     .devo-full .meta {
@@ -74,6 +78,8 @@
       font-family: 'Sorts Mill Goudy', serif;
       text-align: left;
       letter-spacing: 0.01em;
+      opacity: 1;
+      transform: none;
     }
     /* Scripture styling */
     .scripture {
@@ -154,23 +160,27 @@
       localStorage.setItem('darkMode', html.classList.contains('dark'));
     });
 
-    // IntersectionObserver for animations
+    // Add visible class immediately on mobile
     document.addEventListener('DOMContentLoaded', () => {
       const article = document.querySelector('.devo-full');
-      const io = new IntersectionObserver(entries => {
-        entries.forEach(e => {
-          if (e.isIntersecting) {
-            e.target.classList.add('visible');
-            io.unobserve(e.target);
-          }
+      if (window.innerWidth <= 768) {
+        article.classList.add('visible');
+      } else {
+        const io = new IntersectionObserver(entries => {
+          entries.forEach(e => {
+            if (e.isIntersecting) {
+              e.target.classList.add('visible');
+              io.unobserve(e.target);
+            }
+          });
+        }, { 
+          threshold: 0.1,
+          rootMargin: '0px'
         });
-      }, { 
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-      });
-      
-      if (article) {
-        io.observe(article);
+        
+        if (article) {
+          io.observe(article);
+        }
       }
     });
   </script>
