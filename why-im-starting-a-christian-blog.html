@@ -30,24 +30,40 @@
   <style>
     /* constrain + center */
     main.container {
-      display: flex;
-      justify-content: center;
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-areas: 
+        "content"
+        "comments";
       padding: 4rem 2rem;
       font-family: 'Sorts Mill Goudy', serif;
-      width: 75%;
-      max-width: 1000px;
+      width: 95%;
+      max-width: 1400px;
       margin: 0 auto;
+      gap: 2rem;
     }
 
     article.devo-full {
+      grid-area: content;
       flex: 0 1 900px;
       padding: 0;
+      max-width: 750px;
+      margin: 0 auto;
       /* initial state for fade‑in (duplicates values from styles.css so it still works if external CSS fails) */
       opacity: 0;
       transform: translateY(15px);
       transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s,
                   transform 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
     }
+    
+    .comments-section {
+      grid-area: comments;
+      width: 100%;
+      max-width: 750px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
     article.devo-full.visible {
       opacity: 1;
       transform: translateY(0);
@@ -117,6 +133,29 @@
       <p>This is my first ever blog, so it's all new to me. We'll see where God takes this.<br>
       Anyway, if you've read this far, thank you for checking out my blog. The site is pretty barebones right now, but I'm working hard to improve it for the glory of God. I'm excited to see how this all unfolds in accordance with His will. I truly hope this blog will be helpful to you all!</p>
     </article>
+
+    <!-- Comment Section -->
+    <section class="comments-section">
+      <h3>Comments</h3>
+      <div id="comments-container">
+        <!-- Comments will be loaded here -->
+      </div>
+      
+      <form id="comment-form" class="comment-form">
+        <h4>Share Your Thoughts</h4>
+        <div class="form-group">
+          <label for="comment-name">Name</label>
+          <input type="text" id="comment-name" name="name" placeholder="Your name" required>
+        </div>
+        <div class="form-group">
+          <label for="comment-content">Comment</label>
+          <textarea id="comment-content" name="content" rows="4" placeholder="Add a public comment..." required></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="submit-comment">Post</button>
+        </div>
+      </form>
+    </section>
   </main>
 
   <footer class="site-footer animate-in">
@@ -162,5 +201,8 @@
       }
     });
   </script>
+  
+  <!-- Comments System -->
+  <script src="comments.js"></script>
 </body>
 </html>

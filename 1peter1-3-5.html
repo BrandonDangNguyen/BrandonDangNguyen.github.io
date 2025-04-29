@@ -30,17 +30,32 @@
   <style>
     /* constrain + center */
     main.container {
-      display: flex;
-      justify-content: center;
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-areas: 
+        "content"
+        "comments";
       padding: 4rem 2rem;
-      width: 75%;
-      max-width: 1000px;
+      width: 95%;
+      max-width: 1400px;
       margin: 0 auto;
+      gap: 2rem;
     }
 
     article.devo-full {
+      grid-area: content;
       flex: 0 1 900px;
       padding: 0;
+      max-width: 750px;
+      margin: 0 auto;
+    }
+    
+    .comments-section {
+      grid-area: comments;
+      width: 100%;
+      max-width: 750px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     /* headings and meta */
@@ -172,6 +187,29 @@
         </p>
       </section>
     </article>
+
+    <!-- Comment Section -->
+    <section class="comments-section">
+      <h3>Comments</h3>
+      <div id="comments-container">
+        <!-- Comments will be loaded here -->
+      </div>
+      
+      <form id="comment-form" class="comment-form">
+        <h4>Share Your Thoughts</h4>
+        <div class="form-group">
+          <label for="comment-name">Name</label>
+          <input type="text" id="comment-name" name="name" placeholder="Your name" required>
+        </div>
+        <div class="form-group">
+          <label for="comment-content">Comment</label>
+          <textarea id="comment-content" name="content" rows="4" placeholder="Add a public comment..." required></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="submit-comment">Post</button>
+        </div>
+      </form>
+    </section>
   </main>
 
   <footer class="site-footer animate-in">
@@ -213,5 +251,8 @@
       if (article) io.observe(article);
     });
   </script>
+  
+  <!-- Comments System -->
+  <script src="comments.js"></script>
 </body>
 </html>

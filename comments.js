@@ -1,0 +1,308 @@
+// Comments System
+document.addEventListener('DOMContentLoaded', () => {
+  const commentForm = document.getElementById('comment-form');
+  const commentsContainer = document.getElementById('comments-container');
+  
+  // Check if we're on a devotional page
+  if (!commentForm || !commentsContainer) return;
+  
+  // Load comments from localStorage (simulated database)
+  loadComments();
+  
+  // Handle form submission
+  commentForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    // Get form values
+    const name = document.getElementById('comment-name').value.trim();
+    const content = document.getElementById('comment-content').value.trim();
+    const replyTo = commentForm.getAttribute('data-reply-to') || null;
+    const date = new Date();
+    
+    // Simple validation
+    if (!name || !content) {
+      alert('Please fill out all fields');
+      return;
+    }
+    
+    // Create comment object
+    const comment = {
+      id: Date.now().toString(),
+      name,
+      content,
+      date: date.toISOString(),
+      postId: getPostId(),
+      replyTo: replyTo
+    };
+    
+    // Save comment
+    saveComment(comment);
+    
+    // If it's a reply, add it under the parent comment
+    if (replyTo) {
+      const parentComment = document.querySelector(`.comment[data-id="${replyTo}"]`);
+      if (parentComment) {
+        const repliesContainer = parentComment.querySelector('.comment-replies') || 
+                                createRepliesContainer(parentComment);
+        addReplyToDOM(comment, repliesContainer);
+      }
+      
+      // Reset form to normal comment mode
+      resetReplyForm();
+    } else {
+      // Add comment to DOM at the top level
+      addCommentToDOM(comment);
+    }
+    
+    // Reset form
+    commentForm.reset();
+  });
+  
+  // Cancel reply button event
+  document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('cancel-reply')) {
+      e.preventDefault();
+      resetReplyForm();
+    }
+    
+    // Reply button
+    if (e.target.classList.contains('reply-button')) {
+      e.preventDefault();
+      const commentId = e.target.closest('.comment').getAttribute('data-id');
+      const commentAuthor = e.target.closest('.comment').querySelector('.comment-author').textContent;
+      setupReplyForm(commentId, commentAuthor);
+    }
+  });
+  
+  // Load comments from localStorage for current post
+  function loadComments() {
+    const postId = getPostId();
+    const allComments = JSON.parse(localStorage.getItem('devotionalComments') || '[]');
+    
+    // Separate top-level comments and replies
+    const topLevelComments = allComments.filter(comment => 
+      comment.postId === postId && !comment.replyTo);
+    const replies = allComments.filter(comment => 
+      comment.postId === postId && comment.replyTo);
+    
+    if (topLevelComments.length === 0) {
+      commentsContainer.innerHTML = '<p class="no-comments">No comments yet. Be the first to share your thoughts!</p>';
+      return;
+    }
+    
+    // Sort comments by date (newest first)
+    topLevelComments.sort((a, b) => new Date(b.date) - new Date(a.date));
+    
+    // Clear container
+    commentsContainer.innerHTML = '';
+    
+    // Add each top-level comment to DOM
+    topLevelComments.forEach(comment => {
+      addCommentToDOM(comment);
+      
+      // Find replies for this comment
+      const commentReplies = replies.filter(reply => reply.replyTo === comment.id);
+      if (commentReplies.length > 0) {
+        const commentElement = document.querySelector(`.comment[data-id="${comment.id}"]`);
+        const repliesContainer = createRepliesContainer(commentElement);
+        
+        // Sort replies chronologically (oldest first, like YouTube)
+        commentReplies.sort((a, b) => new Date(a.date) - new Date(b.date));
+        
+        // Add replies
+        commentReplies.forEach(reply => {
+          addReplyToDOM(reply, repliesContainer);
+        });
+      }
+    });
+  }
+  
+  // Save comment to localStorage
+  function saveComment(comment) {
+    const comments = JSON.parse(localStorage.getItem('devotionalComments') || '[]');
+    comments.push(comment);
+    localStorage.setItem('devotionalComments', JSON.stringify(comments));
+  }
+  
+  // Add a single comment to the DOM
+  function addCommentToDOM(comment) {
+    // Remove "no comments" message if it exists
+    const noComments = commentsContainer.querySelector('.no-comments');
+    if (noComments) {
+      commentsContainer.removeChild(noComments);
+    }
+    
+    // Create comment element
+    const commentElement = document.createElement('div');
+    commentElement.classList.add('comment');
+    commentElement.setAttribute('data-id', comment.id);
+    
+    // Format date
+    const commentDate = new Date(comment.date);
+    const formattedDate = formatTimeAgo(commentDate);
+    
+    // Set comment HTML
+    commentElement.innerHTML = `
+      <div class="comment-header">
+        <div class="comment-avatar">${getInitials(comment.name)}</div>
+        <div class="comment-meta">
+          <span class="comment-author">${escapeHTML(comment.name)}</span>
+          <span class="comment-date">${formattedDate}</span>
+        </div>
+      </div>
+      <div class="comment-content">
+        <p>${escapeHTML(comment.content).replace(/\n/g, '<br>')}</p>
+      </div>
+      <div class="comment-actions">
+        <button class="reply-button">Reply</button>
+      </div>
+    `;
+    
+    // Add to container (newest first)
+    commentsContainer.insertBefore(commentElement, commentsContainer.firstChild);
+  }
+  
+  // Add a reply to the DOM
+  function addReplyToDOM(reply, repliesContainer) {
+    // Create reply element
+    const replyElement = document.createElement('div');
+    replyElement.classList.add('comment', 'comment-reply');
+    replyElement.setAttribute('data-id', reply.id);
+    
+    // Format date
+    const replyDate = new Date(reply.date);
+    const formattedDate = formatTimeAgo(replyDate);
+    
+    // Set reply HTML
+    replyElement.innerHTML = `
+      <div class="comment-header">
+        <div class="comment-avatar">${getInitials(reply.name)}</div>
+        <div class="comment-meta">
+          <span class="comment-author">${escapeHTML(reply.name)}</span>
+          <span class="comment-date">${formattedDate}</span>
+        </div>
+      </div>
+      <div class="comment-content">
+        <p>${escapeHTML(reply.content).replace(/\n/g, '<br>')}</p>
+      </div>
+      <div class="comment-actions">
+        <button class="reply-button">Reply</button>
+      </div>
+    `;
+    
+    // Add to replies container
+    repliesContainer.appendChild(replyElement);
+  }
+  
+  // Create a container for replies
+  function createRepliesContainer(commentElement) {
+    let repliesContainer = commentElement.querySelector('.comment-replies');
+    
+    if (!repliesContainer) {
+      repliesContainer = document.createElement('div');
+      repliesContainer.classList.add('comment-replies');
+      commentElement.appendChild(repliesContainer);
+    }
+    
+    return repliesContainer;
+  }
+  
+  // Setup form for replying
+  function setupReplyForm(commentId, authorName) {
+    const formTitle = commentForm.querySelector('h4');
+    formTitle.innerHTML = `Reply to <span class="reply-to-name">${escapeHTML(authorName)}</span>`;
+    
+    commentForm.setAttribute('data-reply-to', commentId);
+    commentForm.classList.add('replying');
+    
+    // Add cancel button if not already there
+    if (!commentForm.querySelector('.cancel-reply')) {
+      const submitButton = commentForm.querySelector('.submit-comment');
+      const cancelButton = document.createElement('button');
+      cancelButton.type = 'button';
+      cancelButton.classList.add('cancel-reply');
+      cancelButton.textContent = 'Cancel';
+      submitButton.parentNode.insertBefore(cancelButton, submitButton);
+    }
+    
+    // Focus the comment textarea
+    commentForm.querySelector('textarea').focus();
+    
+    // Scroll to the form
+    commentForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  
+  // Reset reply form to normal comment mode
+  function resetReplyForm() {
+    const formTitle = commentForm.querySelector('h4');
+    formTitle.textContent = 'Share Your Thoughts';
+    
+    commentForm.removeAttribute('data-reply-to');
+    commentForm.classList.remove('replying');
+    
+    // Remove cancel button if it exists
+    const cancelButton = commentForm.querySelector('.cancel-reply');
+    if (cancelButton) {
+      cancelButton.remove();
+    }
+  }
+  
+  // Format a date as time ago (e.g. "2 hours ago")
+  function formatTimeAgo(date) {
+    const seconds = Math.floor((new Date() - date) / 1000);
+    
+    let interval = Math.floor(seconds / 31536000);
+    if (interval >= 1) {
+      return interval === 1 ? '1 year ago' : `${interval} years ago`;
+    }
+    
+    interval = Math.floor(seconds / 2592000);
+    if (interval >= 1) {
+      return interval === 1 ? '1 month ago' : `${interval} months ago`;
+    }
+    
+    interval = Math.floor(seconds / 86400);
+    if (interval >= 1) {
+      return interval === 1 ? '1 day ago' : `${interval} days ago`;
+    }
+    
+    interval = Math.floor(seconds / 3600);
+    if (interval >= 1) {
+      return interval === 1 ? '1 hour ago' : `${interval} hours ago`;
+    }
+    
+    interval = Math.floor(seconds / 60);
+    if (interval >= 1) {
+      return interval === 1 ? '1 minute ago' : `${interval} minutes ago`;
+    }
+    
+    return 'Just now';
+  }
+  
+  // Get initials from name for avatar
+  function getInitials(name) {
+    return name
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase())
+      .slice(0, 2)
+      .join('');
+  }
+  
+  // Get current post ID from URL
+  function getPostId() {
+    // Extract filename from URL path
+    const path = window.location.pathname;
+    const filename = path.substring(path.lastIndexOf('/') + 1);
+    return filename.replace('.html', '');
+  }
+  
+  // Sanitize HTML to prevent XSS
+  function escapeHTML(str) {
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+}); 
