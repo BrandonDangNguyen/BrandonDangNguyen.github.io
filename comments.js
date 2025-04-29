@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
       replyTo: replyTo
     };
     
-    // Save comment
+    // Save comment locally
     saveComment(comment);
     
     // If it's a reply, add it under the parent comment
@@ -56,6 +56,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Reset form
     commentForm.reset();
+    
+    // Send to server
+    sendCommentToServer(comment);
   });
   
   // Cancel reply button event
@@ -74,16 +77,55 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
   
-  // Load comments from localStorage for current post
+  // Load comments 
   function loadComments() {
     const postId = getPostId();
-    const allComments = JSON.parse(localStorage.getItem('devotionalComments') || '[]');
     
+    // First try to load from server
+    fetchCommentsFromServer(postId)
+      .then(serverComments => {
+        // If we got server comments, use those
+        if (serverComments && serverComments.length > 0) {
+          displayComments(serverComments);
+        } else {
+          // Fall back to localStorage if no server comments
+          const localComments = JSON.parse(localStorage.getItem('devotionalComments') || '[]');
+          const filteredComments = localComments.filter(comment => comment.postId === postId);
+          
+          // If we have local comments, display them and try to sync to server
+          if (filteredComments.length > 0) {
+            displayComments(filteredComments);
+            
+            // Try to sync local comments to server
+            filteredComments.forEach(comment => {
+              sendCommentToServer(comment, false); // Don't refresh UI on sync
+            });
+          } else {
+            // No comments found
+            commentsContainer.innerHTML = '<p class="no-comments">No comments yet. Be the first to share your thoughts!</p>';
+          }
+        }
+      })
+      .catch(error => {
+        console.error('Error loading comments:', error);
+        
+        // Fall back to localStorage if server fetch fails
+        const localComments = JSON.parse(localStorage.getItem('devotionalComments') || '[]');
+        const filteredComments = localComments.filter(comment => comment.postId === postId);
+        
+        if (filteredComments.length > 0) {
+          displayComments(filteredComments);
+        } else {
+          commentsContainer.innerHTML = '<p class="no-comments">No comments yet. Be the first to share your thoughts!</p>';
+        }
+      });
+  }
+  
+  // Display comments in the UI
+  function displayComments(allComments) {
     // Separate top-level comments and replies
-    const topLevelComments = allComments.filter(comment => 
-      comment.postId === postId && !comment.replyTo);
-    const replies = allComments.filter(comment => 
-      comment.postId === postId && comment.replyTo);
+    const topLevelComments = allComments.filter(comment => !comment.replyTo);
+    const replies = allComments.filter(comment => comment.replyTo);
     
     if (topLevelComments.length === 0) {
       commentsContainer.innerHTML = '<p class="no-comments">No comments yet. Be the first to share your thoughts!</p>';
@@ -114,6 +156,45 @@ document.addEventListener('DOMContentLoaded', () => {
           addReplyToDOM(reply, repliesContainer);
         });
       }
+    });
+  }
+  
+  // Fetch comments from server
+  function fetchCommentsFromServer(postId) {
+    return fetch(`comments.php?postId=${encodeURIComponent(postId)}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Server returned ${response.status}`);
+        }
+        return response.json();
+      });
+  }
+  
+  // Send comment to server
+  function sendCommentToServer(comment, refreshUI = true) {
+    fetch('comments.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(comment)
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Server returned ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('Comment saved to server:', data);
+      if (refreshUI) {
+        // Optionally refresh comments after server confirmation
+        loadComments();
+      }
+    })
+    .catch(error => {
+      console.error('Error saving comment to server:', error);
+      // Comment is already saved locally as fallback
     });
   }
   
