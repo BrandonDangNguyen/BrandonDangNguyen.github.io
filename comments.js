@@ -330,7 +330,18 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Format a date as time ago (e.g. "2 hours ago")
   function formatTimeAgo(date) {
-    const seconds = Math.floor((new Date() - date) / 1000);
+    // Use the client's local time to ensure proper time display
+    const clientDate = new Date();
+    const adjustedDate = new Date(date);
+    
+    // Make sure we're comparing dates in the same timezone
+    const seconds = Math.floor((clientDate - adjustedDate) / 1000);
+    
+    // If the time difference is negative (server time is ahead of client time),
+    // default to "Just now" to avoid showing future times
+    if (seconds < 0) {
+      return 'Just now';
+    }
     
     let interval = Math.floor(seconds / 31536000);
     if (interval >= 1) {
