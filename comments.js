@@ -1,10 +1,21 @@
 // Comments System
 document.addEventListener('DOMContentLoaded', () => {
+  // Debug check at the start
+  console.log("Comments system initializing...");
+  console.log("localStorage available:", typeof localStorage !== 'undefined');
+  
   const commentForm = document.getElementById('comment-form');
   const commentsContainer = document.getElementById('comments-container');
   
+  // Debug check for elements
+  console.log("Found comment form:", commentForm !== null);
+  console.log("Found comments container:", commentsContainer !== null);
+  
   // Check if we're on a devotional page
-  if (!commentForm || !commentsContainer) return;
+  if (!commentForm || !commentsContainer) {
+    console.log("Not on a devotional page or missing elements. Stopping initialization.");
+    return;
+  }
   
   // Load comments from localStorage (simulated database)
   loadComments();
@@ -12,12 +23,15 @@ document.addEventListener('DOMContentLoaded', () => {
   // Handle form submission
   commentForm.addEventListener('submit', (e) => {
     e.preventDefault();
+    console.log("Form submitted");
     
     // Get form values
     const name = document.getElementById('comment-name').value.trim();
     const content = document.getElementById('comment-content').value.trim();
     const replyTo = commentForm.getAttribute('data-reply-to') || null;
     const date = new Date();
+    
+    console.log("Form values:", { name, content, replyTo });
     
     // Simple validation
     if (!name || !content) {
@@ -35,6 +49,8 @@ document.addEventListener('DOMContentLoaded', () => {
       replyTo: replyTo
     };
     
+    console.log("Created comment object:", comment);
+    
     // Save comment locally
     saveComment(comment);
     
@@ -44,14 +60,14 @@ document.addEventListener('DOMContentLoaded', () => {
       if (parentComment) {
         const repliesContainer = parentComment.querySelector('.comment-replies') || 
                                 createRepliesContainer(parentComment);
-        addReplyToDOM(comment, repliesContainer);
+        addReplyToDOM(comment, repliesContainer, { prepend: true });
       }
       
       // Reset form to normal comment mode
       resetReplyForm();
     } else {
       // Add comment to DOM at the top level
-      addCommentToDOM(comment);
+      addCommentToDOM(comment, { prepend: true });
     }
     
     // Reset form
@@ -80,17 +96,22 @@ document.addEventListener('DOMContentLoaded', () => {
   // Load comments 
   function loadComments() {
     const postId = getPostId();
+    console.log("Loading comments for postId:", postId);
     
     // First try to load from server
     fetchCommentsFromServer(postId)
       .then(serverComments => {
         // If we got server comments, use those
         if (serverComments && serverComments.length > 0) {
+          console.log("Loaded server comments:", serverComments.length);
           displayComments(serverComments);
         } else {
           // Fall back to localStorage if no server comments
+          console.log("No server comments, checking localStorage");
           const localComments = JSON.parse(localStorage.getItem('devotionalComments') || '[]');
+          console.log("Local comments (all):", localComments.length);
           const filteredComments = localComments.filter(comment => comment.postId === postId);
+          console.log("Filtered comments for this post:", filteredComments.length);
           
           // If we have local comments, display them and try to sync to server
           if (filteredComments.length > 0) {
@@ -123,9 +144,13 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Display comments in the UI
   function displayComments(allComments) {
+    console.log("Displaying comments:", allComments.length);
     // Separate top-level comments and replies
     const topLevelComments = allComments.filter(comment => !comment.replyTo);
     const replies = allComments.filter(comment => comment.replyTo);
+    
+    console.log("Top-level comments:", topLevelComments.length);
+    console.log("Replies:", replies.length);
     
     if (topLevelComments.length === 0) {
       commentsContainer.innerHTML = '<p class="no-comments">No comments yet. Be the first to share your thoughts!</p>';
@@ -161,6 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Fetch comments from server
   function fetchCommentsFromServer(postId) {
+    console.log("Fetching comments from server for postId:", postId);
     return fetch(`comments.php?postId=${encodeURIComponent(postId)}`)
       .then(response => {
         if (!response.ok) {
@@ -172,6 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Send comment to server
   function sendCommentToServer(comment, refreshUI = true) {
+    console.log("Sending comment to server:", comment.id);
     fetch('comments.php', {
       method: 'POST',
       headers: {
@@ -200,13 +227,20 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Save comment to localStorage
   function saveComment(comment) {
-    const comments = JSON.parse(localStorage.getItem('devotionalComments') || '[]');
-    comments.push(comment);
-    localStorage.setItem('devotionalComments', JSON.stringify(comments));
+    console.log("Saving comment to localStorage:", comment.id);
+    try {
+      const comments = JSON.parse(localStorage.getItem('devotionalComments') || '[]');
+      comments.push(comment);
+      localStorage.setItem('devotionalComments', JSON.stringify(comments));
+      console.log("Comment saved to localStorage successfully");
+    } catch (error) {
+      console.error("Error saving to localStorage:", error);
+    }
   }
   
   // Add a single comment to the DOM
-  function addCommentToDOM(comment) {
+  function addCommentToDOM(comment, { prepend = false } = {}) {
+    console.log("Adding comment to DOM:", comment.id, "prepend:", prepend);
     // Remove "no comments" message if it exists
     const noComments = commentsContainer.querySelector('.no-comments');
     if (noComments) {
@@ -239,12 +273,17 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     `;
     
-    // Add to container (newest first)
-    commentsContainer.insertBefore(commentElement, commentsContainer.firstChild);
+    // Add to container (newest first if prepend is true, otherwise append)
+    if (prepend) {
+      commentsContainer.insertBefore(commentElement, commentsContainer.firstChild);
+    } else {
+      commentsContainer.appendChild(commentElement);
+    }
   }
   
   // Add a reply to the DOM
-  function addReplyToDOM(reply, repliesContainer) {
+  function addReplyToDOM(reply, repliesContainer, { prepend = false } = {}) {
+    console.log("Adding reply to DOM:", reply.id, "prepend:", prepend);
     // Create reply element
     const replyElement = document.createElement('div');
     replyElement.classList.add('comment', 'comment-reply');
@@ -271,8 +310,12 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     `;
     
-    // Add to replies container (insert at beginning for newest first)
-    repliesContainer.insertBefore(replyElement, repliesContainer.firstChild);
+    // Add to replies container (insert at beginning for prepend, otherwise append)
+    if (prepend) {
+      repliesContainer.insertBefore(replyElement, repliesContainer.firstChild);
+    } else {
+      repliesContainer.appendChild(replyElement);
+    }
   }
   
   // Create a container for replies
@@ -405,5 +448,3 @@ document.addEventListener('DOMContentLoaded', () => {
       .replace(/'/g, '&#039;');
   }
 }); 
- 
- 
