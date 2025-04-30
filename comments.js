@@ -148,8 +148,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const commentElement = document.querySelector(`.comment[data-id="${comment.id}"]`);
         const repliesContainer = createRepliesContainer(commentElement);
         
-        // Sort replies chronologically (oldest first, like YouTube)
-        commentReplies.sort((a, b) => new Date(a.date) - new Date(b.date));
+        // Sort replies by date (newest first, changed from oldest first)
+        commentReplies.sort((a, b) => new Date(b.date) - new Date(a.date));
         
         // Add replies
         commentReplies.forEach(reply => {
