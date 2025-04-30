@@ -6,13 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Check if we're on a devotional page
   if (!commentForm || !commentsContainer) return;
   
-  // Clear all existing comments from localStorage
-  localStorage.clear(); // Clear all localStorage data
-  localStorage.removeItem('devotionalComments');
-  commentsContainer.innerHTML = '<p class="no-comments">No comments yet. Be the first to share your thoughts!</p>';
-  
-  // Temporarily disable loading comments
-  // loadComments();
+  // Load comments from localStorage (simulated database)
+  loadComments();
   
   // Handle form submission
   commentForm.addEventListener('submit', (e) => {
