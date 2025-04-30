@@ -6,8 +6,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // Check if we're on a devotional page
   if (!commentForm || !commentsContainer) return;
   
+  // Clear all existing comments
+  clearAllComments();
+  
   // Load comments from localStorage (simulated database)
-  loadComments();
+  // loadComments();  // Commented out to prevent loading comments
   
   // Handle form submission
   commentForm.addEventListener('submit', (e) => {
@@ -369,6 +372,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     return 'Just now';
+  }
+  
+  // Clear all comments from localStorage
+  function clearAllComments() {
+    localStorage.removeItem('devotionalComments');
+    commentsContainer.innerHTML = '<p class="no-comments">No comments yet. Be the first to share your thoughts!</p>';
+    console.log('All comments have been cleared');
   }
   
   // Get initials from name for avatar
