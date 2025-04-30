@@ -330,14 +330,14 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Format a date as time ago (e.g. "2 hours ago")
   function formatTimeAgo(date) {
-    // Use the client's local time to ensure proper time display
-    const clientDate = new Date();
-    const adjustedDate = new Date(date);
+    // Convert to Pacific Time
+    const pacificTime = new Date(date.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }));
+    const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }));
     
-    // Make sure we're comparing dates in the same timezone
-    const seconds = Math.floor((clientDate - adjustedDate) / 1000);
+    // Calculate time difference in seconds
+    const seconds = Math.floor((now - pacificTime) / 1000);
     
-    // If the time difference is negative (server time is ahead of client time),
+    // If the time difference is negative (server time is ahead of PT time),
     // default to "Just now" to avoid showing future times
     if (seconds < 0) {
       return 'Just now';
