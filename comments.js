@@ -6,11 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Check if we're on a devotional page
   if (!commentForm || !commentsContainer) return;
   
-  // Clear all existing comments
-  clearAllComments();
-  
   // Load comments from localStorage (simulated database)
-  // loadComments();  // Commented out to prevent loading comments
+  loadComments();
   
   // Handle form submission
   commentForm.addEventListener('submit', (e) => {
