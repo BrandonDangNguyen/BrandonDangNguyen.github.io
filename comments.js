@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const commentElement = document.querySelector(`.comment[data-id="${comment.id}"]`);
         const repliesContainer = createRepliesContainer(commentElement);
         
-        // Sort replies by date (newest first, changed from oldest first)
+        // Sort replies by date (newest first)
         commentReplies.sort((a, b) => new Date(b.date) - new Date(a.date));
         
         // Add replies
@@ -271,8 +271,8 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     `;
     
-    // Add to replies container
-    repliesContainer.appendChild(replyElement);
+    // Add to replies container (insert at beginning for newest first)
+    repliesContainer.insertBefore(replyElement, repliesContainer.firstChild);
   }
   
   // Create a container for replies
