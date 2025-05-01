@@ -51,46 +51,83 @@
     </div>
   </header>
   <main class="container main-grid">
-    <section class="devos" aria-label="Devotional Posts">
-      <article class="devo animate-in">
+    <section class="featured-post animate-in">
+      <h2 class="section-title">Featured Post</h2>
+      <article class="devo featured-devo">
         <header class="devo-header">
           <h2><a href="/1peter1-6-9">1 Peter 1:6‑9</a></h2>
           <div class="post-meta">
             <p>April 29, 2025 · 2 min read</p>
           </div>
         </header>
-        <a href="/1peter1-6-9" class="read-more">Read More</a>
+        <div class="featured-excerpt">
+          <p>In this passage, Peter reminds believers that even though they face various trials, these momentary afflictions are refining their faith like gold in fire. Our genuine faith will result in praise, glory, and honor when Jesus Christ is revealed.</p>
+        </div>
+        <a href="/1peter1-6-9" class="btn btn-primary">Read Featured</a>
       </article>
+    </section>
 
-      <article class="devo animate-in">
-        <header class="devo-header">
-          <h2><a href="/1peter1-3-5">1 Peter 1:3‑5</a></h2>
-          <div class="post-meta">
-            <p>April 26, 2025 · 1.5 min read</p>
+    <section class="other-posts">
+      <div class="search-container">
+        <label for="post-search" class="visually-hidden">Search posts</label>
+        <div class="search-input-wrapper">
+          <input 
+            type="search" 
+            id="post-search" 
+            class="search-input" 
+            placeholder="Search posts..." 
+            aria-controls="posts-grid"
+          >
+          <button type="button" id="clear-search" class="clear-search" aria-label="Clear search">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </div>
+      <h2 class="section-title">More Posts</h2>
+      <div id="posts-grid" class="posts-grid" aria-live="polite">
+        <article class="devo animate-in">
+          <header class="devo-header">
+            <h2><a href="/1peter1-3-5">1 Peter 1:3‑5</a></h2>
+            <div class="post-meta">
+              <p>April 26, 2025 · 1.5 min read</p>
+            </div>
+          </header>
+          <div class="post-excerpt">
+            <p>Peter begins his letter with praise to God for the living hope we have through Christ's resurrection. Our inheritance is kept in heaven, secure and imperishable, as we're guarded by God's power.</p>
           </div>
-        </header>
-        <a href="/1peter1-3-5" class="read-more">Read More</a>
-      </article>
-      
-      <article class="devo animate-in">
-        <header class="devo-header">
-          <h2><a href="/1peter1-2">1 Peter 1:1‑2</a></h2>
-          <div class="post-meta">
-            <p>April 26, 2025 · 1.5 min read</p>
+          <a href="/1peter1-3-5" class="read-more">Read More</a>
+        </article>
+        
+        <article class="devo animate-in">
+          <header class="devo-header">
+            <h2><a href="/1peter1-2">1 Peter 1:1‑2</a></h2>
+            <div class="post-meta">
+              <p>April 26, 2025 · 1.5 min read</p>
+            </div>
+          </header>
+          <div class="post-excerpt">
+            <p>Peter addresses his letter to believers scattered throughout Asia Minor. He reminds them they were chosen according to God's foreknowledge, sanctified by the Spirit, for obedience to Jesus Christ.</p>
           </div>
-        </header>
-        <a href="/1peter1-2" class="read-more">Read More</a>
-      </article>
+          <a href="/1peter1-2" class="read-more">Read More</a>
+        </article>
 
-      <article class="devo animate-in">
-        <header class="devo-header">
-          <h2><a href="/why-im-starting-a-christian-blog">Why I'm Starting a Christian Blog</a></h2>
-          <div class="post-meta">
-            <p>April 23, 2025 · 2 min 36 sec read</p>
+        <article class="devo animate-in">
+          <header class="devo-header">
+            <h2><a href="/why-im-starting-a-christian-blog">Why I'm Starting a Christian Blog</a></h2>
+            <div class="post-meta">
+              <p>April 23, 2025 · 2 min 36 sec read</p>
+            </div>
+          </header>
+          <div class="post-excerpt">
+            <p>In this pilot post, I explain why I've decided to start this devotional blog. I hope to encourage others in their walk with Christ through this website.</p>
           </div>
-        </header>
-        <a href="/why-im-starting-a-christian-blog" class="read-more">Read More</a>
-      </article>
+          <a href="/why-im-starting-a-christian-blog" class="read-more">Read More</a>
+        </article>
+        
+        <div class="no-results-message" hidden>
+          <p>No posts found matching your search. Try different keywords.</p>
+        </div>
+      </div>
     </section>
 
     <aside class="sidebar animate-in">
@@ -125,22 +162,220 @@
       localStorage.setItem('darkMode', html.classList.contains('dark'));
     });
 
-    // IntersectionObserver for animations
+    // Check for reduced motion preference
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Initialize functionality when DOM is ready
     document.addEventListener('DOMContentLoaded', () => {
-      const items = document.querySelectorAll('.animate-in');
-      const io = new IntersectionObserver(entries => {
-        entries.forEach(e => {
-          if (e.isIntersecting) {
-            e.target.classList.add('visible');
-            io.unobserve(e.target);
-          }
+      // Animation setup
+      if (prefersReducedMotion) {
+        // Make all elements visible immediately without animation
+        document.querySelectorAll('.animate-in, .featured-post, .featured-devo').forEach(el => {
+          el.classList.add('visible');
         });
-      }, { 
-        threshold: 0,
-        rootMargin: '0px'
+      } else {
+        // Set up observer for animation
+        const items = document.querySelectorAll('.animate-in, .featured-post, .featured-devo');
+        const io = new IntersectionObserver(entries => {
+          entries.forEach(e => {
+            if (e.isIntersecting) {
+              e.target.classList.add('visible');
+              io.unobserve(e.target);
+            }
+          });
+        }, { 
+          threshold: 0,
+          rootMargin: '0px'
+        });
+        
+        items.forEach(el => io.observe(el));
+      }
+
+      // Post Search Functionality
+      const searchInput = document.getElementById('post-search');
+      const clearButton = document.getElementById('clear-search');
+      const postsGrid = document.getElementById('posts-grid');
+      const posts = Array.from(postsGrid.querySelectorAll('.devo'));
+      const noResultsMessage = postsGrid.querySelector('.no-results-message');
+
+      // Format date for additional search patterns
+      function formatDateVariations(dateStr) {
+        // Extract date components from string like "April 29, 2025"
+        const date = new Date(dateStr);
+        if (isNaN(date)) return [dateStr]; // Return original if parsing fails
+
+        const month = date.toLocaleString('en-US', { month: 'long' }); // "April"
+        const shortMonth = date.toLocaleString('en-US', { month: 'short' }); // "Apr"
+        const numericMonth = (date.getMonth() + 1).toString().padStart(2, '0'); // "04"
+        const day = date.getDate().toString(); // "29"
+        const paddedDay = day.padStart(2, '0'); // "09"
+        const year = date.getFullYear().toString(); // "2025"
+
+        // Return array of different date formats for matching
+        return [
+          dateStr, // Original: "April 29, 2025"
+          `${month} ${day}`, // "April 29"
+          `${month} ${year}`, // "April 2025"
+          `${shortMonth} ${day}`, // "Apr 29"
+          `${numericMonth}/${paddedDay}`, // "04/29"
+          `${numericMonth}/${paddedDay}/${year}`, // "04/29/2025"
+          `${numericMonth}-${paddedDay}-${year}`, // "04-29-2025"
+          month, // "April"
+          shortMonth, // "Apr"
+          year, // "2025"
+          day, // "29"
+          numericMonth, // "04"
+        ];
+      }
+      
+      // Calculate relevance score for a post based on search query
+      function calculateRelevance(post, query) {
+        if (!query) return Infinity;
+        
+        const title = post.querySelector('.devo-header h2 a').textContent.toLowerCase();
+        const excerpt = post.querySelector('.post-excerpt')?.textContent.toLowerCase() || '';
+        const dateText = post.querySelector('.post-meta p').textContent;
+        const dateVariations = formatDateVariations(dateText.split('·')[0].trim()).map(d => d.toLowerCase());
+        
+        // Initialize scores as "not found"
+        let titleScore = Infinity;
+        let excerptScore = Infinity;
+        let dateScore = Infinity;
+        let exactTitleMatch = false;
+        let exactExcerptMatch = false;
+        let exactDateMatch = false;
+        
+        // Check for exact matches (case-insensitive)
+        if (title.includes(query)) {
+          titleScore = title.indexOf(query);
+          exactTitleMatch = title === query;
+        }
+        
+        if (excerpt.includes(query)) {
+          excerptScore = excerpt.indexOf(query);
+          exactExcerptMatch = excerpt === query;
+        }
+
+        // Check all date variations for matches
+        for (const dateStr of dateVariations) {
+          if (dateStr.includes(query)) {
+            dateScore = Math.min(dateScore, dateStr.indexOf(query));
+            exactDateMatch = dateStr === query;
+            if (exactDateMatch) break;
+          }
+        }
+        
+        // Calculate final score (lower is better)
+        // Priority order:
+        // 1. Exact title match
+        // 2. Title contains query
+        // 3. Exact date match
+        // 4. Date contains query
+        // 5. Exact excerpt match
+        // 6. Excerpt contains query
+        let score = Infinity;
+        
+        if (exactTitleMatch) {
+          score = -1000;
+        } else if (titleScore !== Infinity) {
+          score = titleScore;
+        } else if (exactDateMatch) {
+          score = 500;
+        } else if (dateScore !== Infinity) {
+          score = dateScore + 1000;
+        } else if (exactExcerptMatch) {
+          score = 2000;
+        } else if (excerptScore !== Infinity) {
+          score = excerptScore + 3000;
+        }
+        
+        return score;
+      }
+      
+      // Filter and sort posts by relevance
+      function filterAndSortPosts() {
+        const query = searchInput.value.toLowerCase().trim();
+        let matchCount = 0;
+        
+        // Get matching posts with their relevance scores
+        const matchingPosts = posts
+          .map(post => {
+            const title = post.querySelector('.devo-header h2 a').textContent.toLowerCase();
+            const excerpt = post.querySelector('.post-excerpt')?.textContent.toLowerCase() || '';
+            const dateText = post.querySelector('.post-meta p').textContent.toLowerCase();
+            const dateVariations = formatDateVariations(dateText.split('·')[0].trim()).map(d => d.toLowerCase());
+            
+            const isMatch = !query || 
+              title.includes(query) || 
+              excerpt.includes(query) || 
+              dateVariations.some(d => d.includes(query));
+            
+            return {
+              element: post,
+              isMatch,
+              relevance: isMatch ? calculateRelevance(post, query) : Infinity
+            };
+          })
+          .filter(post => post.isMatch);
+        
+        matchCount = matchingPosts.length;
+        
+        // Sort by relevance (lower score = higher relevance)
+        matchingPosts.sort((a, b) => a.relevance - b.relevance);
+        
+        // Update DOM
+        posts.forEach(post => post.style.display = 'none');
+        matchingPosts.forEach(({ element }, index) => {
+          element.style.display = '';
+          element.style.order = index; // Use CSS order for positioning
+        });
+        
+        // Show/hide no results message
+        noResultsMessage.hidden = matchCount > 0;
+        
+        // Update the ARIA live region with search results info
+        if (query && matchCount === 0) {
+          postsGrid.setAttribute('aria-label', `No posts found matching "${query}"`);
+        } else if (query) {
+          postsGrid.setAttribute('aria-label', 
+            `${matchCount} post${matchCount !== 1 ? 's' : ''} found matching "${query}", sorted by relevance`
+          );
+        } else {
+          postsGrid.removeAttribute('aria-label');
+          // Reset post order when search is cleared
+          posts.forEach(post => post.style.order = '');
+        }
+      }
+      
+      // Debounce function to limit how often the search runs
+      function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+          const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+          };
+          clearTimeout(timeout);
+          timeout = setTimeout(later, wait);
+        };
+      }
+      
+      // Event listeners
+      searchInput.addEventListener('input', debounce(filterAndSortPosts, 150));
+      
+      clearButton.addEventListener('click', () => {
+        searchInput.value = '';
+        filterAndSortPosts();
+        searchInput.focus();
       });
       
-      items.forEach(el => io.observe(el));
+      // Support pressing Escape to clear search
+      searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          searchInput.value = '';
+          filterAndSortPosts();
+        }
+      });
     });
   </script>
 </body>
