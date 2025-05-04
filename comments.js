@@ -145,43 +145,86 @@ document.addEventListener('DOMContentLoaded', () => {
   // Display comments in the UI
   function displayComments(allComments) {
     console.log("Displaying comments:", allComments.length);
-    // Separate top-level comments and replies
-    const topLevelComments = allComments.filter(comment => !comment.replyTo);
-    const replies = allComments.filter(comment => comment.replyTo);
-    
+
+    // Create a map of replies grouped by their parent ID for efficient lookup
+    const repliesByParentId = allComments.reduce((map, comment) => {
+        if (comment.replyTo) {
+            // Initialize array if it doesn't exist, then push the reply
+            (map[comment.replyTo] = map[comment.replyTo] || []).push(comment);
+        }
+        return map;
+    }, {});
+
+    // Sort replies within each group by date (newest first)
+    Object.values(repliesByParentId).forEach(group => group.sort((a, b) => new Date(b.date) - new Date(a.date)));
+
+    // Filter and sort top-level comments (newest first)
+    const topLevelComments = allComments
+        .filter(comment => !comment.replyTo)
+        .sort((a, b) => new Date(b.date) - new Date(a.date)); 
+
     console.log("Top-level comments:", topLevelComments.length);
-    console.log("Replies:", replies.length);
     
-    if (topLevelComments.length === 0) {
+    // Clear the main container before rendering
+    commentsContainer.innerHTML = ''; 
+
+    if (topLevelComments.length === 0 && Object.keys(repliesByParentId).length === 0) { // Check if there are truly no comments at all
       commentsContainer.innerHTML = '<p class="no-comments">No comments yet. Be the first to share your thoughts!</p>';
       return;
     }
-    
-    // Sort comments by date (newest first)
-    topLevelComments.sort((a, b) => new Date(b.date) - new Date(a.date));
-    
-    // Clear container
-    commentsContainer.innerHTML = '';
-    
-    // Add each top-level comment to DOM
-    topLevelComments.forEach(comment => {
-      addCommentToDOM(comment);
-      
-      // Find replies for this comment
-      const commentReplies = replies.filter(reply => reply.replyTo === comment.id);
-      if (commentReplies.length > 0) {
-        const commentElement = document.querySelector(`.comment[data-id="${comment.id}"]`);
-        const repliesContainer = createRepliesContainer(commentElement);
+
+    // Helper function to create the DOM element for a single comment or reply
+    function renderCommentElement(comment, isReply = false) {
+        const element = document.createElement('div');
+        element.classList.add('comment');
+        if (isReply) {
+            element.classList.add('comment-reply');
+        }
+        element.setAttribute('data-id', comment.id);
+
+        const commentDate = new Date(comment.date);
+        const formattedDate = formatTimeAgo(commentDate);
+
+        // Re-use the existing HTML structure for consistency
+        element.innerHTML = `
+          <div class="comment-header">
+            <div class="comment-avatar">${getInitials(comment.name)}</div>
+            <div class="comment-meta">
+              <span class="comment-author">${escapeHTML(comment.name)}</span>
+              <span class="comment-date">${formattedDate}</span>
+            </div>
+          </div>
+          <div class="comment-content">
+            <p>${escapeHTML(comment.content).replace(/\n/g, '<br>')}</p>
+          </div>
+          <div class="comment-actions">
+            <button class="reply-button">Reply</button>
+          </div>
+        `;
+        return element;
+    }
+
+    // Recursive function to render a comment and its entire reply subtree
+    function appendCommentTree(comment, containerElement) {
+        // Create the element for the current comment (could be top-level or a reply)
+        const commentElement = renderCommentElement(comment, !!comment.replyTo);
+        // Append it to the appropriate container (either main container or a parent's reply container)
+        containerElement.appendChild(commentElement); 
+
+        // Find replies specifically for THIS comment
+        const replies = repliesByParentId[comment.id] || [];
         
-        // Sort replies by date (newest first)
-        commentReplies.sort((a, b) => new Date(b.date) - new Date(a.date));
-        
-        // Add replies
-        commentReplies.forEach(reply => {
-          addReplyToDOM(reply, repliesContainer);
-        });
-      }
-    });
+        // If this comment has replies, render them recursively
+        if (replies.length > 0) {
+            // Ensure the .comment-replies container exists within the current comment element
+            const repliesContainer = createRepliesContainer(commentElement); 
+            // Append each reply (which are already sorted) into the replies container
+            replies.forEach(reply => appendCommentTree(reply, repliesContainer));
+        }
+    }
+
+    // Start the rendering process for each top-level comment
+    topLevelComments.forEach(comment => appendCommentTree(comment, commentsContainer));
   }
   
   // Fetch comments from server
