@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="1 Thessalonians 2:1-12 Devotional – A study on Paul's ministry, motivation, and model for the Gospel.">
+  <meta name="keywords" content="1 Thessalonians, Bible study, Gospel, Paul, Christian devotional, Brandon Nguyen">
+  <meta name="author" content="Brandon Nguyen"> <title>1 Thessalonians 2:1-12 – Brandon Nguyen</title>
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
+  <link rel="manifest" href="images/favicon/site.webmanifest">
+  <link rel="shortcut icon" href="images/favicon/favicon.ico">
+
+  <link rel="stylesheet" href="styles.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sorts+Mill+Goudy:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400;1,600&display=swap">
+
+
+  <style>
+    /* constrain + center */
+    main.container {
+      display: grid;
+      grid-template-columns: 1fr; /* Simplified for single column content */
+      grid-template-areas: 
+        "content"
+        "comments";
+      padding: 4rem 2rem;
+      width: 95%;
+      max-width: 1400px; /* Max width from 1peter */
+      margin: 0 auto;
+      gap: 2rem;
+    }
+
+    /* Smaller dark mode toggle button specifically for this page */
+    .dark-mode-toggle {
+      width: 35px;  /* Reduced from default */
+      height: 35px; /* Reduced from default */
+      bottom: 1.5rem; /* Adjusted positioning */
+      right: 1.5rem;
+      border-radius: 50%;
+      opacity: 0.85;
+      transition: opacity 0.3s ease;
+    }
+
+    .dark-mode-toggle:hover {
+      opacity: 1;
+    }
+
+    article.devo-full {
+      grid-area: content;
+      /* flex: 0 1 900px; Removed as grid handles width */
+      font-family: 'Sorts Mill Goudy', serif; /* Primary devotional font */
+      padding: 0;
+      max-width: 750px; /* Content width from 1peter */
+      margin: 0 auto; /* Center the article */
+    }
+    
+    .comments-section {
+      grid-area: comments;
+      width: 100%;
+      max-width: 750px; /* Consistent width */
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* headings and meta */
+    .devo-full h2 {
+      font-size: 3.5rem;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      font-family: 'Sorts Mill Goudy', serif;
+      text-align: center;
+      letter-spacing: 0.02em;
+      line-height: 1.2;
+    }
+
+    .devo-full .meta { /* Changed from .date to .meta for consistency */
+      text-align: center;
+      margin-bottom: 3rem;
+      opacity: 0.8;
+    }
+
+    .devo-full .meta em { /* For the date, similar to 1peter */
+      display: block;
+      font-size: 1.1rem;
+      font-style: normal; /* Or italic if preferred */
+      font-family: 'Sorts Mill Goudy', serif;
+      letter-spacing: 0.03em;
+    }
+
+    /* verse sections */
+    .devo-full section {
+      margin: 3rem 0;
+    }
+
+    .devo-full h3 {
+      font-size: 1.8rem; /* Heading for sections within the devotional */
+      margin-top: 2.5rem;
+      margin-bottom: 1.5rem;
+      font-family: 'Sorts Mill Goudy', serif;
+      text-align: left;
+      max-width: 750px; /* Consistent width */
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* content formatting */
+    .devo-full p {
+      font-size: 1.15rem;
+      line-height: 1.7;
+      margin: 1.5rem auto;
+      max-width: 750px; /* Consistent width */
+      font-family: 'Sorts Mill Goudy', serif; /* Primary devotional font */
+      text-align: left;
+      letter-spacing: 0.01em;
+    }
+
+    /* scripture styling (can be used for emphasis if needed) */
+    .scripture {
+      font-weight: bold;
+    }
+
+    /* Greek text */
+    [lang="grc"] {
+      font-family: 'Times New Roman', serif; /* Standard for Greek, or use Crimson Pro if preferred */
+      /* font-weight: bold; /* Making Greek text bold as per original Galatians */
+    }
+    /* Making <strong> inside <p> also use Sorts Mill Goudy by default, but can be overridden */
+    .devo-full p strong {
+        font-family: 'Sorts Mill Goudy', serif; /* Ensure strong text uses the main devotional font */
+    }
+
+    /* Bible verse toggle styling */
+    .bible-passage {
+      background-color: var(--background);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 2rem auto;
+      max-width: 750px;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    /* Added instructions hint */
+    .bible-passage:after {
+      content: "Tap to toggle between English and Greek";
+      position: absolute;
+      bottom: 0.5rem;
+      right: 0.75rem;
+      font-size: 0.7rem;
+      color: var(--text-light);
+      opacity: 0.7;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .bible-passage:hover {
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      background-color: rgba(0, 0, 0, 0.02);
+    }
+
+    .bible-passage .verse {
+      display: flex;
+      margin-bottom: 0.8rem;
+      position: relative;
+    }
+
+    .bible-passage .verse:last-child {
+      margin-bottom: 0;
+    }
+
+    .verse-number {
+      font-weight: bold;
+      min-width: 1.5rem;
+      margin-right: 0.5rem;
+      flex-shrink: 0;
+    }
+
+    .verse-text {
+      flex: 1;
+      word-wrap: break-word;
+      max-width: 100%;
+      overflow-wrap: break-word;
+    }
+
+    .bible-passage .greek-text {
+      display: none;
+      font-family: 'Times New Roman', serif;
+      font-size: 1.05rem; /* Slightly larger for better readability */
+      line-height: 1.6;
+    }
+
+    .bible-passage.show-greek .english-text {
+      display: none;
+    }
+
+    .bible-passage.show-greek .greek-text {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-container"> <h1 class="site-title"><a href="/">Brandon Nguyen</a></h1> <nav class="main-nav" aria-label="Main navigation">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/about">About</a></li> <li><a href="/contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <article class="devo-full animate-in">
+      <h2>1 Thessalonians 2:1-12</h2>
+      <p class="meta"><em>May 15, 2025</em></p>
+
+      <div class="bible-passage" id="bible-passage">
+        <div class="verse">
+          <span class="verse-number">1</span>
+          <div class="verse-text">
+            <span class="english-text">For yourselves, brethren, know our entrance in unto you, that it was not in vain:</span>
+            <span class="greek-text">Αὐτοὶ γὰρ οἴδατε, ἀδελφοί, τὴν εἴσοδον ἡμῶν τὴν πρὸς ὑμᾶς, ὅτι οὐ κενὴ γέγονεν,</span>
+          </div>
+        </div>
+        <div class="verse">
+          <span class="verse-number">2</span>
+          <div class="verse-text">
+            <span class="english-text">But even after that we had suffered before, and were shamefully entreated, as ye know, at Philippi, we were bold in our God to speak unto you the gospel of God with much contention.</span>
+            <span class="greek-text">ἀλλὰ προπαθόντες καὶ ὑβρισθέντες, καθὼς οἴδατε, ἐν Φιλίπποις, ἐπαρρησιασάμεθα ἐν τῷ θεῷ ἡμῶν λαλῆσαι πρὸς ὑμᾶς τὸ εὐαγγέλιον τοῦ θεοῦ ἐν πολλῷ ἀγῶνι.</span>
+          </div>
+        </div>
+        <div class="verse">
+          <span class="verse-number">3</span>
+          <div class="verse-text">
+            <span class="english-text">For our exhortation was not of deceit, nor of uncleanness, nor in guile:</span>
+            <span class="greek-text">ἡ γὰρ παράκλησις ἡμῶν οὐκ ἐκ πλάνης οὐδὲ ἐξ ἀκαθαρσίας οὐδὲ ἐν δόλῳ,</span>
+          </div>
+        </div>
+        <div class="verse">
+          <span class="verse-number">4</span>
+          <div class="verse-text">
+            <span class="english-text">But as we were allowed of God to be put in trust with the gospel, even so we speak; not as pleasing men, but God, which trieth our hearts.</span>
+            <span class="greek-text">ἀλλὰ καθὼς δεδοκιμάσμεθα ὑπὸ τοῦ θεοῦ πιστευθῆναι τὸ εὐαγγέλιον, οὕτως λαλοῦμεν, οὐχ ὡς ἀνθρώποις ἀρέσκοντες ἀλλὰ θεῷ τῷ δοκιμάζοντι τὰς καρδίας ἡμῶν.</span>
+          </div>
+        </div>
+        <div class="verse">
+          <span class="verse-number">5</span>
+          <div class="verse-text">
+            <span class="english-text">For neither at any time used we flattering words, as ye know, nor a cloke of covetousness; God is witness:</span>
+            <span class="greek-text">οὔτε γάρ ποτε ἐν λόγῳ κολακείας ἐγενήθημεν, καθὼς οἴδατε, οὔτε ἐν προφάσει πλεονεξίας, θεὸς μάρτυς,</span>
+          </div>
+        </div>
+        <div class="verse">
+          <span class="verse-number">6</span>
+          <div class="verse-text">
+            <span class="english-text">Nor of men sought we glory, neither of you, nor yet of others, when we might have been burdensome, as the apostles of Christ.</span>
+            <span class="greek-text">οὔτε ζητοῦντες ἐξ ἀνθρώπων δόξαν, οὔτε ἀφ' ὑμῶν οὔτε ἀπ' ἄλλων, δυνάμενοι ἐν βάρει εἶναι ὡς Χριστοῦ ἀπόστολοι.</span>
+          </div>
+        </div>
+        <div class="verse">
+          <span class="verse-number">7</span>
+          <div class="verse-text">
+            <span class="english-text">But we were gentle among you, even as a nurse cherisheth her children:</span>
+            <span class="greek-text">ἀλλὰ ἐγενήθημεν ἤπιοι ἐν μέσῳ ὑμῶν, ὡς ἂν τροφὸς θάλπῃ τὰ ἑαυτῆς τέκνα.</span>
+          </div>
+        </div>
+        <div class="verse">
+          <span class="verse-number">8</span>
+          <div class="verse-text">
+            <span class="english-text">So being affectionately desirous of you, we were willing to have imparted unto you, not the gospel of God only, but also our own souls, because ye were dear unto us.</span>
+            <span class="greek-text">οὕτως ὁμειρόμενοι ὑμῶν εὐδοκοῦμεν μεταδοῦναι ὑμῖν οὐ μόνον τὸ εὐαγγέλιον τοῦ θεοῦ ἀλλὰ καὶ τὰς ἑαυτῶν ψυχάς, διότι ἀγαπητοὶ ἡμῖν ἐγενήθητε.</span>
+          </div>
+        </div>
+        <div class="verse">
+          <span class="verse-number">9</span>
+          <div class="verse-text">
+            <span class="english-text">For ye remember, brethren, our labour and travail: for labouring night and day, because we would not be chargeable unto any of you, we preached unto you the gospel of God.</span>
+            <span class="greek-text">μνημονεύετε γάρ, ἀδελφοί, τὸν κόπον ἡμῶν καὶ τὸν μόχθον· νυκτὸς καὶ ἡμέρας ἐργαζόμενοι πρὸς τὸ μὴ ἐπιβαρῆσαί τινα ὑμῶν ἐκηρύξαμεν εἰς ὑμᾶς τὸ εὐαγγέλιον τοῦ θεοῦ.</span>
+          </div>
+        </div>
+        <div class="verse">
+          <span class="verse-number">10</span>
+          <div class="verse-text">
+            <span class="english-text">Ye are witnesses, and God also, how holily and justly and unblameably we behaved ourselves among you that believe:</span>
+            <span class="greek-text">ὑμεῖς μάρτυρες καὶ ὁ θεός, ὡς ὁσίως καὶ δικαίως καὶ ἀμέμπτως ὑμῖν τοῖς πιστεύουσιν ἐγενήθημεν,</span>
+          </div>
+        </div>
+        <div class="verse">
+          <span class="verse-number">11</span>
+          <div class="verse-text">
+            <span class="english-text">As ye know how we exhorted and comforted and charged every one of you, as a father doth his children,</span>
+            <span class="greek-text">καθάπερ οἴδατε ὡς ἕνα ἕκαστον ὑμῶν ὡς πατὴρ τέκνα ἑαυτοῦ παρακαλοῦντες ὑμᾶς καὶ παραμυθούμενοι</span>
+          </div>
+        </div>
+        <div class="verse">
+          <span class="verse-number">12</span>
+          <div class="verse-text">
+            <span class="english-text">That ye would walk worthy of God, who hath called you unto his kingdom and glory.</span>
+            <span class="greek-text">καὶ μαρτυρόμενοι εἰς τὸ περιπατεῖν ὑμᾶς ἀξίως τοῦ θεοῦ τοῦ καλοῦντος ὑμᾶς εἰς τὴν ἑαυτοῦ βασιλείαν καὶ δόξαν.</span>
+          </div>
+        </div>
+      </div>
+
+      <section>
+        <h3>Paul's Motivation for the Gospel (1 Thessalonians 2:1-4)</h3>
+        <p>
+          For context, before writing this letter, Paul arrived in Thessalonica after being physically beaten with rods (<strong>Acts 16:19-22</strong>) and then imprisoned in Philippi for a few days (<strong>Acts 16:23-24</strong>). Yet, instead of finding rest or recuperating his energy, he went straight into proclaiming the Gospel to the Thessalonians. Even in Thessalonica, Paul faced false allegations of civil treason and endured many physical hardships (<strong>Acts 17:5-9</strong>). Yet to Paul, his coming to the Thessalonians was not <strong lang="grc">κενὴ</strong> (<strong>in vain</strong>). <strong>Why was it not in vain?</strong> Because Paul had been <strong lang="grc">πιστευθῆναι τὸ εὐαγγέλιον</strong> (<strong>entrusted with the gospel</strong>), a stewardship that was divinely commissioned by God Himself. In <strong>1 Corinthians 4:1–2</strong>, it is required of stewards of the gospel that they be found faithful, so that only God alone may be pleased above all things. And as a result of prioritizing the pleasure of God above all else, by the will of God, the church of Thessalonica became fruitful and flourishing, serving as a model to all the churches around them. <strong>How often do we view our efforts in sharing the Gospel as empty-handed or futile?</strong> As Christians, we are called to be faithful in proclaiming the Good News, not fixated on the outcome, because it is neither the one who plants nor the one who waters who brings growth, but God alone who gives the growth, and God alone who has mercy on whom He will have mercy and compassion on whom He will have compassion. Because of his entrusted stewardship of the Gospel and his approval by God as an apostle, Paul is given the <strong lang="grc">παρρησία</strong> (<strong>boldness</strong>) to proclaim the gospel. This boldness ultimately comes from the Spirit of God and is displayed <strong lang="grc">ἐν πολλῷ ἀγῶνι</strong> (<strong>in the midst of much conflict</strong>), as seen during his time in Philippi. This Gospel does not spring from:
+          <ul style="margin-left: 2rem; margin-bottom: 1rem; font-family: 'Sorts Mill Goudy', serif; font-size: 1.15rem; line-height: 1.7; letter-spacing: 0.01em;">
+            <li><strong lang="grc">πλάνη</strong> (<strong>error</strong>): false doctrine; a going astray from the truth (e.g., The Chosen)</li>
+            <li><strong lang="grc">ἀκαθαρσία</strong> (<strong>impurity</strong>): unclean or corrupt motives; disgraceful intentions; sexual wickedness (e.g., adulterous church scandals better left undescribed)</li>
+            <li><strong lang="grc">δόλος</strong> (<strong>deceit</strong>): trickery, craftiness, fraud; subtle manipulation (e.g., Kenneth Copeland)</li>
+          </ul>
+        </p>
+        <p>
+          Nor is it preached to please man by compromising the truth of the gospel. <strong>My fellow Christian, are you doing ministry out of love for others, or out of selfish ambition?</strong> Since our actions are meant to be a witness to the living God and His Gospel, we must also remember what the Gospel is not.
+        </p>
+      </section>
+
+      <section>
+        <h3>The Gentleness of the Gospel (1 Thessalonians 2:5-8)</h3>
+        <p>
+          Paul did not come to persuade the Thessalonians with lofty speech, mere rhetoric, or by making demands of them through his apostolic authority. He uses the phrase <strong lang="grc">Θεὸς μάρτυς</strong> (<strong>God is witness</strong>), a phrase seen in <strong>Romans 1:9</strong> and <strong>Phillipians 1:8</strong>, to affirm that his statements are spoken in truth and with genuine sincerity, demonstrating his deep accountability before God and the seriousness with which he views his ministry. <strong>As we go about our daily lives, are we mindful that everything we do takes place before the face of God? Do we honestly recognize the subtle sins that surface in our interactions with others? Are we seeking our own glory instead of building up others?</strong> Christian, examine your heart. Look at Paul's example in how he passionately serves in his ministry, not out of personal gain or approval from man, but out of sincere devotion to Christ and a deep sense of accountability before God. Even though Paul had every right as an Apostle to demand such things, he made no such use of any of these rights. Paul's ultimate goal was to preach Jesus Christ and Him crucified, in demonstration of power and of the Holy Spirit and full conviction. Paul then uses two analogies to describe his care for the Thessalonians, one of them being that of a mother tenderly caring for her own children. In <strong>Numbers 11:12</strong>, Moses uses a similar analogy, comparing himself to a nursing mother caring for the people of Israel. However, he does so as a plea for help to God, because he was greatly burdened and discouraged by the people's constant demands for meat. He was sacrificially exhausted from constantly providing for them, perhaps foreshadowing the greater burden that Christ, the true and better Moses, would ultimately one day bear for His people. Just as Moses sacrificially loved Israel, Paul and the apostles not only shared the gospel but were also willing to share their very selves, becoming all things to all people, that by all faithful means, God might save some through them. The Thessalonians were very dear to Paul, a love born out of gospel ministry that was familial and sacrificial. He always looked for their interests, not his own, putting their developing faith in Christ first. He was willing to gladly spend all his energy and even have himself spent for the sake of their souls.
+        </p>
+      </section>
+
+      <section>
+        <h3>The Calling of the Gospel (1 Thessalonians 2:9-12)</h3>
+        <p>
+          Paul labored as a tentmaker, night and day, working long hours from before dawn until after sunset, to relieve the Thessalonians of having to provide financially for him. The word <strong lang="grc">κοπιῶντες</strong> (<strong>labored</strong>) means to invest intense, exhausting effort into a task, draining the person physically and emotionally. This statement is echoed later in <strong>1 Thessalonians 3:7–8</strong> as well. Instead of taking advantage of his apostolic authority to demand support from the Thessalonians, he humbled himself so that he might display his sacrificial love in planting this new church in Thessalonica. <strong>Do we serve one another by laboring in love, or do we serve with the expectation of receiving something in return?</strong> Christian, consider the example of Paul, who labored night and day so that he would not take even a single penny from the Thessalonians! For Paul does not seek the monetary gift in itself, but rather seeks the fruit that increases to their faith in Jesus Christ. Paul's vocation of tentmaking was in itself a service to the Lord. He then describes the Thessalonians as witnesses, able to see Paul as an example of what it means to be a true believer in Christ, so that they may be encouraged to imitate him as he imitates Christ. Paul uses another analogy in referring to himself as a father, constantly urging the Thessalonians to <strong lang="grc">περιπατεῖν ἀξίως τοῦ Θεοῦ</strong> (<strong>to walk in a manner worthy of God</strong>), which reflects His holiness, grace, and calling. This walk is the fruit of regeneration and sanctification through the power of the Holy Spirit, not a works-based righteousness, but a confirmation of their election as God's chosen people. Only those who are called into His kingdom and glory, which all Christians will share in heaven, are able to walk in such a high calling. <strong>My fellow Christian, are you continually exhorting others to walk worthy of the calling they have received, not neglecting to meet together, as is the habit of some, but encouraging one another all the more as you see the Day drawing near?</strong> Let us not only look to our own race, but also bear one another's burdens and constantly encourage one another, because, Christian, it is our responsibility to help others maintain their endurance in the race as we press on toward His kingdom and into His glory.
+        </p>
+      </section>
+    </article>
+
+    <section class="comments-section">
+      <h3>Comments</h3>
+      <div id="comments-container">
+        </div>
+      
+      <form id="comment-form" class="comment-form">
+        <h4>Share Your Thoughts</h4>
+        <div class="form-group">
+          <label for="comment-name">Name</label>
+          <input type="text" id="comment-name" name="name" placeholder="Your name" required>
+        </div>
+        <div class="form-group">
+          <label for="comment-content">Comment</label>
+          <textarea id="comment-content" name="content" rows="4" placeholder="Add a public comment..." required></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="submit-comment">Post</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer animate-in">
+    <div class="container"> <p class="copyright">&copy; 2025 Brandon Nguyen. All rights reserved.</p> </div>
+  </footer>
+
+  <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode">
+  </button>
+
+  <script>
+    // Theme toggle
+    const html = document.documentElement;
+    const toggle = document.getElementById('darkModeToggle');
+
+    // Initialize from localStorage
+    if (localStorage.getItem('darkMode') === 'false') {
+      html.classList.remove('dark');
+    } else { // Default to dark if not set or set to true
+        html.classList.add('dark');
+    }
+
+    toggle.addEventListener('click', () => {
+      html.classList.toggle('dark');
+      localStorage.setItem('darkMode', html.classList.contains('dark'));
+    });
+
+    // IntersectionObserver for animations
+    document.addEventListener('DOMContentLoaded', () => {
+      const article = document.querySelector('.devo-full');
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            io.unobserve(e.target);
+          }
+        });
+      }, {
+        threshold: 0, // Start animation as soon as 0% is visible
+        rootMargin: '0px' // No margin adjustment
+      });
+
+      if (article) {
+        io.observe(article);
+      }
+      
+      // Animate footer as well
+      const footer = document.querySelector('.site-footer');
+      if (footer) {
+        const footerIo = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('visible');
+                    footerIo.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0, rootMargin: '0px'});
+        footerIo.observe(footer);
+      }
+    });
+
+    // Scripture language toggle functionality
+    document.addEventListener('DOMContentLoaded', () => {
+      const passageContainer = document.getElementById('bible-passage');
+      
+      // Add click handler to the entire passage container
+      passageContainer.addEventListener('click', () => {
+        passageContainer.classList.toggle('show-greek');
+      });
+    });
+  </script>
+  
+  <script src="comments.js"></script>
+</body>
+</html> 

@@ -159,9 +159,7 @@
   </main>
 
   <footer class="site-footer animate-in">
-    <div class="container">
-      <p class="copyright">&copy; 2025 Brandon Nguyen. All rights reserved.</p>
-    </div>
+    <div class="container"> <p class="copyright">&copy; 2024 Brandon Nguyen. All rights reserved.</p> </div>
   </footer>
 
   <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode"></button>
@@ -174,6 +172,8 @@
     // Initialize from localStorage
     if (localStorage.getItem('darkMode') === 'false') {
       html.classList.remove('dark');
+    } else { // Default to dark if not set or set to true
+        html.classList.add('dark');
     }
 
     toggle.addEventListener('click', () => {
@@ -181,7 +181,7 @@
       localStorage.setItem('darkMode', html.classList.contains('dark'));
     });
 
-    // IntersectionObserver for fade‑in (copied from 1 Peter page)
+    // IntersectionObserver for animations
     document.addEventListener('DOMContentLoaded', () => {
       const article = document.querySelector('.devo-full');
       const io = new IntersectionObserver(entries => {

@@ -55,15 +55,15 @@
       <h2 class="section-title">Featured Post</h2>
       <article class="devo featured-devo">
         <header class="devo-header">
-          <h2><a href="/galatians-1-1-10">Galatians 1:1‑10</a></h2>
+          <h2><a href="/1thessalonians-2-1-12">1 Thessalonians 2:1-12</a></h2>
           <div class="post-meta">
-            <p>May 6, 2025 · 2 min read</p>
+            <p>May 11, 2025 · 2.5 min read</p>
           </div>
         </header>
         <div class="featured-excerpt">
-          <p>Paul introduces himself as an apostle of Christ in his letter to the churches of Galatia. He warns the Galatians of the dangers of turning to a false and distorted gospel, emphasizing the serious consequences for those who preach such a gospel.</p>
+          <p>Paul expresses his deep sense of responsibility in proclaiming the Gospel, his unwavering care for the Thessalonians, and his constant exhortation that they walk worthy of the calling they have received</p>
         </div>
-        <a href="/galatians-1-1-10" class="btn btn-primary">Read Featured</a>
+        <a href="/1thessalonians-2-1-12" class="btn btn-primary">Read Featured</a>
       </article>
     </section>
 
@@ -85,6 +85,19 @@
       </div>
       <h2 class="section-title">More Posts</h2>
       <div id="posts-grid" class="posts-grid" aria-live="polite">
+        <article class="devo animate-in">
+          <header class="devo-header">
+            <h2><a href="/galatians-1-1-10">Galatians 1:1‑10</a></h2>
+            <div class="post-meta">
+              <p>May 6, 2025 · 2 min read</p>
+            </div>
+          </header>
+          <div class="post-excerpt">
+            <p>Paul introduces himself as an apostle of Christ in his letter to the churches of Galatia. He warns the Galatians of the dangers of turning to a false and distorted gospel, emphasizing the serious consequences for those who preach such a gospel.</p>
+          </div>
+          <a href="/galatians-1-1-10" class="read-more">Read More</a>
+        </article>
+        
         <article class="devo animate-in">
           <header class="devo-header">
             <h2><a href="/1peter1-6-9">1 Peter 1:6‑9</a></h2>
@@ -168,6 +181,8 @@
     // Initialize from localStorage
     if (localStorage.getItem('darkMode') === 'false') {
       html.classList.remove('dark');
+    } else { // Default to dark if not set or set to true
+        html.classList.add('dark');
     }
 
     toggle.addEventListener('click', () => {
@@ -175,12 +190,10 @@
       localStorage.setItem('darkMode', html.classList.contains('dark'));
     });
 
-    // Check for reduced motion preference
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    // Initialize functionality when DOM is ready
+    // IntersectionObserver for animations
     document.addEventListener('DOMContentLoaded', () => {
       // Animation setup
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (prefersReducedMotion) {
         // Make all elements visible immediately without animation
         document.querySelectorAll('.animate-in, .featured-post, .featured-devo').forEach(el => {
