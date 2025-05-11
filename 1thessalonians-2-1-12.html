@@ -190,6 +190,19 @@
     .bible-passage.show-greek .greek-text {
       display: block;
     }
+
+    /* Add mobile-specific adjustments */
+    @media (max-width: 768px) {
+      main.container {
+        width: 100%; /* Use full width */
+        padding: 3rem 1rem; /* Adjust padding for mobile */
+        /* margin: 0 auto; is not needed if width is 100% */
+      }
+
+      .devo-full h2 {
+        font-size: 2.5rem; /* Reduce heading size for mobile */
+      }
+    }
   </style>
 </head>
 <body>
