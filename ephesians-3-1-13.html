@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Ephesians 3:1-13 Devotional – A study on Paul's mission to the Gentiles and the mystery of Christ.">
+  <meta name="keywords" content="Ephesians, Bible study, Gospel, Paul, Gentiles, Mystery of Christ, Christian devotional, Brandon Nguyen">
+  <meta name="author" content="Brandon Nguyen">
+  <title>Ephesians 3:1-13 – Brandon Nguyen</title>
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
+  <link rel="manifest" href="images/favicon/site.webmanifest">
+  <link rel="shortcut icon" href="images/favicon/favicon.ico">
+
+  <link rel="stylesheet" href="styles.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sorts+Mill+Goudy:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400;1,600&display=swap">
+
+  <style>
+    /* constrain + center */
+    main.container {
+      display: grid;
+      grid-template-columns: 1fr; /* Simplified for single column content */
+      grid-template-areas: 
+        "content"
+        "comments";
+      padding: 4rem 2rem;
+      width: 95%;
+      max-width: 1400px; /* Max width from 1peter */
+      margin: 0 auto;
+      gap: 2rem;
+    }
+
+    article.devo-full {
+      grid-area: content;
+      font-family: 'Sorts Mill Goudy', serif; /* Primary devotional font */
+      padding: 0;
+      max-width: 750px; /* Content width from 1peter */
+      margin: 0 auto; /* Center the article */
+    }
+    
+    .comments-section {
+      grid-area: comments;
+      width: 100%;
+      max-width: 750px; /* Consistent width */
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* headings and meta */
+    .devo-full h2 {
+      font-size: 3.5rem;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      font-family: 'Sorts Mill Goudy', serif;
+      text-align: center;
+      letter-spacing: 0.02em;
+      line-height: 1.2;
+    }
+
+    .devo-full .meta { /* Changed from .date to .meta for consistency */
+      text-align: center;
+      margin-bottom: 3rem;
+      opacity: 0.8;
+    }
+
+    .devo-full .meta em { /* For the date, similar to 1peter */
+      display: block;
+      font-size: 1.1rem;
+      font-style: normal; /* Or italic if preferred */
+      font-family: 'Sorts Mill Goudy', serif;
+      letter-spacing: 0.03em;
+    }
+
+    /* verse sections */
+    .devo-full section {
+      margin: 3rem 0;
+    }
+
+    .devo-full h3 {
+      font-size: 1.8rem; /* Heading for sections within the devotional */
+      margin-top: 2.5rem;
+      margin-bottom: 1.5rem;
+      font-family: 'Sorts Mill Goudy', serif;
+      text-align: left;
+      max-width: 750px; /* Consistent width */
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* content formatting */
+    .devo-full p {
+      font-size: 1.15rem;
+      line-height: 1.7;
+      margin: 1.5rem auto;
+      max-width: 750px; /* Consistent width */
+      font-family: 'Sorts Mill Goudy', serif; /* Primary devotional font */
+      text-align: left;
+      letter-spacing: 0.01em;
+    }
+
+    /* scripture styling (can be used for emphasis if needed) */
+    .scripture {
+      font-weight: bold;
+    }
+
+    /* Greek text */
+    [lang="grc"] {
+      font-family: 'Times New Roman', serif; /* Standard for Greek, or use Crimson Pro if preferred */
+    }
+    .devo-full p strong {
+        font-family: 'Sorts Mill Goudy', serif; 
+    }
+
+    /* Bible verse toggle styling */
+    .bible-passage {
+      background-color: var(--background);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 2rem auto;
+      max-width: 750px;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .bible-passage:after {
+      content: "Tap to toggle between English and Greek";
+      position: absolute;
+      bottom: 0.5rem;
+      right: 0.75rem;
+      font-size: 0.7rem;
+      color: var(--text-light);
+      opacity: 0.7;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .bible-passage:hover {
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      background-color: rgba(0, 0, 0, 0.02);
+    }
+
+    .bible-passage .verse {
+      display: flex;
+      margin-bottom: 0.8rem;
+      position: relative;
+    }
+
+    .bible-passage .verse:last-child {
+      margin-bottom: 0;
+    }
+
+    .verse-number {
+      font-weight: bold;
+      min-width: 1.5rem;
+      margin-right: 0.5rem;
+      flex-shrink: 0;
+    }
+
+    .verse-text {
+      flex: 1;
+      word-wrap: break-word;
+      max-width: 100%;
+      overflow-wrap: break-word;
+    }
+
+    .bible-passage .greek-text {
+      display: none;
+      font-family: 'Times New Roman', serif;
+      font-size: 1.05rem; /* Slightly larger for better readability */
+      line-height: 1.6;
+    }
+
+    .bible-passage.show-greek .english-text {
+      display: none;
+    }
+
+    .bible-passage.show-greek .greek-text {
+      display: block;
+    }
+
+    /* Add mobile-specific adjustments */
+    @media (max-width: 768px) {
+      main.container {
+        width: 100%; /* Use full width */
+        padding: 3rem 1rem; /* Adjust padding for mobile */
+      }
+      
+      .devo-full h2 {
+        font-size: 2.5rem; /* Reduce heading size for mobile */
+      }
+    }
+    
+    /* Animation styles */
+    .animate-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    
+    .animate-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    /* Comment section styles */
+    .comments-section h3 {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      font-family: 'Sorts Mill Goudy', serif;
+    }
+    
+    .comment-form {
+      margin-top: 2rem;
+      border-top: 1px solid var(--border);
+      padding-top: 1.5rem;
+    }
+    
+    .comment-form h4 {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      font-family: 'Sorts Mill Goudy', serif;
+    }
+    
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background-color: var(--background);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .form-actions {
+      margin-top: 1rem;
+    }
+    
+    .submit-comment {
+      padding: 0.5rem 1rem;
+      background-color: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background-color 0.2s;
+    }
+    
+    .submit-comment:hover {
+      background-color: var(--accent-hover);
+    }
+    
+    /* Dark mode toggle */
+    .dark-mode-toggle {
+      position: fixed;
+      width: 30px;
+      height: 30px;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      background-color: var(--background);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      transition: background-color 0.2s, box-shadow 0.2s;
+    }
+    
+    .dark-mode-toggle:hover {
+      box-shadow: 0 0 8px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-container">
+      <h1 class="site-title"><a href="/">Brandon Nguyen</a></h1>
+      <nav class="main-nav" aria-label="Main navigation">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <article class="devo-full animate-in">
+      <h2>Ephesians 3:1-13</h2>
+
+      <div class="bible-passage" id="bible-passage" onclick="this.classList.toggle('show-greek')">
+        <div class="english-text">
+          <div class="verse"><span class="verse-number">1</span><span class="verse-text">For this cause I Paul, the prisoner of Jesus Christ for you Gentiles,</span></div>
+          <div class="verse"><span class="verse-number">2</span><span class="verse-text">If ye have heard of the dispensation of the grace of God which is given me to you-ward:</span></div>
+          <div class="verse"><span class="verse-number">3</span><span class="verse-text">How that by revelation he made known unto me the mystery; (as I wrote afore in few words,</span></div>
+          <div class="verse"><span class="verse-number">4</span><span class="verse-text">Whereby, when ye read, ye may understand my knowledge in the mystery of Christ)</span></div>
+          <div class="verse"><span class="verse-number">5</span><span class="verse-text">Which in other ages was not made known unto the sons of men, as it is now revealed unto his holy apostles and prophets by the Spirit;</span></div>
+          <div class="verse"><span class="verse-number">6</span><span class="verse-text">That the Gentiles should be fellowheirs, and of the same body, and partakers of his promise in Christ by the gospel:</span></div>
+          <div class="verse"><span class="verse-number">7</span><span class="verse-text">Whereof I was made a minister, according to the gift of the grace of God given unto me by the effectual working of his power.</span></div>
+          <div class="verse"><span class="verse-number">8</span><span class="verse-text">Unto me, who am less than the least of all saints, is this grace given, that I should preach among the Gentiles the unsearchable riches of Christ;</span></div>
+          <div class="verse"><span class="verse-number">9</span><span class="verse-text">And to make all men see what is the fellowship of the mystery, which from the beginning of the world hath been hid in God, who created all things by Jesus Christ:</span></div>
+          <div class="verse"><span class="verse-number">10</span><span class="verse-text">To the intent that now unto the principalities and powers in heavenly places might be known by the church the manifold wisdom of God,</span></div>
+          <div class="verse"><span class="verse-number">11</span><span class="verse-text">According to the eternal purpose which he purposed in Christ Jesus our Lord:</span></div>
+          <div class="verse"><span class="verse-number">12</span><span class="verse-text">In whom we have boldness and access with confidence by the faith of him.</span></div>
+          <div class="verse"><span class="verse-number">13</span><span class="verse-text">Wherefore I desire that ye faint not at my tribulations for you, which is your glory.</span></div>
+        </div>
+        <div class="greek-text">
+          <div class="verse"><span class="verse-number">1</span><span class="verse-text">τούτου χάριν ἐγὼ παῦλος ὁ δέσμιος τοῦ χριστοῦ ἰησοῦ ὑπὲρ ὑμῶν τῶν ἐθνῶν</span></div>
+          <div class="verse"><span class="verse-number">2</span><span class="verse-text">εἴγε ἠκούσατε τὴν οἰκονομίαν τῆς χάριτος τοῦ θεοῦ τῆς δοθείσης μοι εἰς ὑμᾶς</span></div>
+          <div class="verse"><span class="verse-number">3</span><span class="verse-text">ὅτι κατὰ ἀποκάλυψιν ἐγνώρισέν μοι τὸ μυστήριον καθὼς προέγραψα ἐν ὀλίγῳ</span></div>
+          <div class="verse"><span class="verse-number">4</span><span class="verse-text">πρὸς ὃ δύνασθε ἀναγινώσκοντες νοῆσαι τὴν σύνεσίν μου ἐν τῷ μυστηρίῳ τοῦ χριστοῦ</span></div>
+          <div class="verse"><span class="verse-number">5</span><span class="verse-text">ὃ ἐν ἑτέραις γενεαῖς οὐκ ἐγνωρίσθη τοῖς υἱοῖς τῶν ἀνθρώπων ὡς νῦν ἀπεκαλύφθη τοῖς ἁγίοις ἀποστόλοις αὐτοῦ καὶ προφήταις ἐν πνεύματι</span></div>
+          <div class="verse"><span class="verse-number">6</span><span class="verse-text">εἶναι τὰ ἔθνη συγκληρονόμα καὶ σύσσωμα καὶ συμμέτοχα τῆς ἐπαγγελίας αὐτοῦ ἐν τῷ χριστῷ διὰ τοῦ εὐαγγελίου</span></div>
+          <div class="verse"><span class="verse-number">7</span><span class="verse-text">οὗ ἐγενόμην διάκονος κατὰ τὴν δωρεὰν τῆς χάριτος τοῦ θεοῦ τὴν δοθεῖσάν μοι κατὰ τὴν ἐνέργειαν τῆς δυνάμεως αὐτοῦ</span></div>
+          <div class="verse"><span class="verse-number">8</span><span class="verse-text">ἐμοὶ τῷ ἐλαχιστοτέρῳ πάντων τῶν ἁγίων ἐδόθη ἡ χάρις αὕτη ἐν τοῖς ἔθνεσιν εὐαγγελίσασθαι τὸν ἀνεξιχνίαστον πλοῦτον τοῦ χριστοῦ</span></div>
+          <div class="verse"><span class="verse-number">9</span><span class="verse-text">καὶ φωτίσαι πάντας τίς ἡ κοινωνία τοῦ μυστηρίου τοῦ ἀποκεκρυμμένου ἀπὸ τῶν αἰώνων ἐν τῷ θεῷ τῷ τὰ πάντα κτίσαντι διὰ ἰησοῦ χριστοῦ</span></div>
+          <div class="verse"><span class="verse-number">10</span><span class="verse-text">ἵνα γνωρισθῇ νῦν ταῖς ἀρχαῖς καὶ ταῖς ἐξουσίαις ἐν τοῖς ἐπουρανίοις διὰ τῆς ἐκκλησίας ἡ πολυποίκιλος σοφία τοῦ θεοῦ</span></div>
+          <div class="verse"><span class="verse-number">11</span><span class="verse-text">κατὰ πρόθεσιν τῶν αἰώνων ἣν ἐποίησεν ἐν χριστῷ ἰησοῦ τῷ κυρίῳ ἡμῶν</span></div>
+          <div class="verse"><span class="verse-number">12</span><span class="verse-text">ἐν ᾧ ἔχομεν τὴν παῤῥησίαν καὶ τὴν προσαγωγὴν ἐν πεποιθήσει διὰ τῆς πίστεως αὐτοῦ</span></div>
+          <div class="verse"><span class="verse-number">13</span><span class="verse-text">διὸ αἰτοῦμαι μὴ ἐκκακεῖν ἐν ταῖς θλίψεσίν μου ὑπὲρ ὑμῶν ἥτις ἐστὶν δόξα ὑμῶν</span></div>
+        </div>
+      </div>
+
+      <section>
+        <h3>Paul's Mission for the Gentiles (Ephesians 3:1-2)</h3>
+        <p>Paul continues his train of thought from the previous passage of Ephesians 2, where he declares that the Gentiles are no longer strangers and aliens but are fellow citizens with the saints and members of the household of God. The Greek word <strong><span lang="grc">ἔθνος</span> (ethnos)</strong>, translated as Gentile, refers to non-Jews who were originally outside the covenant people of Israel, God's chosen nation. Though Paul was most likely in prison when writing the letter to the Ephesians, he considered himself a prisoner of Jesus Christ, not of Rome. His imprisonment, in his eyes, was of no concern, for it had served to advance the gospel among the Gentiles. God appointed Paul as an apostle of Christ, entrusting him with the <strong><span lang="grc">οἰκονομία</span> (stewardship)</strong> of His grace for the Gentiles. The <strong><span lang="grc">μυστήριον</span> (mystery)</strong> of Christ refers to the inclusion of the Gentiles as fellow heirs in the covenant. This mystery was not made known in times of the Old Covenant as it has now been revealed to His holy apostles and prophets by the Spirit in the New Covenant. It was revealed to Paul by the appearance of Jesus to him, as recorded in Acts 9, where the Lord declares to Ananias, <strong>“He is a chosen vessel unto me, to bear my name before the Gentiles, and kings, and the children of Israel."</strong></p>
+      </section>
+
+      <section>
+        <h3>The Gospel for All (Ephesians 3:3-5)</h3>
+        <p>This inclusion was once considered a mystery because it had been widely assumed that only the Jewish people were heirs to the promises of God. However, the Scriptures always testified to God's plan to gather all the nations. In <strong>Genesis 12:3</strong>, God promises Abraham, <strong>“In thee shall all families of the earth be blessed.”</strong> In <strong>Isaiah 2:2–3</strong>, the nations are prophesied to flow to the mountain of the Lord: <strong>“And it shall come to pass in the last days, that the mountain of the Lord's house shall be established in the top of the mountains... and all nations shall flow unto it.”</strong> <strong>Isaiah 49:6</strong> declares, <strong>“I will also give thee for a light to the Gentiles, that thou mayest be my salvation unto the end of the earth.”</strong> And in <strong>Zechariah 2:11</strong>, we read, <strong>“And many nations shall be joined to the Lord in that day, and shall be my people.”</strong> But now, with the coming of Christ, this mystery has been revealed in full light. God has made it clear that Gentiles, too, are part of His covenant people.</p>
+      </section>
+
+      <section>
+        <h3>Adoption of His Children (Ephesians 3:6)</h3>
+        <p>As Paul writes, the Gentiles are <strong><span lang="grc">συγκληρονόμοι</span> (fellow heirs)</strong>, <strong><span lang="grc">σύσσωμα</span> (members of the same body)</strong>, and <strong><span lang="grc">συμμέτοχα τῆς ἐπαγγελίας ἐν Χριστῷ Ἰησοῦ</span> (partakers of the promise in Christ Jesus)</strong>. And this is the promise: the gospel of our salvation, the word of truth by which we have been sealed with the Holy Spirit, who bears witness with our spirit that we are children of God. And if we are children, then we are heirs, heirs of God and fellow heirs with Christ, provided that we suffer with Him in order that we may also be glorified with Him. All of this comes through Jesus Christ, the founder and perfecter of our faith, who for the joy that was set before him endured the cross. It was through His blood that we, who were once far off, have been brought near. Christ has reconciled even the Gentiles to Himself, making peace by the blood of His cross. Thus, there is neither Jew nor Greek, neither one who has been in the faith for many years nor one who is a new believer, for we are all one in Jesus Christ.</p>
+      </section>
+
+      <section>
+        <h3>The Unfathomable, Inexpressible Richness of the Gospel (Ephesians 3:7-12)</h3>
+        <p>Paul was made a minister and an apostle according to God's sovereign appointment. This was not due to his own works or merits but because God had chosen him <strong><span lang="grc">κατὰ τὴν δωρεὰν τῆς χάριτος τοῦ Θεοῦ</span> (according to the gift of God's grace)</strong>. Despite Paul's past as a persecutor of the church, even acting with a clear conscience, believing he was serving God, the Lord nevertheless used him for His purposes. He appointed Paul to proclaim the gospel to the Gentiles, <strong><span lang="grc">κηρύξαι τοῖς ἔθνεσιν τὸν ἀνεξιχνίαστον πλοῦτον τοῦ Χριστοῦ</span> (to preach to the Gentiles the unsearchable riches of Christ)</strong>. These riches are unfathomable, surpassing the limits of human reasoning, an inexpressible treasure found in the knowledge of Christ. This is an abundance that cannot be found anywhere apart from Him. Praise be to the God and Father of our Lord Jesus Christ, who has blessed us in Christ with every spiritual blessing in the heavenly places. In Him are hidden all the treasures of wisdom and knowledge. All of this comes entirely through grace, the act of receiving what we do not deserve. Through Paul, God revealed His eternal plan. Salvation is not for the Jews alone but for all whom the Lord our God calls. God has not changed His mind. He is sovereign over all things, the Creator of heaven and earth. Through His church, His <strong><span lang="grc">πολυποίκιλος σοφία</span> (manifold wisdom)</strong> is being made known to the rulers and authorities in the heavenly places. This includes the grafting in of the Gentiles, the redemption accomplished by Christ at Calvary, the defeat of Satan, and the ultimate restoration of creation from the bondage of sin. The church is the chosen instrument to display God's glory in His perfect plan of redemption. This is all according to the <strong><span lang="grc">πρόθεσιν τῶν αἰώνων</span> (eternal purpose)</strong> that He has realized in Christ Jesus our Lord. In Him, we have <strong><span lang="grc">παρρησία καὶ προσαγωγή ἐν πεποιθήσει</span> (boldness and access with confidence)</strong> through our faith in Him. We are no longer slaves to sin but can now draw near with confidence to the throne of grace, entering the holy places by the blood of Jesus. Let us then draw near with a true heart in full assurance of faith, with our hearts sprinkled clean from an evil conscience.</p>
+      </section>
+
+      <section>
+        <h3>Paul's Exhortation for the Ephesians (Ephesians 3:13)</h3>
+        <p>Therefore, Paul exhorts the Ephesians to <strong><span lang="grc">μὴ ἐγκακεῖν</span> (not to lose heart)</strong>, not to become discouraged or grow weary in the faith, so that his sufferings were not in vain. To Paul, it was worth every affliction to preach the gospel to the Gentiles so that more might be grafted into the kingdom of God and that God's glory would be magnified and exalted in the salvation among the Gentiles and eventually through all the nations.</p>
+      </section>
+    </article>
+
+    <section class="comments-section">
+      <h3>Comments</h3>
+      <div id="comments-container">
+      </div>
+      
+      <form id="comment-form" class="comment-form">
+        <h4>Share Your Thoughts</h4>
+        <div class="form-group">
+          <label for="comment-name">Name</label>
+          <input type="text" id="comment-name" name="name" placeholder="Your name" required>
+        </div>
+        <div class="form-group">
+          <label for="comment-content">Comment</label>
+          <textarea id="comment-content" name="content" rows="4" placeholder="Add a public comment..." required></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="submit-comment">Post</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer animate-in">
+    <div class="container">
+      <p class="copyright">&copy; 2025 Brandon Nguyen. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode">
+  </button>
+
+  <script>
+    // Theme toggle
+    const html = document.documentElement;
+    const toggle = document.getElementById('darkModeToggle');
+
+    // Initialize from localStorage
+    if (localStorage.getItem('darkMode') === 'false') {
+      html.classList.remove('dark');
+    } else { // Default to dark if not set or set to true
+      html.classList.add('dark');
+    }
+
+    toggle.addEventListener('click', () => {
+      html.classList.toggle('dark');
+      localStorage.setItem('darkMode', html.classList.contains('dark'));
+    });
+
+    // IntersectionObserver for animations
+    document.addEventListener('DOMContentLoaded', () => {
+      const article = document.querySelector('.devo-full');
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            io.unobserve(e.target);
+          }
+        });
+      }, {
+        threshold: 0, // Start animation as soon as 0% is visible
+        rootMargin: '0px' // No margin adjustment
+      });
+
+      if (article) {
+        io.observe(article);
+      }
+      
+      // Animate footer as well
+      const footer = document.querySelector('.site-footer');
+      if (footer) {
+        const footerIo = new IntersectionObserver(entries => {
+          entries.forEach(e => {
+            if (e.isIntersecting) {
+              e.target.classList.add('visible');
+              footerIo.unobserve(e.target);
+            }
+          });
+        }, { threshold: 0, rootMargin: '0px'});
+        footerIo.observe(footer);
+      }
+    });
+  </script>
+  
+  <script src="comments.js"></script>
+</body>
+</html> 
