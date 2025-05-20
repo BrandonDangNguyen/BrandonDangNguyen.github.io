@@ -132,8 +132,7 @@ main.container {
 }
 
 .header-gradient {
-  background: linear-gradient(to right, darkred, #580000);
-  margin-bottom: 2.5rem;
+  background: linear-gradient(to right, darkred, #580000) !important;
 }
 /* Search Bar */
 .search-container {
