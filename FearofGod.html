@@ -25,8 +25,8 @@
 
   <style>
     body {
-      background: linear-gradient(to right, red, darkred);
-      color: white;
+      background: linear-gradient(to right, darkred, #580000);
+      color: #fff; /* white for all text */
       margin: 0;
       padding: 0;
       font-size: 100%;
@@ -61,9 +61,16 @@
     .comments-section {
       grid-area: comments;
       width: 100%;
-      max-width: 750px; /* Consistent width */
+      max-width: 750px;
       margin-left: auto;
       margin-right: auto;
+      background: linear-gradient(to right, darkred, #580000);
+      border: 1.5px solid #DC143C;
+      color: #fff;
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-top: 2rem;
+      box-shadow: 0 2px 12px 0 rgba(80,0,0,0.13);
     }
 
     /* headings and meta */
@@ -135,15 +142,28 @@
 
     /* Bible verse toggle styling */
     .bible-passage {
-      background-color: var(--background);
-      border: 1px solid var(--border);
+      background: linear-gradient(to right, darkred, #580000);
+      border: 1.5px solid #DC143C;
+      color: #fff;
       border-radius: 8px;
       padding: 1.5rem;
       margin: 2rem auto;
       max-width: 750px;
       position: relative;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: box-shadow 0.2s, background 0.2s;
+    }
+
+    .bible-passage:hover {
+      box-shadow: 0 4px 16px 0 rgba(80,0,0,0.25);
+      background: linear-gradient(to right, #a80000, #580000);
+    }
+
+    .bible-passage .verse-number,
+    .bible-passage .verse-text,
+    .bible-passage .english-text,
+    .bible-passage .greek-text {
+      color: #fff;
     }
 
     /* Added instructions hint */
@@ -156,11 +176,6 @@
       color: var(--text-light);
       opacity: 0.7;
       font-family: 'Inter', sans-serif;
-    }
-
-    .bible-passage:hover {
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      background-color: rgba(0, 0, 0, 0.02);
     }
 
     .bible-passage .verse {
@@ -222,6 +237,67 @@
       bottom: 1.5rem;
       right: 1.5rem;
     }
+
+    .site-header {
+      background: linear-gradient(to right, darkred, #580000);
+      padding: 2.5rem 0 1.5rem 0;
+      margin-bottom: 2.5rem;
+    }
+
+    .site-footer {
+      background: linear-gradient(to right, darkred, #580000);
+      border-top: 1.5px solid #DC143C;
+      padding: 2rem 0;
+      margin-top: 3rem;
+      text-align: center;
+    }
+
+    .comment-form {
+      background: linear-gradient(to right, darkred, #580000);
+      border: 1.5px solid #DC143C;
+      border-radius: 10px;
+      padding: 1.2rem;
+      margin-top: 1.5rem;
+    }
+
+    .comment-form input[type="text"],
+    .comment-form textarea {
+      background: linear-gradient(to right, #7a0000, #580000);
+      color: #FFD700; /* brighter yellow */
+      border: 1px solid #DC143C;
+      border-radius: 4px;
+      font-family: 'Inter', sans-serif;
+      margin-bottom: 1rem;
+    }
+    .comment-form input[type="text"]::placeholder,
+    .comment-form textarea::placeholder {
+      color: #fff;
+    }
+
+    /* Remove or override other color rules */
+    .site-title a,
+    .main-nav a,
+    .devo-full h2,
+    .devo-full .meta,
+    .devo-full h3,
+    .devo-full p,
+    .comments-section,
+    .comment-form,
+    .comment-form label,
+    .comment-form input[type="text"],
+    .comment-form textarea,
+    .site-footer .copyright {
+      color: #fff !important;
+    }
+
+    .site-title a,
+    .main-nav a {
+      font-family: 'Sorts Mill Goudy', serif !important;
+    }
+
+    .site-footer .copyright {
+      font-family: 'Sorts Mill Goudy', serif !important;
+    }
   </style>
 </head>
 <body>
@@ -239,6 +315,15 @@
     <article class="devo-full animate-in">
         <h2>Crucifying the Fear of Man</h2>
         <p class="meta"><em>May 20, 2025</em></p>
+        <div class="bible-passage" id="bible-passage">
+            <div class="verse">
+              <div class="verse-text">
+                <span class="english-text">The fear of the LORD is the beginning of wisdom: and the knowledge of the holy is understanding. - Proverbs 9:10</span>
+                <span class="greek-text">ἀρχὴ σοφίας φόβος Κυρίου, καὶ βουλὴ ἁγίων σύνεσις. - Παρoιμίαι 9:10</span>
+              </div>
+            </div>
+          </div>
+          
         <section>
           <h3>Introduction: The Struggle with the Fear of Man</h3>
           <p>My ultimate goal with this blog is not to sound doomer, but to point to Jesus Christ as our ultimate Redeemer in the midst of our trials. I only write blogs after I have a semblance of reconciliation with this trial through much wrestling with God, because I feel like that's when it's the most helpful. After all, our trials are meant to refine our faith so that we may bring glory to Christ. <strong class="latin-term">Soli Deo Gloria!</strong></p>
@@ -300,26 +385,7 @@
     <div class="container"> <p class="copyright">&copy; 2025 Brandon Nguyen. All rights reserved.</p> </div>
   </footer>
 
-  <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode">
-  </button>
-
   <script>
-    // Theme toggle
-    const html = document.documentElement;
-    const toggle = document.getElementById('darkModeToggle');
-
-    // Initialize from localStorage
-    if (localStorage.getItem('darkMode') === 'false') {
-      html.classList.remove('dark');
-    } else { // Default to dark if not set or set to true
-        html.classList.add('dark');
-    }
-
-    toggle.addEventListener('click', () => {
-      html.classList.toggle('dark');
-      localStorage.setItem('darkMode', html.classList.contains('dark'));
-    });
-
     // IntersectionObserver for animations
     document.addEventListener('DOMContentLoaded', () => {
       const article = document.querySelector('.devo-full');
@@ -354,14 +420,14 @@
       }
     });
 
-    // Scripture language toggle functionality
+    // Remove Proverbs 9:10 toggle JS
     document.addEventListener('DOMContentLoaded', () => {
       const passageContainer = document.getElementById('bible-passage');
-      
-      // Add click handler to the entire passage container
-      passageContainer.addEventListener('click', () => {
-        passageContainer.classList.toggle('show-greek');
-      });
+      if (passageContainer) {
+        passageContainer.addEventListener('click', () => {
+          passageContainer.classList.toggle('show-greek');
+        });
+      }
     });
   </script>
   
