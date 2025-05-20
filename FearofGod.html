@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A devotional on crucifying the fear of man and finding true worth in Jesus Christ.">
+  <meta name="keywords" content="Fear of Man, Fear of God, Christian living, Devotional, Brandon Nguyen, Theology, Sanctification, Coram Deo">
+  <meta name="author" content="Brandon Nguyen">
+  <title>Crucifying the Fear of Man – Brandon Nguyen</title>
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
+  <link rel="manifest" href="images/favicon/site.webmanifest">
+  <link rel="shortcut icon" href="images/favicon/favicon.ico">
+
+  <link rel="stylesheet" href="styles.css"> <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sorts+Mill+Goudy:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400;1,600&display=swap">
+
+  <style>
+    html {
+      background: linear-gradient(to bottom right, #8B0000, #B22222, #DC143C); /* Darker to lighter red gradient */
+      color: white;
+      min-height: 100vh;
+      font-family: 'Inter', sans-serif; /* Base font */
+    }
+
+    body {
+      background-color: transparent; /* Let html background show through */
+      color: white; /* Default text color */
+      margin: 0;
+      padding: 0;
+    }
+    
+    /* constrain + center */
+    main.container {
+      display: grid;
+      grid-template-columns: 1fr; 
+      grid-template-areas: 
+        "content"
+        "comments";
+      padding: 4rem 0 4rem 0;
+      width: 95%;
+      max-width: 1400px; 
+      margin: 0 auto;
+      gap: 2rem;
+    }
+
+    article.devo-full {
+      grid-area: content;
+      font-family: 'Sorts Mill Goudy', serif; 
+      padding: 0;
+      max-width: 750px; 
+      margin: 0 auto; 
+    }
+    
+    .comments-section {
+      grid-area: comments;
+      width: 100%;
+      max-width: 750px; 
+      margin-left: auto;
+      margin-right: auto;
+      background-color: rgba(0,0,0,0.1); /* Slight dark background for comment section for contrast */
+      padding: 1.5rem;
+      border-radius: 8px;
+    }
+
+    .comments-section h3, .comments-section h4 {
+      color: white;
+      font-family: 'Sorts Mill Goudy', serif;
+    }
+
+    .comment-form {
+      margin-top: 2rem;
+      background-color: rgba(0,0,0,0.2);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 8px;
+      padding: 1.5rem;
+    }
+
+    .comment-form label {
+      color: white;
+      font-family: 'Inter', sans-serif;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .comment-form input[type="text"],
+    .comment-form textarea {
+      width: 100%;
+      padding: 0.75rem;
+      background-color: rgba(255,255,255,0.1);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 4px;
+      font-family: 'Inter', sans-serif;
+      margin-bottom: 1rem;
+    }
+
+    .comment-form input[type="text"]::placeholder,
+    .comment-form textarea::placeholder {
+      color: rgba(255,255,255,0.5);
+    }
+
+    .comment-form .submit-comment {
+      background-color: #FFD700; /* Gold button */
+      color: #333; /* Dark text on gold button */
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
+      font-family: 'Inter', sans-serif;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .comment-form .submit-comment:hover {
+      background-color: #FFFACD; /* Lighter gold on hover */
+    }
+
+    .comment {
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      padding-bottom: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .comment-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .comment-avatar {
+      width: 40px;
+      height: 40px;
+      background-color: #FFD700; /* Gold background */
+      color: #333; /* Dark text */
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      margin-right: 10px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .comment-meta {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .comment-author {
+      font-weight: bold;
+      color: #FFD700; /* Gold for author name */
+      font-family: 'Inter', sans-serif;
+    }
+
+    .comment-date {
+      font-size: 0.8em;
+      color: rgba(255,255,255,0.7);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .comment-content p {
+      color: white;
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .comment-actions button {
+      background-color: transparent;
+      color: #FFD700;
+      border: 1px solid #FFD700;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8em;
+      margin-top: 0.5rem;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .comment-actions button:hover {
+      background-color: rgba(255, 215, 0, 0.1);
+    }
+
+    .comment-replies {
+      margin-left: 40px;
+      padding-left: 10px;
+      border-left: 2px solid rgba(255,255,255,0.2);
+    }
+
+    .comment-reply {
+      margin-top: 1rem;
+    }
+
+    .comment-form.replying h4 {
+      font-size: 1.2rem;
+    }
+
+    .reply-to-name {
+      color: #FFFACD;
+      font-weight: bold;
+    }
+
+    .cancel-reply {
+      background-color: transparent !important;
+      color: #f0f0f0 !important;
+      border: 1px solid #f0f0f0 !important;
+      margin-left: 10px !important;
+    }
+
+    .cancel-reply:hover {
+      background-color: rgba(255,255,255,0.1) !important;
+    }
+
+    .no-comments {
+      color: rgba(255,255,255,0.7);
+      font-style: italic;
+      text-align: center;
+      padding: 2rem 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* headings and meta */
+    .devo-full h2 {
+      font-size: 3.0rem; /* Adjusted size */
+      font-weight: 600; /* Bolder */
+      margin-bottom: 1.5rem;
+      font-family: 'Sorts Mill Goudy', serif;
+      text-align: center;
+      letter-spacing: 0.02em;
+      line-height: 1.2;
+      color: white;
+    }
+
+    .devo-full .meta { 
+      text-align: center;
+      margin-bottom: 3rem;
+      opacity: 0.9;
+      color: white;
+    }
+
+    .devo-full .meta em { 
+      display: block;
+      font-size: 1.1rem;
+      font-style: normal; 
+      font-family: 'Sorts Mill Goudy', serif;
+      letter-spacing: 0.03em;
+      color: white;
+    }
+
+    /* sections */
+    .devo-full section {
+      margin: 2rem 0; /* Adjusted margin */
+    }
+
+    .devo-full h3 {
+      font-size: 1.6rem; /* Adjusted size */
+      margin-top: 2.0rem; /* Adjusted margin */
+      margin-bottom: 1.0rem; /* Adjusted margin */
+      font-family: 'Sorts Mill Goudy', serif;
+      text-align: left;
+      max-width: 750px; 
+      margin-left: auto;
+      margin-right: auto;
+      color: #FFD700; /* Gold color for H3 for emphasis */
+      border-bottom: 1px solid #FFD700;
+      padding-bottom: 0.5rem;
+    }
+
+    /* content formatting */
+    .devo-full p {
+      font-size: 1.15rem;
+      line-height: 1.7;
+      margin: 1.5rem auto;
+      max-width: 750px; 
+      font-family: 'Sorts Mill Goudy', serif; 
+      text-align: left;
+      letter-spacing: 0.01em;
+      color: white;
+    }
+
+    .devo-full p strong, .devo-full p b { /* For bolding scripture and other terms */
+        font-weight: bold;
+        color: #FFFACD; /* Light Lemon Chiffon for bolded text for subtle emphasis */
+    }
+    
+    [lang="grc"], .latin-term { /* Styling for Greek and Latin terms */
+      font-family: 'Times New Roman', serif; 
+      font-weight: bold;
+      color: #FFFACD; /* Consistent color for non-English terms */
+    }
+    
+    /* Header and Footer Styling */
+    .site-header {
+      background-color: rgba(0,0,0,0.2);
+      padding: 1rem 0;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .site-header .header-container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+      width: 95%;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0;
+      gap: 3rem;
+    }
+
+    .site-title {
+      margin: 0;
+      padding: 0;
+      flex-shrink: 0;
+    }
+
+    .site-title a {
+      font-family: 'Sorts Mill Goudy', serif;
+      font-size: 2rem;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      letter-spacing: 0.02em;
+    }
+
+    .main-nav {
+      margin: 0;
+      padding: 0;
+      margin-left: auto;
+    }
+
+    .main-nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      gap: 2rem;
+    }
+
+    .main-nav li {
+      margin: 0;
+      padding: 0;
+    }
+
+    .main-nav a {
+      color: white;
+      text-decoration: none;
+      font-size: 1.1rem;
+      font-family: 'Sorts Mill Goudy', serif;
+      font-weight: normal;
+      transition: color 0.3s ease;
+    }
+
+    .main-nav a:hover {
+      color: #FFD700;
+    }
+
+    .site-footer {
+      background-color: rgba(0,0,0,0.2);
+      padding: 2rem 0;
+      text-align: center;
+      margin-top: 3rem;
+    }
+    .site-footer .copyright {
+      color: white;
+      font-family: 'Sorts Mill Goudy', serif;
+      font-size: 0.9rem;
+    }
+    
+    /* Animation */
+    .animate-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    }
+    .animate-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 768px) {
+      main.container {
+        width: 100%; 
+        padding: 3rem 1rem; 
+      }
+      .devo-full h2 {
+        font-size: 2.2rem; 
+      }
+      .devo-full h3 {
+        font-size: 1.4rem;
+      }
+      .site-header .header-container {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+      }
+      .main-nav ul {
+        gap: 1.5rem;
+      }
+      .site-title a {
+        font-size: 1.8rem;
+      }
+      .main-nav a {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-container">
+      <h1 class="site-title"><a href="/">Brandon Nguyen</a></h1>
+      <nav class="main-nav" aria-label="Main navigation">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <article class="devo-full animate-in">
+      <h2>Crucifying the Fear of Man</h2>
+      <p class="meta"><em>May 19, 2025</em></p>
+
+      <section>
+        <h3>Introduction: The Struggle with the Fear of Man</h3>
+        <p>My ultimate goal with this blog is not to sound doomer, but to point to Jesus Christ as our ultimate Redeemer in the midst of our trials. I only write blogs after I have a semblance of reconciliation with this trial through much wrestling with God, because I feel like that's when it's the most helpful. After all, our trials are meant to refine our faith so that we may bring glory to Christ. <strong class="latin-term">Soli Deo Gloria!</strong></p>
+        <p>I think something I've been struggling with is the fear of man over the fear of God. More specifically, it is very easy for me to care so much about what other believers think of me that it fuels my desire to increase my level of faith. This is not entirely a bad thing, but the problem is that my growth often stems from fear of what other people think about me rather than fear of what my perfect and holy God thinks of me. What I saw as my main motivation for being mature was inherently selfish: to seem more wise in front of others and to seem like a Christian who is always ready to see every trial as a hurdle to easily jump over. I just find it so easy to be overly self-conscious about every detail of my actions. More often than not, I catch myself asking, <strong>"Was that helpful?"</strong> <strong>"Was that very holy of me to say?"</strong> or <strong>"Wow, that was so cringe. Lord, please take this cup from me."</strong> Even before writing this blog, I felt hesitant, wondering if people would think I'm oversharing and that I should probably just keep it between myself, my small group, and God. But then I remembered: I'm literally the one who owns this website... so here we are, haha.</p>
+      </section>
+      
+      <section>
+        <h3>Roots of Insecurity: The Discomfort with Immaturity</h3>
+        <p>After moments of deep reflection, I have begun to recognize several patterns that contributed to an inferiority complex-one that I am now actively seeking to put to death by the grace of God. At the heart of it is a deep discomfort with being seen as immature. I often feel ashamed when I come across as childish in social settings. In high school, there were numerous occasions when my perceived immaturity interfered with meaningful interactions. My peers often failed to take me seriously, assuming I was always joking or always trolling. A notable example of this during high school happened during an aerospace competition, where I was assigned to work on a critical task involving Excel spreadsheets with a teammate. The task required careful data analysis and attention to detail, but it was incredibly difficult to stay locked in because my teammate genuinely thought I was just messing around the entire time-even though I was genuinely trying my best to complete the task. That misunderstanding ultimately cost us our entry into the finals. (Looking back, I can see that this struggle was magnified by the fact that I had not yet come to saving faith in Christ, which likely played a significant role in how I processed these experiences.)</p>
+      </section>
+
+      <section>
+        <h3>Idols of Competence and Knowledge</h3>
+        <p>In response to similar insecurities, I turned to academic achievement and extracurricular involvement as a way to escape the role of the "comic relief" character. I didn't want to be seen as unserious, and if I was, I wanted to make sure I had the credentials to prove otherwise. So I poured myself into building an image of competence and reputation, essentially trying to be seen as "cracked." In a sense, it worked. That drive helped me focus on school and think seriously about my future. But over time, I realized that even this became its own idol: another way of seeking worth apart from God, another mask to hide behind rather than resting in the identity given to me in Christ. By the grace of God, academics is no longer an idol in my life. However, that same idolatry has taken a new form, now manifesting in how much theology I know, especially within the church body. As Scripture warns, <strong>"Knowledge puffs up"</strong> (<strong>1 Corinthians 8:1</strong>). <strong>"If anyone imagines that he knows something, he does not yet know as he ought to know"</strong> (<strong>1 Corinthians 8:2</strong>). <strong>Am I using my theology to puff myself up so I can hide my intellectual insecurities and appear wise in the eyes of others?</strong> <strong>Am I using biblical knowledge as a shield to avoid exposing my weaknesses, my doubts, my sin?</strong> Christ did not call me to accumulate theology for admiration or self-assurance, though sound doctrine is truly a gift. He called me to something far more costly. He called me to deny myself, to take up my cross, and to follow Him. He called me to die to myself. He called me to follow Him in humility, not merely to speak about Him with theological precision and a preloaded set of verses ready to be launched.</p>
+      </section>
+
+      <section>
+        <h3>Redefining Holiness: Beyond Perception</h3>
+        <p>As I reflected further, I began to realize that my desire to appear more spiritually mature was rooted not only in my knowledge, but also in the way I expressed my personality. On one hand, I worry that I come across as too catechistic, like a talking Bible AI robot, and that this might make people feel disconnected or distanced. It doesn't help that my stuttering, stammering voice is monotone and sounds like it's talking at 2x speed. On the other hand, if I try to be more casual or humorous, I feel like I'm compromising my perceived "holiness" and risk being seen as immature. That's when it became clear to me that my perception of holiness was shaped more by what others thought of me than by what Scripture teaches. <strong>What is holiness?</strong> The word <strong lang="grc">ἁγιότης</strong> means to be set apart, to be consecrated. There are two aspects to this. First, we are already made holy in Christ. As Scripture says, <strong>"You were washed, you were sanctified, you were justified in the name of the Lord Jesus Christ and by the Spirit of our God"</strong> (<strong>1 Corinthians 6:11</strong>). Second, we are called to pursue holiness in our daily lives. The Bible describes this pursuit in many ways: submitting to God's Word, putting to death our sinful desires and deeds, bearing the fruit of the Spirit, and rejoicing in our trials. But the one that deeply convicted me the most was the call to live every moment before the face of God—<strong class="latin-term">Coram Deo</strong>. <strong>Was I truly living <strong class="latin-term">Coram Deo</strong>, before the face of God?</strong> <strong>Or was I living before the face of other believers, using their opinions as the measuring stick for my faith?</strong></p>
+      </section>
+      
+      <section>
+        <h3>The Pitfall of "Backseat" Counseling and Surface-Level Sanctification</h3>
+        <p>It is not inherently wrong to receive correction and insight from fellow believers. In fact, that is a grace and a blessing within the body of Christ. But the temptation to turn that into an idol is real and subtle. It is all too easy to labor not out of love for God, but to showcase visible growth to others, hoping to validate yourself and to prove that their counsel and time invested into you was not wasted. I think a notable instance of this during my time here at UCLA was the practice of what I would call "backseat" counseling. In a sense, I was seeking counsel not with the intention of genuine heart change or true conviction, but rather out of a sense of obligation to the person I was speaking with, because I was too afraid to think for myself. I believed that if I simply listened to this person's advice, I would be above reproach and that everything would be "chill," which is a word I often used as a placeholder when I knew that my ability to discern spiritually in that particular moment was completely cooked. I'm often reminded of <strong>Psalm 51:6</strong>, where God desires truth in the inward being and gives true wisdom to those who are repentant in heart, not merely in outward deeds. I was only a hearer of the Word, not a doer of it, and in that, I was deceiving myself. I was like the man who looks intently at his natural face in a mirror and then goes away and immediately forgets what he looked like. Instead of wrestling with the Word of God with all my heart, soul, and mind, I tried to hand off that spiritual responsibility to someone else, hoping I could speedrun the process. But that very impulse is rooted in pride-the desire to be seen as sanctified rather than to be truly sanctified before the eyes of God.</p>
+      </section>
+
+      <section>
+        <h3>Finding True Justification and Purpose</h3>
+        <p>The ultimate goal isn't for me to be the most charismatic guy ever with the smoothest words. No, my goal isn't to proclaim the Word of God with lofty speech or human wisdom, but to know nothing except Jesus Christ and Him crucified-with a contrite heart, in much weakness, fear, and trembling, and in the demonstration of the Holy Spirit. The first step in facing this trial is recognizing the true source of my justification. According to <strong>Romans 5:1</strong>, we know that we are justified by faith, not by any perceived righteousness granted by others. Jesus died for His people, and by God's grace, I am counted among them. It is not by my own doing that I am saved, but solely through the righteousness and finished work of Christ. Therefore, there is no burden to strive toward a standard that has already been fulfilled by my Lord and Savior. The next step is to understand that my highest calling is to live for the pleasure and approval of God alone. This means my aim is not to gain the favor of people-not even the respect or admiration of fellow believers. I must continually examine my heart and ask whether I am seeking the approval of man or of God. For if I were still trying to please man, I would not be a servant of Christ (<strong>Galatians 1:10</strong>). A common theme of Proverbs is that the fear of the Lord is the beginning of wisdom. Ironically, my main reason for learning theology was fear of what others thought about my level of faith, when I should have simply feared the Lord. I'm often reminded of Jesus when He. He spoke to the Pharisees-devout religious leaders who knew the entire Old Testament by memory. Yet Jesus did not come to impress them or flaunt His knowledge. Instead, He sought out the lowly, the poor, and the diseased. When the Pharisees called Him a demon, He did not become distraught or insecure, because He knew He was on Earth to carry out the will of the Father. For Jesus Himself did not seek to receive glory from people, but from His Father. How can anyone truly believe if they are set on receiving glory from others and do not seek the glory that comes from the only God? (<strong>John 5:44</strong>)</p>
+      </section>
+      
+      <section>
+        <h3>Embracing Christ, Forsaking Self-Righteousness</h3>
+        <p>I can study the Word of God as much as I want, and I can search the Scriptures diligently, but if I do not come to Christ in times of distress or trial, and instead use my knowledge as a footstool for my own righteousness, then what I possess is not eternal life but self-deception. <strong>What right do I have to cling to any form of self-righteousness when Jesus Christ, being in very nature God, emptied Himself, took on the form of a servant, and was born in the likeness of men?</strong> He humbled Himself in perfect obedience, even to the point of death-death on a cross. <strong>How can I seek glory for myself when the King of glory bore my shame?</strong> There is simply nothing in this world worth grasping, nothing to gain apart from Christ Himself. He is the surpassing treasure. Everything else I count as loss. I have been crucified with Christ. It is no longer I who live, but Christ who lives in me. And this life I now live in the flesh, I live by faith in the Son of God, who loved me and gave Himself for me.</p>
+      </section>
+
+      <section>
+        <h3>Conclusion: Living for God's Glory Alone</h3>
+        <p><strong>Is it truly worth being overly concerned with whether I am perceived as immature, childish, or naive?</strong> I don't believe it is, so long as everything I do is grounded in Scripture, with Christ at the very center. <strong>Should I constantly be thinking about my self-image after every social blunder or awkward moment I cause?</strong> No, for my concern should not be for my own glory, but for the glory of God alone. <strong>Am I expected to ensure that every single word I speak edifies those around me without fail?</strong> That is the aim, yet in my weakness, I will fall short. Even then, God remains and will always be sovereign-working all things, even my failures, for His glory and for my sanctification. <strong class="latin-term">Soli Deo Gloria.</strong></p>
+      </section>
+    </article>
+
+    <section class="comments-section animate-in">
+      <h3>Comments</h3>
+      <div id="comments-container">
+        <!-- Comments will be loaded here -->
+      </div>
+      
+      <form id="comment-form" class="comment-form">
+        <h4>Share Your Thoughts</h4>
+        <div class="form-group">
+          <label for="comment-name">Name</label>
+          <input type="text" id="comment-name" name="name" placeholder="Your name" required>
+        </div>
+        <div class="form-group">
+          <label for="comment-content">Comment</label>
+          <textarea id="comment-content" name="content" rows="4" placeholder="Add a public comment..." required></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="submit-comment">Post</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer animate-in">
+    <div class="container">
+      <p class="copyright">&copy; 2025 Brandon Nguyen. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // IntersectionObserver for animations
+    document.addEventListener('DOMContentLoaded', () => {
+      const elementsToAnimate = document.querySelectorAll('.animate-in');
+      
+      const observerCallback = (entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      };
+
+      const observerOptions = {
+        threshold: 0.1, // Start animation when 10% is visible
+        rootMargin: '0px'
+      };
+
+      const observer = new IntersectionObserver(observerCallback, observerOptions);
+      elementsToAnimate.forEach(el => observer.observe(el));
+    });
+  </script>
+  
+  <script src="comments.js"></script>
+</body>
+</html>
