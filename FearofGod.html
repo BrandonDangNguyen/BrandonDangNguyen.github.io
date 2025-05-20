@@ -43,11 +43,12 @@
       grid-template-areas: 
         "content"
         "comments";
-      padding: 4rem 0 4rem 0;
-      width: 95%;
+      padding: 2rem 1rem;
+      width: 100%;
       max-width: 1400px; 
       margin: 0 auto;
       gap: 2rem;
+      box-sizing: border-box;
     }
 
     article.devo-full {
@@ -55,7 +56,9 @@
       font-family: 'Sorts Mill Goudy', serif; 
       padding: 0;
       max-width: 750px; 
-      margin: 0 auto; 
+      margin: 0 auto;
+      width: 100%;
+      box-sizing: border-box;
     }
     
     .comments-section {
@@ -304,18 +307,20 @@
       position: sticky;
       top: 0;
       z-index: 1000;
+      width: 100%;
+      box-sizing: border-box;
     }
 
     .site-header .header-container {
       display: flex;
       flex-direction: row;
       align-items: center;
-      justify-content: flex-start;
+      justify-content: space-between;
       width: 95%;
       max-width: 1400px;
       margin: 0 auto;
-      padding: 0;
-      gap: 3rem;
+      padding: 0 1rem;
+      box-sizing: border-box;
     }
 
     .site-title {
@@ -331,12 +336,12 @@
       text-decoration: none;
       font-weight: bold;
       letter-spacing: 0.02em;
+      display: block;
     }
 
     .main-nav {
       margin: 0;
       padding: 0;
-      margin-left: auto;
     }
 
     .main-nav ul {
@@ -345,6 +350,7 @@
       margin: 0;
       display: flex;
       gap: 2rem;
+      align-items: center;
     }
 
     .main-nav li {
@@ -359,6 +365,8 @@
       font-family: 'Sorts Mill Goudy', serif;
       font-weight: normal;
       transition: color 0.3s ease;
+      display: block;
+      padding: 0.5rem 0;
     }
 
     .main-nav a:hover {
@@ -389,45 +397,6 @@
     }
 
     @media (max-width: 768px) {
-      main.container {
-        width: 100%; 
-        padding: 2rem 1rem; 
-        gap: 1.5rem;
-      }
-
-      .devo-full {
-        padding: 0 0.5rem;
-      }
-
-      .devo-full h2 {
-        font-size: 2rem;
-        margin-bottom: 1rem;
-        padding: 0 0.5rem;
-      }
-
-      .devo-full h3 {
-        font-size: 1.4rem;
-        margin-top: 1.5rem;
-        margin-bottom: 0.75rem;
-        padding: 0 0.5rem;
-      }
-
-      .devo-full p {
-        font-size: 1.1rem;
-        line-height: 1.6;
-        margin: 1rem auto;
-        padding: 0 0.5rem;
-      }
-
-      .devo-full .meta {
-        margin-bottom: 2rem;
-        padding: 0 0.5rem;
-      }
-
-      .devo-full .meta em {
-        font-size: 1rem;
-      }
-
       .site-header .header-container {
         flex-direction: column;
         gap: 0.75rem;
@@ -436,41 +405,64 @@
 
       .main-nav ul {
         gap: 1.25rem;
+        justify-content: center;
       }
 
       .site-title a {
         font-size: 1.6rem;
+        text-align: center;
       }
 
       .main-nav a {
         font-size: 1rem;
       }
 
-      .comments-section {
-        padding: 1rem;
-        margin: 0 0.5rem;
-      }
-
-      .comment-form {
+      main.container {
         padding: 1rem;
       }
 
-      .comment-form input[type="text"],
-      .comment-form textarea {
-        padding: 0.5rem;
+      .devo-full {
+        padding: 0;
       }
 
-      .comment {
-        padding: 0.75rem 0;
+      .devo-full h2 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        padding: 0;
       }
 
-      .comment-replies {
-        margin-left: 1.5rem;
-        padding-left: 0.75rem;
+      .devo-full h3 {
+        font-size: 1.4rem;
+        margin-top: 1.5rem;
+        margin-bottom: 0.75rem;
+        padding: 0;
+      }
+
+      .devo-full p {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin: 1rem 0;
+        padding: 0;
       }
     }
 
     @media (max-width: 480px) {
+      .site-header .header-container {
+        padding: 0.5rem;
+      }
+
+      .main-nav ul {
+        gap: 1rem;
+      }
+
+      .site-title a {
+        font-size: 1.4rem;
+      }
+
+      .main-nav a {
+        font-size: 0.95rem;
+      }
+
       .devo-full h2 {
         font-size: 1.8rem;
       }
@@ -481,18 +473,6 @@
 
       .devo-full p {
         font-size: 1rem;
-      }
-
-      .site-title a {
-        font-size: 1.4rem;
-      }
-
-      .main-nav ul {
-        gap: 1rem;
-      }
-
-      .main-nav a {
-        font-size: 0.95rem;
       }
     }
   </style>
