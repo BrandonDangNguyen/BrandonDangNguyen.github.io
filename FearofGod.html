@@ -657,47 +657,20 @@
   </footer>
 
   <script>
-    // IntersectionObserver for animations
     document.addEventListener('DOMContentLoaded', () => {
       const elementsToAnimate = document.querySelectorAll('.animate-in');
       
-      // Immediately show elements that are in the viewport
-      const checkVisibility = () => {
-        elementsToAnimate.forEach(el => {
-          const rect = el.getBoundingClientRect();
-          const isVisible = (
-            rect.top >= 0 &&
-            rect.left >= 0 &&
-            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-          );
-          
-          if (isVisible) {
-            el.classList.add('visible');
-          }
-        });
+      // Function to animate elements in sequence
+      const animateInSequence = async () => {
+        for (const element of elementsToAnimate) {
+          // Add a small delay between each animation
+          await new Promise(resolve => setTimeout(resolve, 200));
+          element.classList.add('visible');
+        }
       };
 
-      // Check visibility immediately and after a short delay
-      checkVisibility();
-      setTimeout(checkVisibility, 100);
-
-      const observerCallback = (entries, observer) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      };
-
-      const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '50px' // Start animation slightly before element comes into view
-      };
-
-      const observer = new IntersectionObserver(observerCallback, observerOptions);
-      elementsToAnimate.forEach(el => observer.observe(el));
+      // Start the animation sequence
+      animateInSequence();
     });
   </script>
   
