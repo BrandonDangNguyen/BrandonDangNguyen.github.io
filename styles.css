@@ -131,6 +131,10 @@ main.container {
   z-index: 100;
 }
 
+.header-gradient {
+  background: linear-gradient(to right, darkred, #580000);
+  margin-bottom: 2.5rem;
+}
 /* Search Bar */
 .search-container {
   margin-bottom: var(--space-md);
