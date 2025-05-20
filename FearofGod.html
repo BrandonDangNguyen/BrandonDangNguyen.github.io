@@ -319,23 +319,24 @@
     /* Header and Footer Styling */
     .site-header {
       background-color: rgba(0,0,0,0.2);
-      padding: 1rem 0;
+      padding: 2rem 0; /* Increased vertical padding */
       text-align: center;
       position: sticky;
       top: 0;
       z-index: 1000;
       width: 100%;
+      margin-bottom: 2rem; /* Added margin below header */
     }
 
     .site-header .header-container {
       display: flex;
-      flex-direction: row; /* Default for desktop */
+      flex-direction: row;
       align-items: center;
       justify-content: space-between;
       width: 95%;
-      max-width: 1400px; /* Consistent with main container */
+      max-width: 1400px;
       margin: 0 auto;
-      padding: 0 1rem; /* Padding within the header */
+      padding: 0 1rem;
     }
 
     .site-title {
@@ -415,6 +416,11 @@
 
     /* MEDIUM SCREENS (Tablets) */
     @media (max-width: 768px) {
+      .site-header {
+        padding: 1.5rem 0; /* Slightly reduced padding for tablets */
+        margin-bottom: 1.5rem;
+      }
+
       .site-header .header-container {
         flex-direction: row; /* Keep horizontal layout */
         align-items: center;
@@ -482,6 +488,11 @@
 
     /* SMALL SCREENS (Mobile phones) */
     @media (max-width: 480px) {
+      .site-header {
+        padding: 1.25rem 0; /* Further reduced padding for mobile */
+        margin-bottom: 1.25rem;
+      }
+
       .site-header .header-container {
         padding: 0.75rem 0.5rem;
         gap: 0.5rem;
