@@ -9,11 +9,11 @@
   <meta name="author" content="Brandon Nguyen">
   <title>Crucifying the Fear of Man – Brandon Nguyen</title>
   
-  <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
-  <link rel="manifest" href="images/favicon/site.webmanifest">
-  <link rel="shortcut icon" href="images/favicon/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png" onerror="this.style.display='none'">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png" onerror="this.style.display='none'">
+  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png" onerror="this.style.display='none'">
+  <link rel="manifest" href="images/favicon/site.webmanifest" onerror="this.style.display='none'">
+  <link rel="shortcut icon" href="images/favicon/favicon.ico" onerror="this.style.display='none'">
 
   <link rel="stylesheet" href="styles.css"> <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,11 +22,17 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400;1,600&display=swap">
 
   <style>
+    /* Global reset and box-sizing */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
     html {
       background: linear-gradient(to bottom right, #8B0000, #B22222, #DC143C); /* Darker to lighter red gradient */
       color: white;
       min-height: 100vh;
       font-family: 'Inter', sans-serif; /* Base font */
+      scroll-behavior: smooth; /* Smooth scrolling */
     }
 
     body {
@@ -34,6 +40,8 @@
       color: white; /* Default text color */
       margin: 0;
       padding: 0;
+      font-size: 100%; /* Base font size for rem units */
+      line-height: 1.6; /* Default line height */
     }
     
     /* constrain + center */
@@ -43,22 +51,20 @@
       grid-template-areas: 
         "content"
         "comments";
-      padding: 2rem 1rem;
+      padding: 2rem 1rem; /* Default padding */
       width: 100%;
       max-width: 1400px; 
       margin: 0 auto;
       gap: 2rem;
-      box-sizing: border-box;
     }
 
     article.devo-full {
       grid-area: content;
       font-family: 'Sorts Mill Goudy', serif; 
-      padding: 0;
+      padding: 0; /* Padding will be handled by main.container or specific elements */
       max-width: 750px; 
-      margin: 0 auto;
-      width: 100%;
-      box-sizing: border-box;
+      margin: 0 auto; /* Center the article */
+      width: 100%; /* Ensure it takes full width up to max-width */
     }
     
     .comments-section {
@@ -94,7 +100,7 @@
 
     .comment-form input[type="text"],
     .comment-form textarea {
-      width: 100%;
+      width: 100%; /* Full width of parent */
       padding: 0.75rem;
       background-color: rgba(255,255,255,0.1);
       color: white;
@@ -130,6 +136,10 @@
       padding-bottom: 1rem;
       margin-bottom: 1rem;
     }
+    .comment:last-child {
+        border-bottom: none; /* Remove border from last comment */
+    }
+
 
     .comment-header {
       display: flex;
@@ -149,6 +159,7 @@
       font-weight: bold;
       margin-right: 10px;
       font-family: 'Inter', sans-serif;
+      flex-shrink: 0; /* Prevent avatar from shrinking */
     }
 
     .comment-meta {
@@ -173,6 +184,8 @@
       font-family: 'Inter', sans-serif;
       line-height: 1.6;
       margin: 0;
+      overflow-wrap: break-word; /* Prevent long words from breaking layout */
+      word-wrap: break-word; /* Older browsers */
     }
 
     .comment-actions button {
@@ -192,7 +205,7 @@
     }
 
     .comment-replies {
-      margin-left: 40px;
+      margin-left: 40px; /* Indent replies */
       padding-left: 10px;
       border-left: 2px solid rgba(255,255,255,0.2);
     }
@@ -231,14 +244,16 @@
 
     /* headings and meta */
     .devo-full h2 {
-      font-size: 3.0rem; /* Adjusted size */
-      font-weight: 600; /* Bolder */
+      font-size: 3.0rem; 
+      font-weight: 600; 
       margin-bottom: 1.5rem;
       font-family: 'Sorts Mill Goudy', serif;
       text-align: center;
       letter-spacing: 0.02em;
       line-height: 1.2;
       color: white;
+      overflow-wrap: break-word; /* Prevent overflow */
+      word-wrap: break-word;
     }
 
     .devo-full .meta { 
@@ -259,33 +274,33 @@
 
     /* sections */
     .devo-full section {
-      margin: 2rem 0; /* Adjusted margin */
+      margin: 2rem 0; /* Default vertical margin for sections */
     }
 
     .devo-full h3 {
-      font-size: 1.6rem; /* Adjusted size */
-      margin-top: 2.0rem; /* Adjusted margin */
-      margin-bottom: 1.0rem; /* Adjusted margin */
+      font-size: 1.6rem; 
+      margin-top: 2.0rem; 
+      margin-bottom: 1.0rem; 
       font-family: 'Sorts Mill Goudy', serif;
       text-align: left;
-      max-width: 750px; 
-      margin-left: auto;
-      margin-right: auto;
       color: #FFD700; /* Gold color for H3 for emphasis */
       border-bottom: 1px solid #FFD700;
       padding-bottom: 0.5rem;
+      overflow-wrap: break-word; /* Prevent overflow */
+      word-wrap: break-word;
     }
 
     /* content formatting */
     .devo-full p {
       font-size: 1.15rem;
       line-height: 1.7;
-      margin: 1.5rem auto;
-      max-width: 750px; 
+      margin: 1.5rem 0; 
       font-family: 'Sorts Mill Goudy', serif; 
       text-align: left;
       letter-spacing: 0.01em;
       color: white;
+      overflow-wrap: break-word; /* Prevent long words from breaking layout */
+      word-wrap: break-word; /* Older browsers */
     }
 
     .devo-full p strong, .devo-full p b { /* For bolding scripture and other terms */
@@ -294,9 +309,11 @@
     }
     
     [lang="grc"], .latin-term { /* Styling for Greek and Latin terms */
-      font-family: 'Times New Roman', serif; 
+      font-family: 'Times New Roman', Times, serif; /* Added Times as primary for better rendering */
       font-weight: bold;
       color: #FFFACD; /* Consistent color for non-English terms */
+      overflow-wrap: break-word; /* Prevent long terms from breaking layout */
+      word-wrap: break-word;
     }
     
     /* Header and Footer Styling */
@@ -308,25 +325,23 @@
       top: 0;
       z-index: 1000;
       width: 100%;
-      box-sizing: border-box;
     }
 
     .site-header .header-container {
       display: flex;
-      flex-direction: row;
+      flex-direction: row; /* Default for desktop */
       align-items: center;
       justify-content: space-between;
       width: 95%;
-      max-width: 1400px;
+      max-width: 1400px; /* Consistent with main container */
       margin: 0 auto;
-      padding: 0 1rem;
-      box-sizing: border-box;
+      padding: 0 1rem; /* Padding within the header */
     }
 
     .site-title {
       margin: 0;
       padding: 0;
-      flex-shrink: 0;
+      flex-shrink: 0; /* Prevent title from shrinking too much */
     }
 
     .site-title a {
@@ -336,7 +351,7 @@
       text-decoration: none;
       font-weight: bold;
       letter-spacing: 0.02em;
-      display: block;
+      display: block; /* Ensure it behaves as a block */
     }
 
     .main-nav {
@@ -349,7 +364,7 @@
       padding: 0;
       margin: 0;
       display: flex;
-      gap: 2rem;
+      gap: 2rem; /* Space between nav items */
       align-items: center;
     }
 
@@ -366,16 +381,18 @@
       font-weight: normal;
       transition: color 0.3s ease;
       display: block;
-      padding: 0.5rem 0;
+      padding: 0.5rem 0; /* Vertical padding for easier clicking */
     }
 
-    .main-nav a:hover {
+    .main-nav a:hover, .main-nav a:focus { /* Added focus state for accessibility */
       color: #FFD700;
+      outline: 1px dashed #FFD700; /* Subtle focus outline */
+      outline-offset: 2px;
     }
-
+    
     .site-footer {
       background-color: rgba(0,0,0,0.2);
-      padding: 2rem 0;
+      padding: 2rem 1rem; /* Added horizontal padding */
       text-align: center;
       margin-top: 3rem;
     }
@@ -396,91 +413,161 @@
       transform: translateY(0);
     }
 
+    /* MEDIUM SCREENS (Tablets) */
     @media (max-width: 768px) {
       .site-header .header-container {
-        flex-direction: column;
-        gap: 0.75rem;
-        padding: 0.75rem;
+        flex-direction: column; /* Stack title and nav */
+        gap: 0.75rem; /* Space between title and nav block */
+        padding: 0.75rem; /* Reduced padding for header */
       }
 
       .main-nav ul {
-        gap: 1.25rem;
-        justify-content: center;
+        gap: 1.25rem; /* Space between nav items */
+        justify-content: center; /* Center nav items */
+        flex-wrap: wrap; /* Allow nav items to wrap if needed */
       }
 
       .site-title a {
-        font-size: 1.6rem;
-        text-align: center;
+        font-size: 1.6rem; /* Reduced font size */
+        text-align: center; /* Center title text */
       }
 
       .main-nav a {
-        font-size: 1rem;
+        font-size: 1rem; /* Reduced font size */
+        padding: 0.5rem 0.25rem; /* Adjust padding for smaller touch targets */
       }
 
       main.container {
-        padding: 1rem;
-      }
-
-      .devo-full {
-        padding: 0;
+        padding: 1.5rem 1rem; /* Slightly more vertical padding */
       }
 
       .devo-full h2 {
-        font-size: 2rem;
-        margin-bottom: 1rem;
-        padding: 0;
+        font-size: 2.2rem; /* Adjusted for better readability */
+        margin-bottom: 1.25rem;
+      }
+      
+      .devo-full .meta {
+        margin-bottom: 2rem;
+      }
+      
+      .devo-full .meta em {
+        font-size: 1rem;
+      }
+
+      .devo-full section {
+        margin: 1.5rem 0; /* Reduced vertical margin for sections */
       }
 
       .devo-full h3 {
         font-size: 1.4rem;
         margin-top: 1.5rem;
         margin-bottom: 0.75rem;
-        padding: 0;
       }
 
       .devo-full p {
-        font-size: 1.1rem;
-        line-height: 1.6;
+        font-size: 1.05rem; /* Slightly adjusted for better scale */
+        line-height: 1.65;
         margin: 1rem 0;
-        padding: 0;
+      }
+      .comments-section {
+        padding: 1rem;
+      }
+      .comment-form {
+        padding: 1rem;
       }
     }
 
+    /* SMALL SCREENS (Mobile phones) */
     @media (max-width: 480px) {
       .site-header .header-container {
-        padding: 0.5rem;
+        padding: 0.75rem 0.5rem; /* Further reduced padding */
+        gap: 0.5rem;
       }
 
       .main-nav ul {
-        gap: 1rem;
+        gap: 1rem; /* Further reduced gap for nav items */
+        flex-direction: column; /* Stack nav items vertically */
+        align-items: center; /* Center them */
       }
+      
+      .main-nav li {
+        width: 100%; /* Make nav items take full width for easier tapping */
+        text-align: center;
+      }
+      
+      .main-nav a {
+        font-size: 1rem; /* Kept at 1rem for readability */
+        padding: 0.75rem 0.5rem; /* Larger tap area */
+      }
+
 
       .site-title a {
-        font-size: 1.4rem;
+        font-size: 1.5rem; /* Further reduced font size */
       }
 
-      .main-nav a {
-        font-size: 0.95rem;
+      main.container {
+        padding: 1rem 0.75rem; /* Reduced padding for main content area */
+        gap: 1.5rem;
       }
 
       .devo-full h2 {
-        font-size: 1.8rem;
+        font-size: 1.8rem; /* Further reduced font size */
+        margin-bottom: 1rem;
+      }
+      
+      .devo-full .meta {
+        margin-bottom: 1.5rem;
+      }
+       .devo-full .meta em {
+        font-size: 0.9rem;
+      }
+
+      .devo-full section {
+        margin: 1rem 0; /* Further reduced vertical margin for sections */
       }
 
       .devo-full h3 {
-        font-size: 1.3rem;
+        font-size: 1.3rem; /* Further reduced font size */
+        margin-top: 1.25rem;
+        margin-bottom: 0.5rem;
       }
 
       .devo-full p {
-        font-size: 1rem;
+        font-size: 1rem; /* Base readable font size */
+        line-height: 1.6;
+        margin: 0.75rem 0;
+      }
+      
+      .comments-section {
+        padding: 0.75rem;
+      }
+      .comment-form {
+        padding: 0.75rem;
+      }
+      .comment-form input[type="text"],
+      .comment-form textarea {
+        padding: 0.6rem;
+        font-size: 0.95rem;
+      }
+      .comment-form .submit-comment {
+        padding: 0.6rem 1.2rem;
+        width: 100%; /* Make button full width */
+      }
+      .comment-avatar {
+        width: 35px;
+        height: 35px;
+        margin-right: 8px;
+      }
+      .comment-replies {
+        margin-left: 25px; /* Reduce indent for replies */
+        padding-left: 8px;
       }
     }
   </style>
 </head>
 <body>
   <header class="site-header">
-    <div class="container header-container">
-      <h1 class="site-title"><a href="/">Brandon Nguyen</a></h1>
+    <div class="container header-container"> <h1 class="site-title"><a href="/">Brandon Nguyen</a></h1>
       <nav class="main-nav" aria-label="Main navigation">
         <ul>
           <li><a href="/">Home</a></li>
@@ -541,8 +628,7 @@
     <section class="comments-section animate-in">
       <h3>Comments</h3>
       <div id="comments-container">
-        <!-- Comments will be loaded here -->
-      </div>
+        <div class="no-comments">Be the first to share your thoughts!</div> </div>
       
       <form id="comment-form" class="comment-form">
         <h4>Share Your Thoughts</h4>
@@ -555,15 +641,14 @@
           <textarea id="comment-content" name="content" rows="4" placeholder="Add a public comment..." required></textarea>
         </div>
         <div class="form-actions">
-          <button type="submit" class="submit-comment">Post</button>
+          <button type="submit" class="submit-comment">Post Comment</button>
         </div>
       </form>
     </section>
   </main>
 
   <footer class="site-footer animate-in">
-    <div class="container">
-      <p class="copyright">&copy; 2025 Brandon Nguyen. All rights reserved.</p>
+    <div class="container"> <p class="copyright">&copy; 2025 Brandon Nguyen. All rights reserved.</p>
     </div>
   </footer>
 
@@ -576,21 +661,21 @@
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
+            observer.unobserve(entry.target); // Stop observing once animated
           }
         });
       };
 
       const observerOptions = {
-        threshold: 0.1, // Start animation when 10% is visible
-        rootMargin: '0px'
+        threshold: 0.1, // Start animation when 10% of the element is visible
+        rootMargin: '0px' // No margin around the viewport
       };
 
+      // Create and start the observer
       const observer = new IntersectionObserver(observerCallback, observerOptions);
       elementsToAnimate.forEach(el => observer.observe(el));
     });
   </script>
   
-  <script src="comments.js"></script>
-</body>
+  <script src="comments.js"></script> </body>
 </html>
