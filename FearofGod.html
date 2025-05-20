@@ -416,25 +416,28 @@
     /* MEDIUM SCREENS (Tablets) */
     @media (max-width: 768px) {
       .site-header .header-container {
-        flex-direction: column; /* Stack title and nav */
-        gap: 0.75rem; /* Space between title and nav block */
-        padding: 0.75rem; /* Reduced padding for header */
+        flex-direction: row; /* Keep horizontal layout */
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0.75rem;
       }
 
       .main-nav ul {
-        gap: 1.25rem; /* Space between nav items */
-        justify-content: center; /* Center nav items */
-        flex-wrap: wrap; /* Allow nav items to wrap if needed */
+        gap: 1.25rem;
+        justify-content: flex-end; /* Align nav items to the right */
+        flex-wrap: nowrap; /* Prevent wrapping */
       }
 
       .site-title a {
-        font-size: 1.6rem; /* Reduced font size */
-        text-align: center; /* Center title text */
+        font-size: 1.6rem;
+        text-align: left; /* Align title to the left */
       }
 
       .main-nav a {
-        font-size: 1rem; /* Reduced font size */
-        padding: 0.5rem 0.25rem; /* Adjust padding for smaller touch targets */
+        font-size: 1rem;
+        padding: 0.5rem 0.25rem;
+        white-space: nowrap; /* Prevent text wrapping */
       }
 
       main.container {
@@ -480,29 +483,30 @@
     /* SMALL SCREENS (Mobile phones) */
     @media (max-width: 480px) {
       .site-header .header-container {
-        padding: 0.75rem 0.5rem; /* Further reduced padding */
+        padding: 0.75rem 0.5rem;
         gap: 0.5rem;
+        flex-direction: row; /* Keep horizontal layout */
       }
 
       .main-nav ul {
-        gap: 1rem; /* Further reduced gap for nav items */
-        flex-direction: column; /* Stack nav items vertically */
-        align-items: center; /* Center them */
+        gap: 0.75rem; /* Reduced gap for nav items */
+        flex-direction: row; /* Keep horizontal layout */
+        justify-content: flex-end; /* Align nav items to the right */
       }
       
       .main-nav li {
-        width: 100%; /* Make nav items take full width for easier tapping */
-        text-align: center;
+        width: auto; /* Don't force full width */
+        text-align: right; /* Align text to the right */
       }
       
       .main-nav a {
-        font-size: 1rem; /* Kept at 1rem for readability */
-        padding: 0.75rem 0.5rem; /* Larger tap area */
+        font-size: 0.9rem; /* Slightly smaller font */
+        padding: 0.5rem 0.25rem;
+        white-space: nowrap; /* Prevent text wrapping */
       }
 
-
       .site-title a {
-        font-size: 1.5rem; /* Further reduced font size */
+        font-size: 1.4rem;
       }
 
       main.container {
@@ -657,21 +661,41 @@
     document.addEventListener('DOMContentLoaded', () => {
       const elementsToAnimate = document.querySelectorAll('.animate-in');
       
+      // Immediately show elements that are in the viewport
+      const checkVisibility = () => {
+        elementsToAnimate.forEach(el => {
+          const rect = el.getBoundingClientRect();
+          const isVisible = (
+            rect.top >= 0 &&
+            rect.left >= 0 &&
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+          );
+          
+          if (isVisible) {
+            el.classList.add('visible');
+          }
+        });
+      };
+
+      // Check visibility immediately and after a short delay
+      checkVisibility();
+      setTimeout(checkVisibility, 100);
+
       const observerCallback = (entries, observer) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             entry.target.classList.add('visible');
-            observer.unobserve(entry.target); // Stop observing once animated
+            observer.unobserve(entry.target);
           }
         });
       };
 
       const observerOptions = {
-        threshold: 0.1, // Start animation when 10% of the element is visible
-        rootMargin: '0px' // No margin around the viewport
+        threshold: 0.1,
+        rootMargin: '50px' // Start animation slightly before element comes into view
       };
 
-      // Create and start the observer
       const observer = new IntersectionObserver(observerCallback, observerOptions);
       elementsToAnimate.forEach(el => observer.observe(el));
     });
