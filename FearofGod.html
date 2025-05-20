@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,13 +9,13 @@
   <meta name="author" content="Brandon Nguyen">
   <title>Crucifying the Fear of Man – Brandon Nguyen</title>
 
-  <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png" onerror="this.style.display='none'">
-  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png" onerror="this.style.display='none'">
-  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png" onerror="this.style.display='none'">
-  <link rel="manifest" href="images/favicon/site.webmanifest" onerror="this.style.display='none'">
-  <link rel="shortcut icon" href="images/favicon/favicon.ico" onerror="this.style.display='none'">
+  <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
+  <link rel="manifest" href="images/favicon/site.webmanifest">
+  <link rel="shortcut icon" href="images/favicon/favicon.ico">
 
-  <link rel="stylesheet" href="styles.css"> 
+  <link rel="stylesheet" href="styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -23,7 +23,6 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400;1,600&display=swap">
 
   <style>
-    *, *::before, *::after { box-sizing: border-box; }
     html {
       background: linear-gradient(to bottom right, #8B0000, #B22222, #DC143C);
       color: white;
@@ -32,19 +31,88 @@
       scroll-behavior: smooth;
     }
     body {
-      background-color: transparent;
+      background: none;
       color: white;
       margin: 0;
       padding: 0;
       font-size: 100%;
       line-height: 1.6;
     }
+    .site-header {
+      background-color: rgba(0,0,0,0.2);
+      padding: 2.5rem 0 1.5rem 0;
+      margin-bottom: 2.5rem;
+    }
+    .header-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 95%;
+    }
+    .site-title {
+      margin: 0;
+      padding: 0;
+      flex-shrink: 0;
+    }
+    .site-title a {
+      font-family: 'Sorts Mill Goudy', serif;
+      font-size: 3.5rem;
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      text-align: center;
+      display: block;
+      line-height: 1.15;
+    }
+    .main-nav {
+      margin-left: 2.5rem;
+    }
+    .main-nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+    .main-nav a {
+      color: white;
+      text-decoration: none;
+      font-size: 1.1rem;
+      font-family: 'Sorts Mill Goudy', serif;
+      font-weight: normal;
+      padding: 0.5rem 0;
+      transition: color 0.3s;
+      display: block;
+    }
+    .main-nav a:hover,
+    .main-nav a:focus {
+      color: #FFD700;
+      outline: 1px dashed #FFD700;
+      outline-offset: 2px;
+    }
+
+    @media (max-width: 700px) {
+      .header-container {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+      }
+      .main-nav {
+        margin-left: 0;
+      }
+      .site-title a {
+        font-size: 2.2rem;
+      }
+    }
+
     main.container {
       display: grid;
       grid-template-columns: 1fr;
-      grid-template-areas:
-        "content"
-        "comments";
+      grid-template-areas: "content" "comments";
       padding: 4rem 2rem;
       width: 95%;
       max-width: 1400px;
@@ -58,146 +126,6 @@
       max-width: 750px;
       margin: 0 auto;
       width: 100%;
-    }
-    .comments-section {
-      grid-area: comments;
-      width: 100%;
-      max-width: 750px;
-      margin-left: auto;
-      margin-right: auto;
-      background-color: rgba(0,0,0,0.1);
-      padding: 1.5rem;
-      border-radius: 8px;
-    }
-    .comments-section h3, .comments-section h4 {
-      color: white;
-      font-family: 'Sorts Mill Goudy', serif;
-    }
-    .comment-form {
-      margin-top: 2rem;
-      background-color: rgba(0,0,0,0.2);
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 8px;
-      padding: 1.5rem;
-    }
-    .comment-form label {
-      color: white;
-      font-family: 'Inter', sans-serif;
-      display: block;
-      margin-bottom: 0.5rem;
-    }
-    .comment-form input[type="text"],
-    .comment-form textarea {
-      width: 100%;
-      padding: 0.75rem;
-      background-color: rgba(255,255,255,0.1);
-      color: white;
-      border: 1px solid rgba(255,255,255,0.3);
-      border-radius: 4px;
-      font-family: 'Inter', sans-serif;
-      margin-bottom: 1rem;
-      font-size: 1rem;
-    }
-    .comment-form input[type="text"]::placeholder,
-    .comment-form textarea::placeholder {
-      color: rgba(255,255,255,0.5);
-    }
-    .comment-form .submit-comment {
-      background-color: #FFD700;
-      color: #333;
-      border: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: 4px;
-      font-family: 'Inter', sans-serif;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    .comment-form .submit-comment:hover {
-      background-color: #FFFACD;
-    }
-    .comment {
-      border-bottom: 1px solid rgba(255,255,255,0.2);
-      padding-bottom: 1rem;
-      margin-bottom: 1rem;
-    }
-    .comment:last-child { border-bottom: none; }
-    .comment-header {
-      display: flex;
-      align-items: center;
-      margin-bottom: 0.5rem;
-    }
-    .comment-avatar {
-      width: 40px;
-      height: 40px;
-      background-color: #FFD700;
-      color: #333;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      margin-right: 10px;
-      font-family: 'Inter', sans-serif;
-      flex-shrink: 0;
-    }
-    .comment-meta {
-      display: flex;
-      flex-direction: column;
-    }
-    .comment-author {
-      font-weight: bold;
-      color: #FFD700;
-      font-family: 'Inter', sans-serif;
-    }
-    .comment-date {
-      font-size: 0.8em;
-      color: rgba(255,255,255,0.7);
-      font-family: 'Inter', sans-serif;
-    }
-    .comment-content p {
-      color: white;
-      font-family: 'Inter', sans-serif;
-      line-height: 1.6;
-      margin: 0;
-      overflow-wrap: break-word;
-      word-wrap: break-word;
-    }
-    .comment-actions button {
-      background-color: transparent;
-      color: #FFD700;
-      border: 1px solid #FFD700;
-      padding: 0.25rem 0.5rem;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.8em;
-      margin-top: 0.5rem;
-      font-family: 'Inter', sans-serif;
-    }
-    .comment-actions button:hover {
-      background-color: rgba(255, 215, 0, 0.1);
-    }
-    .comment-replies {
-      margin-left: 40px;
-      padding-left: 10px;
-      border-left: 2px solid rgba(255,255,255,0.2);
-    }
-    .comment-reply { margin-top: 1rem; }
-    .comment-form.replying h4 { font-size: 1.2rem; }
-    .reply-to-name { color: #FFFACD; font-weight: bold; }
-    .cancel-reply {
-      background-color: transparent !important;
-      color: #f0f0f0 !important;
-      border: 1px solid #f0f0f0 !important;
-      margin-left: 10px !important;
-    }
-    .cancel-reply:hover { background-color: rgba(255,255,255,0.1) !important; }
-    .no-comments {
-      color: rgba(255,255,255,0.7);
-      font-style: italic;
-      text-align: center;
-      padding: 2rem 0;
-      font-family: 'Inter', sans-serif;
     }
     .devo-full h2 {
       font-size: 3.5rem;
@@ -219,13 +147,15 @@
     }
     .devo-full .meta em {
       display: block;
-      font-size: 1rem;
+      font-size: 1.1rem;
       font-style: normal;
       font-family: 'Sorts Mill Goudy', serif;
       letter-spacing: 0.03em;
       color: white;
     }
-    .devo-full section { margin: 3rem 0; }
+    .devo-full section {
+      margin: 3rem 0;
+    }
     .devo-full h3 {
       font-size: 1.8rem;
       margin-top: 2.5rem;
@@ -250,8 +180,8 @@
       word-wrap: break-word;
     }
     .devo-full p strong, .devo-full p b {
-        font-weight: bold;
-        color: #FFFACD;
+      font-weight: bold;
+      color: #FFFACD;
     }
     [lang="grc"], .latin-term {
       font-family: 'Times New Roman', Times, serif;
@@ -260,137 +190,93 @@
       overflow-wrap: break-word;
       word-wrap: break-word;
     }
-    .site-header {
-      background-color: rgba(0,0,0,0.2);
-      padding: 2rem 0;
-      text-align: center;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
+
+    /* --- RED THEMED COMMENTS SECTION --- */
+    .comments-section {
+      grid-area: comments;
       width: 100%;
-      margin-bottom: 2rem;
+      max-width: 750px;
+      margin-left: auto;
+      margin-right: auto;
+      background: linear-gradient(135deg, #A93226 80%, #B22222 100%);
+      border: 1.5px solid #DC143C;
+      color: #fff;
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-top: 2rem;
+      box-shadow: 0 2px 12px 0 rgba(80,0,0,0.13);
     }
-    .site-header .header-container {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: flex-start;
-      width: 95%;
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 0 1rem;
-    }
-    .site-title {
-      margin: 0;
-      padding: 0;
-      flex-shrink: 0;
-      margin-right: 3rem;
-    }
-    .site-title a {
-      font-family: 'Sorts Mill Goudy', serif;
-      font-size: 2rem;
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-      letter-spacing: 0.02em;
-      display: block;
-    }
-    .main-nav {
-      margin: 0;
-      padding: 0;
-    }
-    .main-nav ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: flex;
-      gap: 2rem;
-      align-items: center;
-    }
-    .main-nav li {
-      margin: 0;
-      padding: 0;
-    }
-    .main-nav a {
-      color: white;
-      text-decoration: none;
-      font-size: 1.1rem;
-      font-family: 'Sorts Mill Goudy', serif;
-      font-weight: normal;
-      transition: color 0.3s ease;
-      display: block;
-      padding: 0.5rem 0;
-    }
-    .main-nav a:hover, .main-nav a:focus {
+    .comments-section h3 {
       color: #FFD700;
-      outline: 1px dashed #FFD700;
-      outline-offset: 2px;
-    }
-    .site-footer {
-      background-color: rgba(0,0,0,0.2);
-      padding: 2rem 1rem;
-      text-align: center;
-      margin-top: 3rem;
-    }
-    .site-footer .copyright {
-      color: white;
       font-family: 'Sorts Mill Goudy', serif;
-      font-size: 0.9rem;
     }
-    .animate-in {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    .comment-form {
+      background: linear-gradient(90deg, #B22222 60%, #8B0000 100%);
+      border: 1.5px solid #DC143C;
+      border-radius: 10px;
+      padding: 1.2rem;
+      margin-top: 1.5rem;
     }
-    .animate-in.visible {
-      opacity: 1;
-      transform: translateY(0);
+    .comment-form h4 {
+      color: #FFD700;
+      font-family: 'Sorts Mill Goudy', serif;
     }
-    /* MEDIUM SCREENS (Tablets) */
+    .comment-form label {
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    .comment-form input[type="text"],
+    .comment-form textarea {
+      width: 100%;
+      padding: 0.75rem;
+      background: rgba(255,255,255,0.07);
+      color: #fff;
+      border: 1px solid #FFD700;
+      border-radius: 4px;
+      font-family: 'Inter', sans-serif;
+      margin-bottom: 1rem;
+    }
+    .comment-form input[type="text"]::placeholder,
+    .comment-form textarea::placeholder {
+      color: rgba(255,255,255,0.5);
+    }
+    .comment-form .submit-comment {
+      background-color: #FFD700;
+      color: #B22222;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
+      font-family: 'Inter', sans-serif;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .comment-form .submit-comment:hover {
+      background: #fffacd;
+      color: #8B0000;
+    }
+    .no-comments {
+      color: rgba(255,255,255,0.7);
+      font-style: italic;
+      text-align: center;
+      padding: 2rem 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Responsive text scaling */
     @media (max-width: 768px) {
-      .site-header {
-        padding: 1.5rem 0;
-        margin-bottom: 1.5rem;
-      }
-      .site-header .header-container {
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-start;
-        gap: 1rem;
-        padding: 0.75rem;
-      }
-      .site-title {
-        margin-right: 2rem;
-      }
-      .main-nav ul {
-        gap: 1.25rem;
-        justify-content: flex-start;
-        flex-wrap: nowrap;
-      }
-      .site-title a {
-        font-size: 1.6rem;
-      }
-      .main-nav a {
-        font-size: 1rem;
-        padding: 0.5rem 0.25rem;
-        white-space: nowrap;
-      }
       main.container {
         width: 100%;
         padding: 2rem 1rem;
       }
       .devo-full h2 {
-        font-size: 2rem;
+        font-size: 2.2rem;
         margin-bottom: 1rem;
       }
       .devo-full .meta {
         margin-bottom: 2rem;
-      }
-      .devo-full .meta em {
-        font-size: 0.95rem;
-      }
-      .devo-full section {
-        margin: 1.5rem 0;
       }
       .devo-full h3 {
         font-size: 1.3rem;
@@ -399,7 +285,6 @@
       }
       .devo-full p {
         font-size: 1rem;
-        line-height: 1.6;
         margin: 1rem 0;
       }
       .comments-section {
@@ -409,45 +294,7 @@
         padding: 1rem;
       }
     }
-    /* MOBILE STACKING & SMALL SCREENS (phones) */
     @media (max-width: 480px) {
-      .site-header {
-        padding: 1.25rem 0;
-        margin-bottom: 1.25rem;
-      }
-      .site-header .header-container {
-        flex-direction: column;
-        align-items: stretch;
-        justify-content: flex-start;
-        gap: 0.7rem;
-        padding: 0 0.75rem;
-        width: 100%;
-      }
-      .site-title {
-        margin-right: 0;
-        margin-bottom: 0.5rem;
-        text-align: left;
-      }
-      .site-title a {
-        font-size: 1.15rem;
-        text-align: left;
-      }
-      .main-nav ul {
-        gap: 0.5rem;
-        flex-direction: row;
-        justify-content: flex-start;
-        width: 100%;
-        flex-wrap: wrap;
-      }
-      .main-nav li {
-        width: auto;
-        text-align: left;
-      }
-      .main-nav a {
-        font-size: 0.95rem;
-        padding: 0.5rem 0.25rem;
-        white-space: nowrap;
-      }
       main.container {
         width: 100%;
         padding: 1.2rem 0.5rem;
@@ -459,12 +306,6 @@
       }
       .devo-full .meta {
         margin-bottom: 0.9rem;
-      }
-      .devo-full .meta em {
-        font-size: 0.87rem;
-      }
-      .devo-full section {
-        margin: 1rem 0;
       }
       .devo-full h3 {
         font-size: 1rem;
@@ -483,49 +324,49 @@
       .comment-form {
         padding: 0.5rem;
       }
-      .comment-form input[type="text"],
-      .comment-form textarea {
-        padding: 0.5rem;
-        font-size: 0.92rem;
-      }
-      .comment-form .submit-comment {
-        padding: 0.55rem 1rem;
-        width: 100%;
-        font-size: 0.97rem;
-      }
-      .comment-avatar {
-        width: 28px;
-        height: 28px;
-        margin-right: 7px;
-        font-size: 0.95rem;
-      }
-      .comment-replies {
-        margin-left: 12px;
-        padding-left: 5px;
-      }
+    }
+
+    .site-footer {
+      background: linear-gradient(135deg, #A93226 80%, #B22222 100%);
+      border-top: 1.5px solid #DC143C;
+      padding: 2rem 0;
+      margin-top: 3rem;
+      text-align: center;
+    }
+
+    .site-footer .container {
+      width: 95%;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    .site-footer .copyright {
+      color: white;
+      font-family: 'Sorts Mill Goudy', serif;
+      font-size: 1rem;
+      margin: 0;
+      opacity: 0.9;
+    }
+
+    @media (max-width: 768px) {
       .site-footer {
-        padding: 1.2rem 0.6rem;
-        margin-top: 1.8rem;
+        padding: 1.5rem 0;
+        margin-top: 2rem;
       }
     }
-    @media (max-width: 350px) {
-      .site-header .header-container {
-        gap: 0.4rem;
-        padding: 0 0.25rem;
-      }
-      .site-title a {
-        font-size: 1rem;
-      }
-      .main-nav a {
-        font-size: 0.85rem;
-        padding: 0.4rem 0.12rem;
+
+    @media (max-width: 480px) {
+      .site-footer {
+        padding: 1rem 0;
+        margin-top: 1.5rem;
       }
     }
   </style>
 </head>
 <body>
   <header class="site-header">
-    <div class="container header-container">
+    <div class="header-container">
       <h1 class="site-title"><a href="/">Brandon Nguyen</a></h1>
       <nav class="main-nav" aria-label="Main navigation">
         <ul>
@@ -536,11 +377,10 @@
       </nav>
     </div>
   </header>
-
   <main class="container">
     <article class="devo-full animate-in">
       <h2>Crucifying the Fear of Man</h2>
-      <p class="meta"><em>May 19, 2025</em></p>
+      <p class="meta"><em>May 20, 2025</em></p>
       <section>
         <h3>Introduction: The Struggle with the Fear of Man</h3>
         <p>My ultimate goal with this blog is not to sound doomer, but to point to Jesus Christ as our ultimate Redeemer in the midst of our trials. I only write blogs after I have a semblance of reconciliation with this trial through much wrestling with God, because I feel like that's when it's the most helpful. After all, our trials are meant to refine our faith so that we may bring glory to Christ. <strong class="latin-term">Soli Deo Gloria!</strong></p>
@@ -575,48 +415,46 @@
         <p><strong>Is it truly worth being overly concerned with whether I am perceived as immature, childish, or naive?</strong> I don't believe it is, so long as everything I do is grounded in Scripture, with Christ at the very center. <strong>Should I constantly be thinking about my self-image after every social blunder or awkward moment I cause?</strong> No, for my concern should not be for my own glory, but for the glory of God alone. <strong>Am I expected to ensure that every single word I speak edifies those around me without fail?</strong> That is the aim, yet in my weakness, I will fall short. Even then, God remains and will always be sovereign—working all things, even my failures, for His glory and for my sanctification. <strong class="latin-term">Soli Deo Gloria.</strong></p>
       </section>
     </article>
-
-    <section class="comments-section animate-in">
-      <h3>Comments</h3>
-      <div id="comments-container">
-        <div class="no-comments">Be the first to share your thoughts!</div>
-      </div>
-      <form id="comment-form" class="comment-form">
-        <h4>Share Your Thoughts</h4>
-        <div class="form-group">
-          <label for="comment-name">Name</label>
-          <input type="text" id="comment-name" name="name" placeholder="Your name" required>
-        </div>
-        <div class="form-group">
-          <label for="comment-content">Comment</label>
-          <textarea id="comment-content" name="content" rows="4" placeholder="Add a public comment..." required></textarea>
-        </div>
-        <div class="form-actions">
-          <button type="submit" class="submit-comment">Post Comment</button>
-        </div>
-      </form>
-    </section>
-  </main>
-
-  <footer class="site-footer animate-in">
-    <div class="container">
-      <p class="copyright">&copy; 2025 Brandon Nguyen. All rights reserved.</p>
+</article>
+<section class="comments-section">
+  <h3>Comments</h3>
+  <div id="comments-container">
+    <div class="no-comments">Be the first to share your thoughts!</div>
+  </div>
+  <form id="comment-form" class="comment-form">
+    <h4>Share Your Thoughts</h4>
+    <div class="form-group">
+      <label for="comment-name">Name</label>
+      <input type="text" id="comment-name" name="name" placeholder="Your name" required>
     </div>
-  </footer>
-
-  <script>
-    // Animate elements on page load
-    document.addEventListener('DOMContentLoaded', () => {
-      const elementsToAnimate = document.querySelectorAll('.animate-in');
-      const animateInSequence = async () => {
-        for (const element of elementsToAnimate) {
-          await new Promise(resolve => setTimeout(resolve, 200));
-          element.classList.add('visible');
-        }
-      };
-      animateInSequence();
-    });
-  </script>
-  <script src="comments.js"></script>
+    <div class="form-group">
+      <label for="comment-content">Comment</label>
+      <textarea id="comment-content" name="content" rows="4" placeholder="Add a public comment..." required></textarea>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="submit-comment">Post Comment</button>
+    </div>
+  </form>
+</section>
+</main>
+<footer class="site-footer animate-in">
+<div class="container">
+  <p class="copyright">&copy; 2025 Brandon Nguyen. All rights reserved.</p>
+</div>
+</footer>
+<script>
+// Animate elements on page load
+document.addEventListener('DOMContentLoaded', () => {
+  const elementsToAnimate = document.querySelectorAll('.animate-in');
+  const animateInSequence = async () => {
+    for (const element of elementsToAnimate) {
+      await new Promise(resolve => setTimeout(resolve, 200));
+      element.classList.add('visible');
+    }
+  };
+  animateInSequence();
+});
+</script>
+<script src="comments.js"></script>
 </body>
 </html>
