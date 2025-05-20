@@ -133,7 +133,9 @@ main.container {
 
 .header-gradient {
   background: linear-gradient(to right, darkred, #580000) !important;
+  min-height: 80px;
 }
+
 /* Search Bar */
 .search-container {
   margin-bottom: var(--space-md);
