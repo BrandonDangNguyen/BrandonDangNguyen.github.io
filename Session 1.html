@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Session 1 of the Bible Study on Hebrews 11:1-7">
+<meta name="keywords" content="Hebrews 11, Faith, Bible Study, Christian Devotional, Assurance, Abel, Enoch, Noah, Brandon Nguyen, Reformed Theology">
+<meta name="author" content="Brandon Nguyen">
+<title>Hebrews 11:1-7 – Rebuilding Our Understanding of Faith | Brandon Nguyen</title>
+    
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
+  <link rel="manifest" href="images/favicon/site.webmanifest">
+  <link rel="shortcut icon" href="images/favicon/favicon.ico">
+
+  <link rel="stylesheet" href="styles.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sorts+Mill+Goudy:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400;1,600&display=swap">
+
+  <style>
+    /* Force dark theme styles */
+    :root {
+      --background: #000000;
+      --text: #ffffff;
+      --text-light: #cccccc;
+      --border: #333333;
+      --accent: #4a90e2;
+      --accent-hover: #357abd;
+    }
+
+    body {
+      background-color: var(--background);
+      background-image: url('images/starry-night-bg.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      color: var(--text);
+    }
+
+    /* Add overlay to ensure text readability */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.3);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* constrain + center */
+    main.container {
+      display: grid;
+      grid-template-columns: 1fr; /* Simplified for single column content */
+      grid-template-areas: 
+        "content"
+        "comments";
+      padding: 4rem 2rem;
+      width: 95%;
+      max-width: 1400px; /* Max width from 1peter */
+      margin: 0 auto;
+      gap: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    article.devo-full {
+      grid-area: content;
+      font-family: 'Sorts Mill Goudy', serif; /* Primary devotional font */
+      padding: 0;
+      max-width: 750px; /* Content width from 1peter */
+      margin: 0 auto; /* Center the article */
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 12px;
+      padding: 2rem;
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .comments-section {
+      grid-area: comments;
+      width: 100%;
+      max-width: 750px; /* Consistent width */
+      margin-left: auto;
+      margin-right: auto;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 12px;
+      padding: 2rem;
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* headings and meta */
+    .devo-full h2 {
+      font-size: 3.5rem;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      font-family: 'Sorts Mill Goudy', serif;
+      text-align: center;
+      letter-spacing: 0.02em;
+      line-height: 1.2;
+      color: var(--text);
+    }
+
+    .devo-full .meta { /* Changed from .date to .meta for consistency */
+      text-align: center;
+      margin-bottom: 3rem;
+      opacity: 0.8;
+      color: var(--text);
+    }
+
+    .devo-full .meta em { /* For the date, similar to 1peter */
+      display: block;
+      font-size: 1.1rem;
+      font-style: normal; /* Or italic if preferred */
+      font-family: 'Sorts Mill Goudy', serif;
+      letter-spacing: 0.03em;
+      color: var(--text);
+    }
+
+    /* verse sections */
+    .devo-full section {
+      margin: 3rem 0;
+    }
+
+    .devo-full h3 {
+      font-size: 1.8rem; /* Heading for sections within the devotional */
+      margin-top: 2.5rem;
+      margin-bottom: 1.5rem;
+      font-family: 'Sorts Mill Goudy', serif;
+      text-align: left;
+      max-width: 750px; /* Consistent width */
+      margin-left: auto;
+      margin-right: auto;
+      color: var(--text);
+    }
+
+    /* content formatting */
+    .devo-full p {
+      font-size: 1.15rem;
+      line-height: 1.7;
+      margin: 1.5rem auto;
+      max-width: 750px; /* Consistent width */
+      font-family: 'Sorts Mill Goudy', serif; /* Primary devotional font */
+      text-align: left;
+      letter-spacing: 0.01em;
+      color: var(--text);
+    }
+
+    /* scripture styling (can be used for emphasis if needed) */
+    .scripture {
+      font-weight: bold;
+    }
+
+    /* Greek text */
+    [lang="grc"] {
+      font-family: 'Times New Roman', serif; /* Standard for Greek, or use Crimson Pro if preferred */
+    }
+    .devo-full p strong {
+        font-family: 'Sorts Mill Goudy', serif; 
+        color: var(--text);
+    }
+
+    /* Bible verse toggle styling */
+    .bible-passage {
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 2rem auto;
+      max-width: 750px;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: var(--text);
+      backdrop-filter: blur(3px);
+    }
+
+    .bible-passage:after {
+      content: "Tap to toggle between English and Greek";
+      position: absolute;
+      bottom: 0.5rem;
+      right: 0.75rem;
+      font-size: 0.7rem;
+      color: var(--text-light);
+      opacity: 0.7;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .bible-passage:hover {
+      box-shadow: 0 4px 8px rgba(255,255,255,0.1);
+      background-color: rgba(255, 255, 255, 0.02);
+    }
+
+    .bible-passage .verse {
+      display: flex;
+      margin-bottom: 0.8rem;
+      position: relative;
+    }
+
+    .bible-passage .verse:last-child {
+      margin-bottom: 0;
+    }
+
+    .verse-number {
+      font-weight: bold;
+      min-width: 1.5rem;
+      margin-right: 0.5rem;
+      flex-shrink: 0;
+      color: var(--text);
+    }
+
+    .verse-text {
+      flex: 1;
+      word-wrap: break-word;
+      max-width: 100%;
+      overflow-wrap: break-word;
+      color: var(--text);
+    }
+
+    .bible-passage .greek-text {
+      display: none;
+      font-family: 'Times New Roman', serif;
+      font-size: 1.05rem; /* Slightly larger for better readability */
+      line-height: 1.6;
+      color: var(--text);
+    }
+
+    .bible-passage.show-greek .english-text {
+      display: none;
+    }
+
+    .bible-passage.show-greek .greek-text {
+      display: block;
+    }
+
+    /* Add mobile-specific adjustments */
+    @media (max-width: 768px) {
+      main.container {
+        width: 100%; /* Use full width */
+        padding: 3rem 1rem; /* Adjust padding for mobile */
+      }
+      
+      .devo-full h2 {
+        font-size: 2.5rem; /* Reduce heading size for mobile */
+      }
+    }
+    
+    /* Animation styles */
+    .animate-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    
+    .animate-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    /* Comment section styles */
+    .comments-section h3 {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      font-family: 'Sorts Mill Goudy', serif;
+      color: var(--text);
+    }
+    
+    .comment-form {
+      margin-top: 2rem;
+      border-top: 1px solid var(--border);
+      padding-top: 1.5rem;
+    }
+    
+    .comment-form h4 {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      font-family: 'Sorts Mill Goudy', serif;
+      color: var(--text);
+    }
+    
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+    }
+    
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background-color: var(--background);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .form-actions {
+      margin-top: 1rem;
+    }
+    
+    .submit-comment {
+      padding: 0.5rem 1rem;
+      background-color: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background-color 0.2s;
+    }
+    
+    .submit-comment:hover {
+      background-color: var(--accent-hover);
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-container">
+      <h1 class="site-title"><a href="/">Brandon Nguyen</a></h1>
+      <nav class="main-nav" aria-label="Main navigation">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <article class="devo-full animate-in">
+      <h2>Hebrews 11:1-7</h2>
+      <p class="meta"><em>Session 1: Rebuilding Our Understanding of Faith</em></p>
+  
+      <div class="bible-passage" id="bible-passage" onclick="this.classList.toggle('show-greek')">
+        <div class="english-text">
+          <div class="verse"><span class="verse-number">1</span><span class="verse-text">Now faith is the substance of things hoped for, the evidence of things not seen.</span></div>
+          <div class="verse"><span class="verse-number">2</span><span class="verse-text">For by it the elders obtained a good report.</span></div>
+          <div class="verse"><span class="verse-number">3</span><span class="verse-text">Through faith we understand that the worlds were framed by the word of God, so that things which are seen were not made of things which do appear.</span></div>
+          <div class="verse"><span class="verse-number">4</span><span class="verse-text">By faith Abel offered unto God a more excellent sacrifice than Cain, by which he obtained witness that he was righteous, God testifying of his gifts: and by it he being dead yet speaketh.</span></div>
+          <div class="verse"><span class="verse-number">5</span><span class="verse-text">By faith Enoch was translated that he should not see death; and was not found, because God had translated him: for before his translation he had this testimony, that he pleased God.</span></div>
+          <div class="verse"><span class="verse-number">6</span><span class="verse-text">But without faith it is impossible to please him: for he that cometh to God must believe that he is, and that he is a rewarder of them that diligently seek him.</span></div>
+          <div class="verse"><span class="verse-number">7</span><span class="verse-text">By faith Noah, being warned of God of things not seen as yet, moved with fear, prepared an ark to the saving of his house; by the which he condemned the world, and became heir of the righteousness which is by faith.</span></div>
+        </div>
+        <div class="greek-text">
+          <div class="verse"><span class="verse-number">1</span><span class="verse-text">Ἔστιν δὲ πίστις ἐλπιζομένων ὑπόστασις, πραγμάτων ἔλεγχος οὐ βλεπομένων.</span></div>
+          <div class="verse"><span class="verse-number">2</span><span class="verse-text">ἐν ταύτῃ γὰρ ἐμαρτυρήθησαν οἱ πρεσβύτεροι.</span></div>
+          <div class="verse"><span class="verse-number">3</span><span class="verse-text">Πίστει νοοῦμεν κατηρτίσθαι τοὺς αἰῶνας ῥήματι θεοῦ, εἰς τὸ μὴ ἐκ φαινομένων τὸ βλεπόμενον γεγονέναι.</span></div>
+          <div class="verse"><span class="verse-number">4</span><span class="verse-text">Πίστει πλεῖον θυσίαν Ἄβελ παρὰ Κάϊν προσήνεγκεν τῷ θεῷ, δι' ἧς ἐμαρτυρήθη εἶναι δίκαιος, μαρτυροῦντος ἐπὶ τοῖς δώροις αὐτοῦ τοῦ θεοῦ, καὶ δι' αὐτῆς ἀποθανὼν ἔτι λαλεῖ.</span></div>
+          <div class="verse"><span class="verse-number">5</span><span class="verse-text">Πίστει Ἑνὼχ μετετέθη τοῦ μὴ ἰδεῖν θάνατον, καὶ οὐχ ηὐρίσκετο διότι μετέθηκεν αὐτὸν ὁ θεός· πρὸ γὰρ τῆς μεταθέσεως μεμαρτύρηται εὐαρεστηκέναι τῷ θεῷ.</span></div>
+          <div class="verse"><span class="verse-number">6</span><span class="verse-text">χωρὶς δὲ πίστεως ἀδύνατον εὐαρεστῆσαι· πιστεῦσαι γὰρ δεῖ τὸν προσερχόμενον τῷ θεῷ ὅτι ἔστιν καὶ τοῖς ἐκζητοῦσιν αὐτὸν μισθαποδότης γίνεται.</span></div>
+          <div class="verse"><span class="verse-number">7</span><span class="verse-text">Πίστει χρηματισθεὶς Νῶε περὶ τῶν μηδέπω βλεπομένων εὐλαβηθεὶς κατεσκεύασεν κιβωτὸν εἰς σωτηρίαν τοῦ οἴκου αὐτοῦ, δι' ἧς κατέκρινεν τὸν κόσμον, καὶ τῆς κατὰ πίστιν δικαιοσύνης ἐγένετο κληρονόμος.</span></div>
+        </div>
+      </div>
+  
+      <section>
+        <h3>Faith Defined (Hebrews 11:1-2)</h3>
+        <p>
+          When I hear the word <strong>love</strong>, a multitude of associations may come to mind—perhaps a favorite food, a beloved person, my family, or even a funny reel on Instagram. Similarly, when I ponder the word <strong>hope</strong>, I might think of future aspirations like graduate school, a job offer, a long-awaited reunion, the mending of a broken friendship, or simply finishing the quarter well. But what comes to mind when I think about the word <strong>faith</strong>?
+        </p>
+        <p>
+          This is the heart of our inquiry. We must return to Scripture to rediscover what faith truly is. Many today misunderstand faith, especially under the influence of the "word of faith" movement, which falsely teaches that if we possess the right amount of faith, we will inevitably prosper. If we do not prosper, then perhaps we are lacking faith. This view distorts the biblical meaning of faith and reduces it to a transactional formula.
+        </p>
+        <p>
+          True, genuine, saving faith is not about getting what we want. It is not a spiritual commodity we use to secure personal success. Rather, it is the means by which we cling to God, even in suffering and uncertainty. If our understanding of faith is vague or self-centered, we make ourselves vulnerable to sin and deception. The context of Hebrews helps us locate the meaning of faith within God's redemptive history. Chapter 9 presents Christ as the sufficient and final sacrifice. Chapter 10 exhorts us to draw near to God, to hold fast to our confession because we have been reconciled through Christ—past, present, and future. Then Chapter 11 gives us examples of those who, throughout redemptive history, held fast to God by faith.
+        </p>
+        <p>
+          As Habakkuk 2:4 declares, <strong>"Behold, his soul which is lifted up is not upright in him: but the just shall live by his faith."</strong> It is faith in Christ that preserves us to the end. Such faith does not rest on human sight but on the sure promises of God.
+        </p>
+        <p>
+          Hebrews 11:1 defines faith as <strong>"Now faith is the substance of things hoped for, the evidence of things not seen."</strong> Faith is first described as assurance—a firm confidence in what we hope for, rooted not in wishful thinking, but in the surety of God's promises. The believer's assurance is in Jesus Christ, our Great High Priest, who has completed all that was required for reconciliation with God. The "things hoped for" are truths not yet fulfilled, but assured nonetheless. Faith is certainty that what God has promised will indeed come to pass. It is a great blessing to live on this side of the cross, having seen in fullness what the saints of old only glimpsed from afar.
+        </p>
+        <p>
+          Faith is also the "evidence of things not seen." This conviction goes beyond intellectual assent—it involves the rebuke of doubt and the embracing of unseen spiritual realities. We live in an earthly realm, unable to see with physical eyes the fullness of the spiritual realm. And yet, we believe. Though we cannot see, touch, or taste these things, we remain confident that God will keep His word. Faith assures us that the invisible promises of God are no less real than the visible world.
+        </p>
+        <p>
+          True faith is centered on what God has promised, not what I want. It hears the Word of God and responds with humble obedience. The question is not whether God's Word is about me, but whether I will respond to it in faith. Will I hold fast to Jesus, or will I let Him slip from my grasp? Hebrews exhorts us to hold fast and draw near to Jesus, for He is the substance of our hope. As 1 John 1:1–4 proclaims, <strong>"That which was from the beginning, which we have heard, which we have seen with our eyes, which we have looked upon, and our hands have handled, of the Word of life..."</strong> Christ has been made manifest, and all that remains for us is to come to Him in faith.
+        </p>
+      </section>
+  
+      <section>
+        <h3>Faith Demonstrated (Hebrews 11:3-7)</h3>
+        <p>
+          In verse 2, the author writes, <strong>"For by it the elders obtained a good report."</strong> The Old Testament saints were not commended by the world, but by God. Faith receives divine approval—not necessarily temporal rewards, but the promise of eternal life and entrance into the heavenly city. They trusted God's promises even though they received far less revelation than we do today. God spoke to them through prophets; we have the full counsel of Scripture. Their faith challenges us to respond with even greater humility and obedience.
+        </p>
+        <p>
+          Verse 3 illustrates how faith operates in the mind and heart of the believer. <strong>"Through faith we understand that the worlds were framed by the word of God, so that things which are seen were not made of things which do appear."</strong> No one witnessed the act of creation, yet we believe because God has told us so. The visible world was formed by the invisible Word of God. He spoke, and it came to be. We do not affirm this blindly, but by faith—because the Creator Himself has testified to it. If we cannot believe by faith that God created the world, how will we believe the greater truths of redemption? It is the same God who made the heavens who also gave His Son to die for our sins.
+        </p>
+        <p>
+          Verse 4 presents Abel as the first example of a faithful man. Genesis 4 tells us that God accepted Abel's offering, but not Cain's. Why? Because Abel offered his gift in faith. God looked not merely at the outward offering but at the heart of the worshiper. Abel's sacrifice was accepted because it was offered in obedience and reverence. Though he died, his faith still speaks. He lived <em>coram Deo</em>—before the face of God—not merely outwardly, but inwardly, in a life shaped by trust in God.
+        </p>
+        <p>
+          Verse 5 introduces Enoch, who, unlike Abel, did not see death. Genesis 5 tells us that <strong>"And Enoch walked with God: and he was not; for God took him."</strong> His life was a testimony of faith. He did not perform great miracles or feats, but simply walked with God. That walk was enough for God to commend him. We are called to the same kind of life: walking in the newness of life, walking worthy of our calling. <strong>"But without faith it is impossible to please him:"</strong> The way to God is through faith alone. By grace we are saved through faith, and through faith we are justified and granted peace with God.
+        </p>
+        <p>
+          Finally, verse 7 gives us the example of Noah. Genesis 6 tells us that Noah, seeing the wickedness of man, obeyed God's command to build an ark. He did so <strong>"moved with fear"</strong>, even though the idea of a flood seemed absurd to others. He acted on God's Word with confidence and became an heir of the righteousness that comes by faith. Noah's obedience condemned the world, not because he judged others, but because his faithful response to God exposed the unbelief around him. His life is a powerful example of faith that trusts, obeys, and endures.
+        </p>
+        <p>
+          Faith is a firm confidence in God's promises that manifests in humble obedience. It is not merely belief, but belief that acts. Do I have this kind of faith? Am I sure? And if I am sure, am I really sure? Jesus said that all it takes is faith the size of a mustard seed. <strong>"Man shall not live by bread alone, but by every word that proceedeth out of the mouth of God."</strong> Therefore, in every waking moment, we must live in light of what God has said, and respond in faith.
+        </p>
+      </section>
+    </article>
+
+    <section class="comments-section">
+      <h3>Comments</h3>
+      <div id="comments-container">
+      </div>
+      
+      <form id="comment-form" class="comment-form">
+        <h4>Share Your Thoughts</h4>
+        <div class="form-group">
+          <label for="comment-name">Name</label>
+          <input type="text" id="comment-name" name="name" placeholder="Your name" required>
+        </div>
+        <div class="form-group">
+          <label for="comment-content">Comment</label>
+          <textarea id="comment-content" name="content" rows="4" placeholder="Add a public comment..." required></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="submit-comment">Post</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer animate-in">
+    <div class="container">
+      <p class="copyright">&copy; 2025 Brandon Nguyen. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // IntersectionObserver for animations
+    document.addEventListener('DOMContentLoaded', () => {
+      const article = document.querySelector('.devo-full');
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            io.unobserve(e.target);
+          }
+        });
+      }, {
+        threshold: 0, // Start animation as soon as 0% is visible
+        rootMargin: '0px' // No margin adjustment
+      });
+
+      if (article) {
+        io.observe(article);
+      }
+      
+      // Animate footer as well
+      const footer = document.querySelector('.site-footer');
+      if (footer) {
+        const footerIo = new IntersectionObserver(entries => {
+          entries.forEach(e => {
+            if (e.isIntersecting) {
+              e.target.classList.add('visible');
+              footerIo.unobserve(e.target);
+            }
+          });
+        }, { threshold: 0, rootMargin: '0px'});
+        footerIo.observe(footer);
+      }
+    });
+  </script>
+  
+  <script src="comments.js"></script>
+</body>
+</html> 
