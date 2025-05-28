@@ -42,6 +42,13 @@
       --card-hover-border: var(--accent);
     }
 
+    /* Prevent horizontal scroll */
+    html, body {
+      overflow-x: hidden;
+      width: 100%;
+      position: relative;
+    }
+
     /* Smooth scroll behavior */
     html {
       scroll-behavior: smooth;
@@ -62,6 +69,7 @@
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
     }
 
     /* Add overlay to ensure text readability if background is too busy */
@@ -368,12 +376,16 @@
     @media (max-width: 768px) {
       .container {
         width: 100%;
-        padding: 2rem 1rem; /* Reduced padding for mobile */
+        padding: 2rem 1rem;
+        max-width: 100%;
+        box-sizing: border-box;
       }
       
       .retreat-header {
         padding: 2rem 1.25rem;
         margin-bottom: 2.5rem;
+        width: 100%;
+        box-sizing: border-box;
       }
 
       .retreat-header h1 {
@@ -394,10 +406,14 @@
       .sessions-grid {
         gap: 1.5rem;
         margin-bottom: 2.5rem;
+        width: 100%;
+        box-sizing: border-box;
       }
 
       .session-card {
         padding: 1.75rem 1.25rem;
+        width: 100%;
+        box-sizing: border-box;
       }
 
       .session-number {
