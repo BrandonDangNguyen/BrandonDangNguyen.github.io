@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Session 1 of the Bible Study on Hebrews 11:1-7">
+<meta name="keywords" content="Hebrews 11, Faith, Bible Study, Christian Devotional, Assurance, Abel, Enoch, Noah, Brandon Nguyen, Reformed Theology">
+<meta name="author" content="Brandon Nguyen">
+<title>Hebrews 11:32-40 – Faith in a Savior Yet Unseen | Brandon Nguyen</title>
+    
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
+  <link rel="manifest" href="images/favicon/site.webmanifest">
+  <link rel="shortcut icon" href="images/favicon/favicon.ico">
+
+  <link rel="stylesheet" href="styles.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sorts+Mill+Goudy:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400;1,600&display=swap">
+
+  <style>
+    /* Force dark theme styles */
+    :root {
+      --background: #000000;
+      --text: #ffffff;
+      --text-light: #cccccc;
+      --border: #333333;
+      --accent: #4a90e2;
+      --accent-hover: #357abd;
+    }
+
+    body {
+      background-color: var(--background);
+      background-image: url('images/starry-night-bg.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      color: var(--text);
+    }
+
+    /* Add overlay to ensure text readability */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.3);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* constrain + center */
+    main.container {
+      display: grid;
+      grid-template-columns: 1fr; /* Simplified for single column content */
+      grid-template-areas: 
+        "content"
+        "comments";
+      padding: 4rem 2rem;
+      width: 95%;
+      max-width: 1400px; /* Max width from 1peter */
+      margin: 0 auto;
+      gap: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    article.devo-full {
+      grid-area: content;
+      font-family: 'Sorts Mill Goudy', serif; /* Primary devotional font */
+      padding: 0;
+      max-width: 750px; /* Content width from 1peter */
+      margin: 0 auto; /* Center the article */
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 12px;
+      padding: 2rem;
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .comments-section {
+      grid-area: comments;
+      width: 100%;
+      max-width: 750px; /* Consistent width */
+      margin-left: auto;
+      margin-right: auto;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 12px;
+      padding: 2rem;
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* headings and meta */
+    .devo-full h2 {
+      font-size: 3.5rem;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      font-family: 'Sorts Mill Goudy', serif;
+      text-align: center;
+      letter-spacing: 0.02em;
+      line-height: 1.2;
+      color: var(--text);
+    }
+
+    .devo-full .meta { /* Changed from .date to .meta for consistency */
+      text-align: center;
+      margin-bottom: 3rem;
+      opacity: 0.8;
+      color: var(--text);
+    }
+
+    .devo-full .meta em { /* For the date, similar to 1peter */
+      display: block;
+      font-size: 1.1rem;
+      font-style: normal; /* Or italic if preferred */
+      font-family: 'Sorts Mill Goudy', serif;
+      letter-spacing: 0.03em;
+      color: var(--text);
+    }
+
+    /* verse sections */
+    .devo-full section {
+      margin: 3rem 0;
+    }
+
+    .devo-full h3 {
+      font-size: 1.8rem; /* Heading for sections within the devotional */
+      margin-top: 2.5rem;
+      margin-bottom: 1.5rem;
+      font-family: 'Sorts Mill Goudy', serif;
+      text-align: left;
+      max-width: 750px; /* Consistent width */
+      margin-left: auto;
+      margin-right: auto;
+      color: var(--text);
+    }
+
+    /* content formatting */
+    .devo-full p {
+      font-size: 1.15rem;
+      line-height: 1.7;
+      margin: 1.5rem auto;
+      max-width: 750px; /* Consistent width */
+      font-family: 'Sorts Mill Goudy', serif; /* Primary devotional font */
+      text-align: left;
+      letter-spacing: 0.01em;
+      color: var(--text);
+    }
+
+    /* scripture styling (can be used for emphasis if needed) */
+    .scripture {
+      font-weight: bold;
+    }
+
+    /* Greek text */
+    [lang="grc"] {
+      font-family: 'Times New Roman', serif; /* Standard for Greek, or use Crimson Pro if preferred */
+    }
+    .devo-full p strong {
+        font-family: 'Sorts Mill Goudy', serif; 
+        color: var(--text);
+    }
+
+    /* Bible verse toggle styling */
+    .bible-passage {
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 2rem auto;
+      max-width: 750px;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: var(--text);
+      backdrop-filter: blur(3px);
+    }
+
+    .bible-passage:after {
+      content: "Tap to toggle between English and Greek";
+      position: absolute;
+      bottom: 0.5rem;
+      right: 0.75rem;
+      font-size: 0.7rem;
+      color: var(--text-light);
+      opacity: 0.7;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .bible-passage:hover {
+      box-shadow: 0 4px 8px rgba(255,255,255,0.1);
+      background-color: rgba(255, 255, 255, 0.02);
+    }
+
+    .bible-passage .verse {
+      display: flex;
+      margin-bottom: 0.8rem;
+      position: relative;
+    }
+
+    .bible-passage .verse:last-child {
+      margin-bottom: 0;
+    }
+
+    .verse-number {
+      font-weight: bold;
+      min-width: 1.5rem;
+      margin-right: 0.5rem;
+      flex-shrink: 0;
+      color: var(--text);
+    }
+
+    .verse-text {
+      flex: 1;
+      word-wrap: break-word;
+      max-width: 100%;
+      overflow-wrap: break-word;
+      color: var(--text);
+    }
+
+    .bible-passage .greek-text {
+      display: none;
+      font-family: 'Times New Roman', serif;
+      font-size: 1.05rem; /* Slightly larger for better readability */
+      line-height: 1.6;
+      color: var(--text);
+    }
+
+    .bible-passage.show-greek .english-text {
+      display: none;
+    }
+
+    .bible-passage.show-greek .greek-text {
+      display: block;
+    }
+
+    /* Add mobile-specific adjustments */
+    @media (max-width: 768px) {
+      main.container {
+        width: 100%; /* Use full width */
+        padding: 3rem 1rem; /* Adjust padding for mobile */
+      }
+      
+      .devo-full h2 {
+        font-size: 2.5rem; /* Reduce heading size for mobile */
+      }
+    }
+    
+    /* Animation styles */
+    .animate-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    
+    .animate-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    /* Comment section styles */
+    .comments-section h3 {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      font-family: 'Sorts Mill Goudy', serif;
+      color: var(--text);
+    }
+    
+    .comment-form {
+      margin-top: 2rem;
+      border-top: 1px solid var(--border);
+      padding-top: 1.5rem;
+    }
+    
+    .comment-form h4 {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      font-family: 'Sorts Mill Goudy', serif;
+      color: var(--text);
+    }
+    
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+    }
+    
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background-color: var(--background);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .form-actions {
+      margin-top: 1rem;
+    }
+    
+    .submit-comment {
+      padding: 0.5rem 1rem;
+      background-color: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background-color 0.2s;
+    }
+    
+    .submit-comment:hover {
+      background-color: var(--accent-hover);
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-container">
+      <h1 class="site-title"><a href="/">Brandon Nguyen</a></h1>
+      <nav class="main-nav" aria-label="Main navigation">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <article class="devo-full animate-in">
+      <h2>Hebrews 11:32-40</h2>
+      <p class="meta"><em>Session 3: Faith in a Savior Yet Unseen</em></p>
+  
+      <div class="bible-passage" id="bible-passage" onclick="this.classList.toggle('show-greek')">
+        <div class="english-text">
+          <div class="verse"><span class="verse-number">32</span><span class="verse-text">And what more shall I say? For time would fail me to tell of Gideon, Barak, Samson, Jephthah, of David and Samuel and the prophets—</span></div>
+          <div class="verse"><span class="verse-number">33</span><span class="verse-text">who through faith conquered kingdoms, enforced justice, obtained promises, stopped the mouths of lions,</span></div>
+          <div class="verse"><span class="verse-number">34</span><span class="verse-text">quenched the power of fire, escaped the edge of the sword, were made strong out of weakness, became mighty in war, put foreign armies to flight.</span></div>
+          <div class="verse"><span class="verse-number">35</span><span class="verse-text">Women received back their dead by resurrection. Some were tortured, refusing to accept release, so that they might rise again to a better life.</span></div>
+          <div class="verse"><span class="verse-number">36</span><span class="verse-text">Others suffered mocking and flogging, and even chains and imprisonment.</span></div>
+          <div class="verse"><span class="verse-number">37</span><span class="verse-text">They were stoned, they were sawn in two, they were killed with the sword. They went about in skins of sheep and goats, destitute, afflicted, mistreated—</span></div>
+          <div class="verse"><span class="verse-number">38</span><span class="verse-text">of whom the world was not worthy—wandering about in deserts and mountains, and in dens and caves of the earth.</span></div>
+          <div class="verse"><span class="verse-number">39</span><span class="verse-text">And all these, though commended through their faith, did not receive what was promised,</span></div>
+          <div class="verse"><span class="verse-number">40</span><span class="verse-text">since God had provided something better for us, that apart from us they should not be made perfect.</span></div>
+        </div>
+        <div class="greek-text">
+          <div class="verse"><span class="verse-number">32</span><span class="verse-text">Καὶ τί ἔτι λέγω; Ἐπιλείψει με γὰρ διηγούμενον ὁ χρόνος περὶ Γεδεών, Βαράκ, Σαμψών, Ἰεφθάε, Δαυίδ τε καὶ Σαμουὴλ καὶ τῶν προφητῶν·</span></div>
+          <div class="verse"><span class="verse-number">33</span><span class="verse-text">οἳ διὰ πίστεως κατηγωνίσαντο βασιλείας, ἠργάσαντο δικαιοσύνην, ἐπέτυχον ἐπαγγελιῶν, ἔφραξαν στόματα λεόντων,</span></div>
+          <div class="verse"><span class="verse-number">34</span><span class="verse-text">ἔσβεσαν δύναμιν πυρός, ἔφυγον στόματα μαχαίρης, ἐδυναμώθησαν ἀπὸ ἀσθενείας, ἐγενήθησαν ἰσχυροὶ ἐν πολέμῳ, παρεμβολὰς ἔκλιναν ἀλλοτρίων·</span></div>
+          <div class="verse"><span class="verse-number">35</span><span class="verse-text">ἔλαβον γυναῖκες ἐξ ἀναστάσεως τοὺς νεκροὺς αὐτῶν· ἄλλοι δὲ ἐτυμπανίσθησαν, οὐ προσδεξάμενοι τὴν ἀπολύτρωσιν, ἵνα κρείττονος ἀναστάσεως τύχωσιν·</span></div>
+          <div class="verse"><span class="verse-number">36</span><span class="verse-text">ἕτεροι δὲ ἐμπαιγμῶν καὶ μαστίγων πεῖραν ἔλαβον, ἔτι δὲ δεσμῶν καὶ φυλακῆς·</span></div>
+          <div class="verse"><span class="verse-number">37</span><span class="verse-text">ἐλιθάσθησαν, ἐπρίσθησαν, ἐπειράσθησαν, ἐν φόνῳ μαχαίρης ἀπέθανον· περιῆλθον ἐν μηλωταῖς, ἐν αἰγείοις δέρμασιν, ὑστερούμενοι, θλιβόμενοι, κακουχούμενοι,</span></div>
+          <div class="verse"><span class="verse-number">38</span><span class="verse-text">ὧν οὐκ ἦν ἄξιος ὁ κόσμος, ἐν ἐρημίαις πλανώμενοι καὶ ὄρεσιν καὶ σπηλαίοις καὶ ταῖς ὀπαῖς τῆς γῆς.</span></div>
+          <div class="verse"><span class="verse-number">39</span><span class="verse-text">Καὶ οὗτοι πάντες, μαρτυρηθέντες διὰ τῆς πίστεως, οὐκ ἐκομίσαντο τὴν ἐπαγγελίαν,</span></div>
+          <div class="verse"><span class="verse-number">40</span><span class="verse-text">τοῦ θεοῦ περὶ ἡμῶν κρεῖττόν τι προβλεψαμένου, ἵνα μὴ χωρὶς ἡμῶν τελειωθῶσιν.</span></div>
+        </div>
+      </div>
+      
+      
+  
+      <section>
+        <p><strong>Hebrews 11</strong> draws to a close with a rapid summary of Old Testament saints whose faith was 
+          tested, stretched, and ultimately approved by God. The inspired author shifts from focusing on 
+          individual stories to a rapid listing of figures—Gideon, Barak, Samson, Jephthah, David, 
+          Samuel, and the prophets. These names serve as a concluding witness to the enduring faith 
+          that overcomes through trial and weakness. The central truth of this passage is that we have 
+          received something better than even these Old Testament saints. While they lived in 
+          anticipation of a Messiah who had not yet come, we live in the fulfillment of His saving work. 
+          The intent of the author is not merely to honor these saints, but to encourage us to persevere, 
+          holding fast to our confession. Because we have Christ, we are equipped to walk by faith with 
+          boldness and endurance.</p>
+          
+          <h3>Faith That Acted</h3>
+          <p>The first theme the author emphasizes is that faith is not passive—it acts in 
+          obedience, even under daunting circumstances. It is easy to trust God in seasons of peace and 
+          prosperity, but it is far harder to trust Him in the crucible of trial and uncertainty. Yet this is the 
+          kind of faith that pleases God: <strong>faith that acts in trust when standing at the precipice.</strong> The author, 
+          in listing so many names quickly, implies there is a great cloud of witnesses who lived by such 
+          faith. Many of these figures—Gideon, Barak, Samson, Jephthah, David, Samuel—are 
+          remembered as much for their failures as for their triumphs. But despite their flaws, they were 
+          used mightily by God through faith. Gideon was fearful and doubting, asking for constant signs 
+          from God, yet he obeyed and delivered Israel. Barak, though hesitant, acted on God’s word and 
+          was victorious. Samson failed repeatedly, yet in his final moments called upon God in faith and 
+          was used to defeat the Philistines. Jephthah trusted God, and though his character is complex, 
+          God gave him victory. David’s faith triumphed over Goliath because he trusted in the Lord; though he would later fall into adultery and murder, yet God, in His mercy, still used him to accomplish His purposes and establish the lineage through which the Messiah would come. Samuel, though a flawed father, trusted God’s promises and led 
+          Israel in righteousness. These were men who acted not in strength, but in weakness, and by 
+          faith became mighty in war, conquered kingdoms, administered justice, and saw miracles 
+          wrought by the hand of God. Their strength lay not in themselves, but in the God they trusted. 
+          So also, we must ask: Do we have a faith that listens to and acts upon God’s Word? Is our trust 
+          rooted in Scripture?</p>
+          
+          <h3>Faith That Suffered</h3>
+          <p>The author does not sugarcoat the experience of faith. Not all who trust in 
+          God are delivered in this life. Some suffer greatly, and their faith is no less real—indeed, it may 
+          be deeper. The narrative moves from triumphs to tribulations. Some saints endured mockings, 
+          floggings, imprisonment, stonings, and even death by the sword. These were faithful ones who 
+          endured in hope of a better resurrection, not merely survival or earthly restoration. They 
+          wandered in deserts and mountains, lived in caves, and were destitute. These were people of 
+          whom the world was not worthy. Their faith clung to the promise of heaven, not earth. As 
+          Christians, we are exiles and sojourners—citizens of a better country. As Jesus said in <strong>Luke 9</strong>, 
+          <strong>“Foxes have holes and birds of the air have nests, but the Son of Man has nowhere to lay His 
+          head.”</strong> Faith may lead us to victories, but it also leads us to sufferings. The apostle Paul says in 
+          <strong>2 Timothy 2:12</strong>, <strong>“If we endure, we will also reign with Him.”</strong> Therefore, we echo the cry: <strong>“Take 
+          the world, but give me Jesus!”</strong> To live is Christ, and to die is gain. With such a hope, we can 
+          endure anything the world brings against us, because we are fixed on Christ. Are we willing to 
+          lose opportunities, relationships, or worldly recognition because our eyes are on Jesus? Are we 
+          hesitant to speak of Christ for fear of disapproval? Faith suffers, but suffers with eyes set on 
+          eternity.</p>
+          
+          <h3>Faith That Anticipated</h3>
+          <p>Finally, we see that the faith of the saints looked forward to something 
+          greater than themselves. Though they received commendation from God, they did not receive 
+          the promise in its fullness. They lived before the cross, and their salvation could not be 
+          perfected until Jesus accomplished redemption through His death and resurrection. Now, as 
+          New Testament believers, we live in the light of that finished work. They lived in shadow; we live 
+          in fulfillment. They stumbled forward with a flicker of revelation; we walk in the light of the 
+          gospel. We should be deeply challenged—how much more can we walk by faith, having 
+          received the full revelation of Christ? We have what they longed for. Their examples should 
+          inspire us, but our access to the gospel should propel us to greater obedience. Our faith is not in 
+          what is to come, but in what has already been done. In light of this, we must live by a faith that 
+          anticipates the full realization of Christ’s kingdom, trusting in the God who has already proven 
+          Himself faithful.</p>
+          
+          <p>Our faith can endure because we have Jesus. As <strong>Hebrews 12:1–2</strong> declares, <strong>we must run the 
+          race with endurance, fixing our eyes on Jesus, the founder and perfecter of our faith.</strong> The secret 
+          to perseverance is not found in our own strength, but in continual looking to Christ. He is our 
+          model, our strength, and our hope. We must rest in this glorious truth. Jesus Christ is our perfect 
+          example of enduring faith. Let us meditate on Him, follow Him, and trust in Him with all our 
+          hearts.</p>
+          
+          <p><strong>I have decided to follow Jesus. The cross before me, the world behind me. Though none 
+          go with me, still I will follow. No turning back. Amen.</strong></p>
+          
+        
+      </section>
+    </article>
+
+    <section class="comments-section">
+      <h3>Comments</h3>
+      <div id="comments-container">
+      </div>
+      
+      <form id="comment-form" class="comment-form">
+        <h4>Share Your Thoughts</h4>
+        <div class="form-group">
+          <label for="comment-name">Name</label>
+          <input type="text" id="comment-name" name="name" placeholder="Your name" required>
+        </div>
+        <div class="form-group">
+          <label for="comment-content">Comment</label>
+          <textarea id="comment-content" name="content" rows="4" placeholder="Add a public comment..." required></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="submit-comment">Post</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer animate-in">
+    <div class="container">
+      <p class="copyright">&copy; 2025 Brandon Nguyen. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // IntersectionObserver for animations
+    document.addEventListener('DOMContentLoaded', () => {
+      const article = document.querySelector('.devo-full');
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            io.unobserve(e.target);
+          }
+        });
+      }, {
+        threshold: 0, // Start animation as soon as 0% is visible
+        rootMargin: '0px' // No margin adjustment
+      });
+
+      if (article) {
+        io.observe(article);
+      }
+      
+      // Animate footer as well
+      const footer = document.querySelector('.site-footer');
+      if (footer) {
+        const footerIo = new IntersectionObserver(entries => {
+          entries.forEach(e => {
+            if (e.isIntersecting) {
+              e.target.classList.add('visible');
+              footerIo.unobserve(e.target);
+            }
+          });
+        }, { threshold: 0, rootMargin: '0px'});
+        footerIo.observe(footer);
+      }
+    });
+  </script>
+  
+  <script src="comments.js"></script>
+</body>
+</html> 

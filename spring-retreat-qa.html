@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Q&A Session">
+<meta name="keywords" content="Q&A Session, Brandon Nguyen, Christian Chen, Matt Ng, Aden Wong, Jonathan Tan, Yeadam Kim, AJ Mackewicz">
+<meta name="author" content="Brandon Nguyen">
+<title>Q&A Session | Brandon Nguyen</title>
+    
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
+  <link rel="manifest" href="images/favicon/site.webmanifest">
+  <link rel="shortcut icon" href="images/favicon/favicon.ico">
+
+  <link rel="stylesheet" href="styles.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sorts+Mill+Goudy:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400;1,600&display=swap">
+
+  <style>
+    /* Force dark theme styles */
+    :root {
+      --background: #000000;
+      --text: #ffffff;
+      --text-light: #cccccc;
+      --border: #333333;
+      --accent: #4a90e2;
+      --accent-hover: #357abd;
+    }
+
+    body {
+      background-color: var(--background);
+      background-image: url('images/starry-night-bg.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      color: var(--text);
+    }
+
+    /* Add overlay to ensure text readability */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.3);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* constrain + center */
+    main.container {
+      display: grid;
+      grid-template-columns: 1fr; /* Simplified for single column content */
+      grid-template-areas: 
+        "content"
+        "comments";
+      padding: 4rem 2rem;
+      width: 95%;
+      max-width: 1400px; /* Max width from 1peter */
+      margin: 0 auto;
+      gap: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    article.devo-full {
+      grid-area: content;
+      font-family: 'Sorts Mill Goudy', serif; /* Primary devotional font */
+      padding: 0;
+      max-width: 750px; /* Content width from 1peter */
+      margin: 0 auto; /* Center the article */
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 12px;
+      padding: 2rem;
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .comments-section {
+      grid-area: comments;
+      width: 100%;
+      max-width: 750px; /* Consistent width */
+      margin-left: auto;
+      margin-right: auto;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 12px;
+      padding: 2rem;
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* headings and meta */
+    .devo-full h2 {
+      font-size: 3.5rem;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      font-family: 'Sorts Mill Goudy', serif;
+      text-align: center;
+      letter-spacing: 0.02em;
+      line-height: 1.2;
+      color: var(--text);
+    }
+
+    .devo-full .meta { /* Changed from .date to .meta for consistency */
+      text-align: center;
+      margin-bottom: 3rem;
+      opacity: 0.8;
+      color: var(--text);
+    }
+
+    .devo-full .meta em { /* For the date, similar to 1peter */
+      display: block;
+      font-size: 1.1rem;
+      font-style: normal; /* Or italic if preferred */
+      font-family: 'Sorts Mill Goudy', serif;
+      letter-spacing: 0.03em;
+      color: var(--text);
+    }
+
+    /* verse sections */
+    .devo-full section {
+      margin: 3rem 0;
+    }
+
+    .devo-full h3 {
+      font-size: 1.8rem; /* Heading for sections within the devotional */
+      margin-top: 2.5rem;
+      margin-bottom: 1.5rem;
+      font-family: 'Sorts Mill Goudy', serif;
+      text-align: left;
+      max-width: 750px; /* Consistent width */
+      margin-left: auto;
+      margin-right: auto;
+      color: var(--text);
+    }
+
+    /* content formatting */
+    .devo-full p {
+      font-size: 1.15rem;
+      line-height: 1.7;
+      margin: 1.5rem auto;
+      max-width: 750px; /* Consistent width */
+      font-family: 'Sorts Mill Goudy', serif; /* Primary devotional font */
+      text-align: left;
+      letter-spacing: 0.01em;
+      color: var(--text);
+    }
+
+    /* scripture styling (can be used for emphasis if needed) */
+    .scripture {
+      font-weight: bold;
+    }
+
+    /* Greek text */
+    [lang="grc"] {
+      font-family: 'Times New Roman', serif; /* Standard for Greek, or use Crimson Pro if preferred */
+    }
+    .devo-full p strong {
+        font-family: 'Sorts Mill Goudy', serif; 
+        color: var(--text);
+    }
+
+    /* Bible verse toggle styling */
+    .bible-passage {
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 2rem auto;
+      max-width: 750px;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: var(--text);
+      backdrop-filter: blur(3px);
+    }
+
+    .bible-passage:after {
+      content: "Tap to toggle between English and Greek";
+      position: absolute;
+      bottom: 0.5rem;
+      right: 0.75rem;
+      font-size: 0.7rem;
+      color: var(--text-light);
+      opacity: 0.7;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .bible-passage:hover {
+      box-shadow: 0 4px 8px rgba(255,255,255,0.1);
+      background-color: rgba(255, 255, 255, 0.02);
+    }
+
+    .bible-passage .verse {
+      display: flex;
+      margin-bottom: 0.8rem;
+      position: relative;
+    }
+
+    .bible-passage .verse:last-child {
+      margin-bottom: 0;
+    }
+
+    .verse-number {
+      font-weight: bold;
+      min-width: 1.5rem;
+      margin-right: 0.5rem;
+      flex-shrink: 0;
+      color: var(--text);
+    }
+
+    .verse-text {
+      flex: 1;
+      word-wrap: break-word;
+      max-width: 100%;
+      overflow-wrap: break-word;
+      color: var(--text);
+    }
+
+    .bible-passage .greek-text {
+      display: none;
+      font-family: 'Times New Roman', serif;
+      font-size: 1.05rem; /* Slightly larger for better readability */
+      line-height: 1.6;
+      color: var(--text);
+    }
+
+    .bible-passage.show-greek .english-text {
+      display: none;
+    }
+
+    .bible-passage.show-greek .greek-text {
+      display: block;
+    }
+
+    /* Add mobile-specific adjustments */
+    @media (max-width: 768px) {
+      main.container {
+        width: 100%; /* Use full width */
+        padding: 3rem 1rem; /* Adjust padding for mobile */
+      }
+      
+      .devo-full h2 {
+        font-size: 2.5rem; /* Reduce heading size for mobile */
+      }
+    }
+    
+    /* Animation styles */
+    .animate-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    
+    .animate-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    /* Comment section styles */
+    .comments-section h3 {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      font-family: 'Sorts Mill Goudy', serif;
+      color: var(--text);
+    }
+    
+    .comment-form {
+      margin-top: 2rem;
+      border-top: 1px solid var(--border);
+      padding-top: 1.5rem;
+    }
+    
+    .comment-form h4 {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      font-family: 'Sorts Mill Goudy', serif;
+      color: var(--text);
+    }
+    
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+    }
+    
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background-color: var(--background);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .form-actions {
+      margin-top: 1rem;
+    }
+    
+    .submit-comment {
+      padding: 0.5rem 1rem;
+      background-color: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background-color 0.2s;
+    }
+    
+    .submit-comment:hover {
+      background-color: var(--accent-hover);
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-container">
+      <h1 class="site-title"><a href="/">Brandon Nguyen</a></h1>
+      <nav class="main-nav" aria-label="Main navigation">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <article class="devo-full animate-in">
+      <h2>Q&A Session</h2>
+  
+  
+      
+      
+      
+  
+      <section>
+        <h3>What Has God Taught You as Parents? (Christian Chen)</h3>
+        <p>As parents, we are reminded that the growth of children is ultimately from God. You are not alone in parenting—God is in control. The journey reveals more and more of God’s love for you as His child. Parenting requires the cultivation of many traits that mirror Christ-like behavior. When it comes to enduring faith, we must hold fast to God's promises and discipline ourselves to remain faithful, even in the midst of caring for children. First and foremost, we must lay hold of the truths of the gospel.</p>
+    
+        <h3>What Was a Moment When You Had to Hold Fast to God or Fight the Temptation to Drift? (Matt Ng)</h3>
+        <p>Mason shared that <strong>Psalm 73:25</strong> became especially meaningful during seasons of trial: <strong>“Whom have I in heaven but you? And there is nothing on earth that I desire besides you.”</strong> The psalmist was bitter that others were prospering while he wasn’t—but this verse became a reminder that if Christ is all he has, then that is all he needs. Amen.</p>
+        <p>Eric recounted moments in his life that led him to question—Who am I? What is God’s will? During that time <strong>Romans 8:1</strong> anchored him: <strong>“There is therefore now no condemnation for those who are in Christ Jesus.”</strong> Even in uncertainty, God is present and sanctifying. Identify the greatest gift: salvation secured in Christ.</p>
+        <p>Matt emphasized that when faith, rather than career or academic aspiration, becomes the driving force of your life, you will increasingly think about what Christ has done on the cross.</p>
+        <p>Eric added that we often prefer to have more knowledge and control, instead of simply depending on God.</p>
+        <p>Priscilla shared how in the midst of suffering, everything by human standards seemed to be going right. Yet God was orchestrating events to teach her that He gives and takes away—even life itself. She wrestled with questions: Why do these things happen? Should we question God? <strong>Romans 5:3–5</strong> became a comfort: <strong>“We rejoice in our sufferings, knowing that suffering produces endurance, and endurance produces character, and character produces hope.”</strong> Though she had memorized it before, this trial pressed it into her heart. Even amid loss, she clung to the eternal—her place in heaven with God. Heaven is far greater than earth.</p>
+    
+        <h3>What Are Some Promises We Can Specifically Have Faith In? How Do We Do Mundane Things Like Brushing Teeth Out of Faith? (Aden Wong)</h3>
+        <p>Use a waterpik.</p>
+        <p>Mason shared from <strong>Romans 8</strong>: If God did not spare His own Son, what good thing would He withhold from us?</p>
+        <p>Matt referenced <strong>2 Peter 1:3</strong>—God has granted us all things needed for life and godliness.</p>
+        <p>Kimmie pointed to <strong>Matthew 6</strong>, reminding us of Jesus’ words about anxiety and God’s provision.</p>
+        <p>Eric emphasized <strong>2 Peter 1:4</strong>, which promises that we are partakers in the divine nature. God will sanctify us and complete His work in us until the final day of Christ.</p>
+        <p>Matt encouraged a simple mindset: brush your teeth for the glory of God. Don’t overthink it—be a good steward of your responsibilities. Do them well so you can focus more on the Word and exhorting others. It’s not that deep.</p>
+        <p>Eric highlighted <strong>Psalm 19</strong>: <strong>“The law of the Lord is perfect.”</strong> If that’s true, then we will naturally cling to the Word and let it shape our lives.</p>
+    
+        <h3>How Do You Help Someone Who Isn’t Willing to Give Up Everything for Christ, Especially If They Struggle to Believe in What They Cannot See? (Jonathan Tan)</h3>
+        <p>Be present. Care for them. Be a burden-bearer, a peacekeeper. Honor others as much as it depends on you (<strong>Romans 12</strong>). Think about their spiritual good above all.</p>
+        <p>Be a good witness and let the Holy Spirit do the convicting. Ultimately, it is not up to us to change hearts—only God can soften them.</p>
+        <p>Discipleship is helping others follow Jesus, and sometimes it means patiently walking alongside someone even if they don’t immediately respond.</p>
+        <p>Mason referenced <strong>Romans 6:21</strong>, reminding us that the outcome of sin is death. In the grand scope of eternity, it's easy to be deceived by what’s immediately around us—but we must keep the eternal perspective.</p>
+    
+        <h3>What Would You Tell Someone Who Believes in Jesus but Struggles to Prioritize Him and Is Still Conformed to the World? (Yeadam Kim)</h3>
+        <p>Eric referred to <strong>1 Peter 1</strong>: though we do not see Christ, we love Him. Verse 13 adds that faith looks like preparing our minds for action and being sober-minded. God says, <strong>“Be holy, for I am holy.”</strong></p>
+        <p>Belief in Christ must lead to obedience. Help the person think through their priorities: is faith in Christ the driving force of their life, or is it worldly things? We cannot love God and the world at the same time—we must choose one. Sanctification is ongoing, but it is for our good. We must learn to count all things as loss in comparison to the surpassing worth of knowing Christ (<strong>Philippians 3</strong>). His yoke is easy and His burden is light (<strong>Matthew 11</strong>).</p>
+    
+        <h3>What’s the Difference Between God’s Sovereignty and God’s Providence? (AJ Mackewicz)</h3>
+        <p>Sovereignty refers to God's absolute rule and authority over all things. Providence is “warm sovereignty”—it describes the way God’s sovereign hand is lovingly and wisely at work in the lives of His people. Matt recommended reading <em>Providence</em> by John Piper. “It’s just an awesome read.”—Matt Ng, July 28, 2025, 7:35 PM, Camp Pondo, 31324 Green Valley Lake Rd, Running Springs, CA 92382, USA</p>
+          
+        
+      </section>
+    </article>
+
+    <section class="comments-section">
+      <h3>Comments</h3>
+      <div id="comments-container">
+      </div>
+      
+      <form id="comment-form" class="comment-form">
+        <h4>Share Your Thoughts</h4>
+        <div class="form-group">
+          <label for="comment-name">Name</label>
+          <input type="text" id="comment-name" name="name" placeholder="Your name" required>
+        </div>
+        <div class="form-group">
+          <label for="comment-content">Comment</label>
+          <textarea id="comment-content" name="content" rows="4" placeholder="Add a public comment..." required></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="submit-comment">Post</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer animate-in">
+    <div class="container">
+      <p class="copyright">&copy; 2025 Brandon Nguyen. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // IntersectionObserver for animations
+    document.addEventListener('DOMContentLoaded', () => {
+      const article = document.querySelector('.devo-full');
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            io.unobserve(e.target);
+          }
+        });
+      }, {
+        threshold: 0, // Start animation as soon as 0% is visible
+        rootMargin: '0px' // No margin adjustment
+      });
+
+      if (article) {
+        io.observe(article);
+      }
+      
+      // Animate footer as well
+      const footer = document.querySelector('.site-footer');
+      if (footer) {
+        const footerIo = new IntersectionObserver(entries => {
+          entries.forEach(e => {
+            if (e.isIntersecting) {
+              e.target.classList.add('visible');
+              footerIo.unobserve(e.target);
+            }
+          });
+        }, { threshold: 0, rootMargin: '0px'});
+        footerIo.observe(footer);
+      }
+    });
+  </script>
+  
+  <script src="comments.js"></script>
+</body>
+</html> 

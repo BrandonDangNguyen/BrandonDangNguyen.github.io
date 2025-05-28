@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Spring Retreat 2025 - Three sessions and Q&A by Brandon Nguyen">
+  <meta name="keywords" content="spring retreat, Christian retreat, faith, spiritual growth, Brandon Nguyen">
+  <meta name="author" content="Brandon Nguyen">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png" onerror="this.href='https://placehold.co/180x180/000000/FFFFFF?text=Favicon';">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png" onerror="this.href='https://placehold.co/32x32/000000/FFFFFF?text=Favicon';">
+  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png" onerror="this.href='https://placehold.co/16x16/000000/FFFFFF?text=Favicon';">
+  <link rel="manifest" href="images/favicon/site.webmanifest">
+  <link rel="shortcut icon" href="images/favicon/favicon.ico" onerror="this.href='https://placehold.co/48x48/000000/FFFFFF?text=Favicon';">
+
+  <meta property="og:title" content="Spring Retreat 2025 - Brandon Nguyen">
+  <meta property="og:description" content="Spring Retreat 2025 - Three sessions and Q&A by Brandon Nguyen">
+  <meta property="og:image" content="og-image.jpg" onerror="this.src='https://placehold.co/1200x630/000000/FFFFFF?text=Spring+Retreat';">
+  <meta property="og:url" content="https://brandondangnguyen.github.io/spring-retreat">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <title>Spring Retreat 2025 - Brandon Nguyen</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sorts+Mill+Goudy:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* Force dark theme styles */
+    :root {
+      --background: #0f0f1a; /* Slightly desaturated dark blue */
+      --text: #e0e0e0; /* Lighter text for better contrast */
+      --text-light: #b0b0b0; /* Softer light text */
+      --border: #2a2a3a; /* Softer border */
+      --accent: #58a6ff; /* Brighter, more vibrant blue */
+      --accent-hover: #4090e0;
+      --accent-rgb: 88, 166, 255; /* RGB for use with alpha, e.g., box-shadows */
+      --card-bg: rgba(10, 10, 20, 0.75); /* Darker, slightly more opaque card */
+      --card-hover-bg: rgba(15, 15, 25, 0.85);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --card-hover-border: var(--accent);
+    }
+
+    /* Smooth scroll behavior */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--background);
+      background-image: url('https://www.transparenttextures.com/patterns/stardust.png'); /* Subtle texture, replace with your starry-night-bg.jpg if preferred and available */
+      /* background-image: url('images/starry-night-bg.jpg'); */ /* Original, ensure path is correct or use placeholder */
+      background-size: auto; /* Or 'cover' if using a large image */
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: repeat; /* Use 'no-repeat' and 'cover' if it's a single large image */
+      color: var(--text);
+      font-family: 'Inter', sans-serif; /* Default to Inter */
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Add overlay to ensure text readability if background is too busy */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.4)); /* Softer overlay */
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* Clean, centered layout */
+    .container { /* Renamed main.container to .container for general use */
+      padding: 4rem 2rem;
+      width: 95%;
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Site Header Styles (Example - assuming it's outside the main retreat section) */
+    .site-header {
+      background: rgba(10, 10, 20, 0.6);
+      backdrop-filter: blur(8px);
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .site-header .container { /* Scoping container for header */
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+
+    .site-title a {
+      font-family: 'Sorts Mill Goudy', serif;
+      font-size: 1.8rem;
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .main-nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+    }
+
+    .main-nav li {
+      margin-left: 1.5rem;
+    }
+
+    .main-nav a {
+      color: var(--text-light);
+      text-decoration: none;
+      font-size: 1rem;
+      padding: 0.5rem 0;
+      position: relative;
+      transition: color 0.3s ease;
+    }
+
+    .main-nav a::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: 0;
+        left: 0;
+        background-color: var(--accent);
+        transition: width 0.3s ease;
+    }
+
+    .main-nav a:hover,
+    .main-nav a[aria-current="page"] {
+      color: var(--text);
+    }
+    .main-nav a:hover::after,
+    .main-nav a[aria-current="page"]::after {
+        width: 100%;
+    }
+
+
+    /* Retreat Header section */
+    .retreat-header {
+      text-align: center;
+      margin-bottom: 4rem;
+      background: var(--card-bg);
+      border-radius: 16px; /* Slightly more rounded */
+      padding: 3rem 2.5rem; /* More padding */
+      backdrop-filter: blur(10px); /* Stronger blur */
+      border: 1px solid var(--card-border);
+      box-shadow: 0 8px 32px rgba(var(--accent-rgb), 0.1); /* Subtle accent shadow */
+    }
+
+    .retreat-header h1 {
+      font-size: 3.2rem; /* Adjusted for balance */
+      font-weight: 500;
+      margin-bottom: 1rem;
+      font-family: 'Sorts Mill Goudy', serif;
+      color: var(--text);
+      line-height: 1.2;
+      letter-spacing: 0.5px; /* Added letter spacing */
+    }
+
+    .retreat-header .subtitle {
+      font-size: 1.25rem; /* Slightly larger */
+      color: var(--text-light);
+      margin-bottom: 2rem;
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+    }
+
+    .retreat-header .description {
+      font-size: 1.1rem;
+      line-height: 1.7; /* Increased line height */
+      color: var(--text);
+      font-family: 'Sorts Mill Goudy', serif;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Sessions grid */
+    .sessions-grid {
+      display: grid;
+      gap: 2.5rem; /* Increased gap */
+      margin-bottom: 4rem; /* Increased bottom margin */
+    }
+
+    .session-card {
+      background: var(--card-bg);
+      border-radius: 16px; /* Consistent rounding */
+      padding: 2.5rem; /* More padding */
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1); /* Smoother transition */
+      box-shadow: 0 4px 15px rgba(0,0,0, 0.2); /* Softer shadow */
+    }
+
+    .session-card:hover {
+      background: var(--card-hover-bg);
+      border-color: var(--card-hover-border); /* Accent border on hover */
+      transform: translateY(-5px) scale(1.01); /* More noticeable lift */
+      box-shadow: 0 8px 30px rgba(var(--accent-rgb), 0.15); /* Enhanced accent shadow on hover */
+    }
+
+    .session-number {
+      display: inline-block;
+      background: var(--accent);
+      color: #ffffff; /* Ensure contrast */
+      padding: 0.4rem 1rem; /* Adjusted padding */
+      border-radius: 20px;
+      font-size: 0.85rem; /* Slightly larger */
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      margin-bottom: 1.2rem; /* Increased margin */
+      text-transform: uppercase;
+    }
+
+    .session-title {
+      font-size: 1.75rem; /* Larger title */
+      font-weight: 500;
+      margin-bottom: 0.75rem; /* Adjusted margin */
+      font-family: 'Sorts Mill Goudy', serif;
+      color: var(--text);
+    }
+
+    .session-title a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .session-title a:hover {
+      color: var(--accent);
+    }
+
+    .session-meta {
+      font-size: 0.95rem; /* Slightly larger */
+      color: var(--text-light);
+      margin-bottom: 1.2rem; /* Increased margin */
+      font-family: 'Inter', sans-serif;
+      /* Consider adding an icon here: e.g., calendar for date */
+    }
+     .session-meta::before {
+        /* content: '🗓️ '; /* Example: Calendar icon, replace with SVG or font icon */
+        /* margin-right: 0.3em; */
+    }
+
+
+    .session-description {
+      font-size: 1.05rem; /* Slightly larger */
+      line-height: 1.7; /* Increased line height */
+      color: var(--text);
+      margin-bottom: 1.75rem; /* Increased margin */
+      font-family: 'Sorts Mill Goudy', serif;
+    }
+
+    .session-link {
+      display: inline-flex; /* For aligning icon if added */
+      align-items: center;
+      padding: 0.75rem 1.5rem; /* Larger padding */
+      background-color: var(--accent);
+      color: white;
+      text-decoration: none;
+      border-radius: 8px; /* More rounded */
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: background-color 0.25s ease, transform 0.2s ease;
+      box-shadow: 0 2px 8px rgba(var(--accent-rgb), 0.3);
+    }
+
+    .session-link:hover {
+      background-color: var(--accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.4);
+    }
+     .session-link::after {
+        /* content: ' →'; /* Example: Arrow icon */
+        /* margin-left: 0.5em; */
+    }
+
+
+    /* Site Footer Styles */
+    .site-footer {
+        text-align: center;
+        padding: 2rem 1rem;
+        margin-top: 3rem;
+        border-top: 1px solid var(--border);
+        background: rgba(10, 10, 20, 0.5);
+    }
+    .site-footer .copyright {
+        font-size: 0.9rem;
+        color: var(--text-light);
+    }
+
+
+    /* Dark Mode Toggle Button Styles */
+    .dark-mode-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: rgba(50, 50, 70, 0.8); /* Themed background */
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 1.5rem; /* For icon */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      z-index: 1000;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+
+    .dark-mode-toggle:hover {
+      background-color: rgba(70, 70, 90, 0.9);
+      transform: scale(1.1);
+    }
+    .dark-mode-toggle:focus {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+    }
+
+    /* Icon for dark mode toggle - using text, replace with SVG if possible */
+    .dark-mode-toggle::before {
+      content: '🌙'; /* Moon for dark mode */
+    }
+    html:not(.dark) .dark-mode-toggle::before {
+      content: '☀️'; /* Sun for light mode */
+    }
+
+
+    /* Animation styles */
+    .animate-in {
+      opacity: 0;
+      transform: translateY(30px); /* Slightly more pronounced */
+      transition-property: opacity, transform;
+      transition-duration: 0.7s; /* Slightly longer */
+      transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Easing with overshoot */
+    }
+    
+    .animate-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 768px) {
+      .container {
+        width: 100%;
+        padding: 3rem 1.5rem; /* Adjusted padding for mobile */
+      }
+      
+      .retreat-header h1 {
+        font-size: 2.5rem;
+      }
+      .retreat-header .subtitle {
+        font-size: 1.1rem;
+      }
+
+      .retreat-header {
+        padding: 2.5rem 1.5rem;
+      }
+
+      .session-card {
+        padding: 2rem 1.5rem; /* Adjusted padding */
+      }
+      .session-title {
+        font-size: 1.5rem;
+      }
+
+      .site-header .container {
+        flex-direction: column;
+        align-items: center;
+      }
+      .site-title {
+        margin-bottom: 0.5rem;
+      }
+      .main-nav ul {
+        justify-content: center;
+        flex-wrap: wrap; /* Allow nav items to wrap */
+      }
+      .main-nav li {
+        margin: 0.25rem 0.5rem; /* Adjust spacing for wrapped items */
+      }
+
+      .dark-mode-toggle {
+        width: 45px;
+        height: 45px;
+        font-size: 1.3rem;
+        bottom: 15px;
+        right: 15px;
+      }
+    }
+
+    @media (max-width: 480px) {
+        .retreat-header h1 {
+            font-size: 2.2rem;
+        }
+        .session-title {
+            font-size: 1.3rem;
+        }
+        .session-link {
+            padding: 0.6rem 1.2rem;
+            font-size: 0.9rem;
+        }
+    }
+
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1 class="site-title"><a href="/">Brandon Nguyen</a></h1>
+      <nav class="main-nav" aria-label="Main navigation">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/contact">Contact</a></li>
+          <li><a href="/spring-retreat" aria-current="page">Spring Retreat</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="retreat-header animate-in">
+      <h1>Spring Retreat 2025</h1>
+      <p class="subtitle">March 2025 · Spiritual Growth Weekend</p>
+      <p class="description">
+        Join us for a transformative weekend of spiritual growth and fellowship. This retreat features three powerful sessions on faith from Hebrews 11, followed by an interactive Q&A session.
+      </p>
+    </section>
+
+    <div class="sessions-grid">
+      <article class="session-card animate-in">
+        <div class="session-number">Session 1</div>
+        <h2 class="session-title">
+          <a href="spring-retreat-session-1.html">Rebuilding Our Understanding of Faith</a>
+        </h2>
+        <div class="session-meta">
+            Hebrews 11:1-7 · Friday Evening
+        </div>
+        <p class="session-description">
+          We begin by examining the solid foundation of faith through the examples of Abel, Enoch, and Noah. Discover what true, biblical faith looks like and how it serves as our anchor.
+        </p>
+        <a href="spring-retreat-session-1.html" class="session-link">
+            View Session
+            </a>
+      </article>
+
+      <article class="session-card animate-in">
+        <div class="session-number">Session 2</div>
+        <h2 class="session-title">
+          <a href="spring-retreat-session-2.html">The Characteristics of Faith</a>
+        </h2>
+        <div class="session-meta">Hebrews 11:8-39 · Saturday Morning</div>
+        <p class="session-description">
+          Explore the characteristics of enduring faith through Abraham, Moses, and other Old Testament saints. Learn how faith obeys, ventures into the unknown, and looks to eternity.
+        </p>
+        <a href="spring-retreat-session-2.html" class="session-link">View Session</a>
+      </article>
+
+      <article class="session-card animate-in">
+        <div class="session-number">Session 3</div>
+        <h2 class="session-title">
+          <a href="spring-retreat-session-3.html">Faith in a Savior Yet Unseen</a>
+        </h2>
+        <div class="session-meta">Hebrews 11:32-40 · Saturday Afternoon</div>
+        <p class="session-description">
+          Understand how the Old Testament saints lived by faith in anticipation of Christ. See how their examples challenge us to live with even greater faith today.
+        </p>
+        <a href="spring-retreat-session-3.html" class="session-link">View Session</a>
+      </article>
+
+      <article class="session-card animate-in">
+        <div class="session-number">Q&A</div>
+        <h2 class="session-title">
+          <a href="spring-retreat-qa.html">Interactive Discussion</a>
+        </h2>
+        <div class="session-meta">Saturday Evening · Open Forum</div>
+        <p class="session-description">
+          An open forum for questions about faith, spiritual growth, and practical Christian living. Featuring insights on parenting, holding fast to God, and God's promises.
+        </p>
+        <a href="spring-retreat-qa.html" class="session-link">View Q&A</a>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer animate-in">
+    <div class="container">
+      <p class="copyright">&copy; 2025 Brandon Nguyen. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode" title="Toggle theme">
+    </button>
+
+  <script>
+    // Theme toggle
+    const html = document.documentElement;
+    const toggle = document.getElementById('darkModeToggle');
+    const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+
+    // Function to apply theme
+    function applyTheme(isDark) {
+      if (isDark) {
+        html.classList.add('dark');
+        if (toggle) toggle.setAttribute('aria-pressed', 'true');
+      } else {
+        html.classList.remove('dark');
+        if (toggle) toggle.setAttribute('aria-pressed', 'false');
+      }
+    }
+
+    // Check localStorage for saved theme preference
+    const savedTheme = localStorage.getItem('darkMode');
+
+    if (savedTheme !== null) {
+      applyTheme(savedTheme === 'true');
+    } else {
+      // Otherwise, respect OS preference
+      applyTheme(prefersDarkScheme.matches);
+    }
+    
+    // Listen for OS preference changes
+    prefersDarkScheme.addEventListener('change', (e) => {
+        // Only change if no user preference is stored
+        if (localStorage.getItem('darkMode') === null) {
+            applyTheme(e.matches);
+        }
+    });
+
+
+    if (toggle) {
+        toggle.addEventListener('click', () => {
+          const isDark = html.classList.toggle('dark');
+          localStorage.setItem('darkMode', isDark);
+          toggle.setAttribute('aria-pressed', isDark.toString());
+        });
+    }
+
+
+    // IntersectionObserver for animations
+    document.addEventListener('DOMContentLoaded', () => {
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      
+      const itemsToAnimate = document.querySelectorAll('.animate-in');
+
+      if (prefersReducedMotion) {
+        itemsToAnimate.forEach(el => {
+          el.classList.add('visible'); // Make visible immediately if reduced motion
+        });
+      } else {
+        const observerOptions = {
+          threshold: 0.1, // Trigger when 10% of the element is visible
+          rootMargin: '0px 0px -50px 0px' // Trigger a bit before it's fully in viewport
+        };
+
+        const io = new IntersectionObserver((entries, observer) => {
+          entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+              // Add a delay based on the item's order in the NodeList for staggered effect
+              const delay = (entry.target.closest('.session-card') || entry.target.closest('.retreat-header') || entry.target.closest('.site-footer')) ? (Array.from(itemsToAnimate).indexOf(entry.target) * 100) : 0; // Stagger cards, header, footer
+              
+              setTimeout(() => {
+                entry.target.classList.add('visible');
+              }, delay);
+              observer.unobserve(entry.target); // Stop observing once animated
+            }
+          });
+        }, observerOptions);
+        
+        itemsToAnimate.forEach(el => io.observe(el));
+      }
+    });
+  </script>
+</body>
+</html>
