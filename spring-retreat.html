@@ -42,29 +42,6 @@
       --card-hover-border: var(--accent);
     }
 
-    /* Apply base styling for dark mode if html.dark */
-    html.dark {
-      --background: #0f0f1a;
-      --text: #e0e0e0;
-      --text-light: #b0b0b0;
-      --border: #2a2a3a;
-      --card-bg: rgba(10, 10, 20, 0.75);
-      --card-hover-bg: rgba(15, 15, 25, 0.85);
-      --card-border: rgba(255, 255, 255, 0.1);
-    }
-    /* Example for light mode - you can define these if you implement light mode */
-    html:not(.dark) {
-        --background: #f0f2f5;
-        --text: #1f2937;
-        --text-light: #4b5563;
-        --border: #d1d5db;
-        --card-bg: rgba(255, 255, 255, 0.85);
-        --card-hover-bg: rgba(245, 245, 250, 0.95);
-        --card-border: rgba(0, 0, 0, 0.1);
-        /* --accent and --accent-hover can remain the same or be adjusted for light mode */
-    }
-
-
     body {
       background-color: var(--background);
       background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
@@ -198,10 +175,7 @@
   <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 relative z-10">
     <section class="retreat-header text-center mb-12 md:mb-16 p-6 sm:p-8 md:p-12 bg-[var(--card-bg)] rounded-2xl backdrop-blur-lg border border-[var(--card-border)] shadow-accent-subtle animate-in transition-all duration-300">
       <h1 class="text-3xl sm:text-4xl lg:text-5xl font-goudy font-medium mb-3 sm:mb-4 text-[var(--text)] tracking-wide transition-colors duration-300">Spring Retreat 2025</h1>
-      <p class="text-lg sm:text-xl text-[var(--text-light)] mb-6 sm:mb-8 font-inter transition-colors duration-300">March 2025 · Spiritual Growth Weekend</p>
-      <p class="text-base sm:text-lg leading-relaxed text-[var(--text)] font-goudy max-w-2xl mx-auto transition-colors duration-300">
-        Join us for a transformative weekend of spiritual growth and fellowship. This retreat features three powerful sessions on faith from Hebrews 11, followed by an interactive Q&A session.
-      </p>
+      <p class="text-lg sm:text-xl text-[var(--text-light)] mb-6 sm:mb-8 font-inter transition-colors duration-300">May 2025 · Faith That Endures</p>
     </section>
 
     <div class="sessions-grid grid grid-cols-1 gap-8 md:gap-10 mb-12 md:mb-16">
@@ -271,9 +245,6 @@
     </div>
   </footer>
 
-  <button class="dark-mode-toggle fixed bottom-5 right-5 sm:bottom-6 sm:right-6 w-12 h-12 sm:w-14 sm:h-14 bg-[var(--card-bg)]/80 dark:bg-[var(--card-bg)]/80 text-[var(--text)] border border-[var(--border)] rounded-full flex items-center justify-center text-xl sm:text-2xl cursor-pointer transition-all duration-300 ease-in-out hover:bg-[var(--accent)]/30 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:ring-offset-2 focus:ring-offset-[var(--background)] backdrop-blur-sm shadow-lg z-[1000]" id="darkModeToggle" aria-label="Toggle dark mode" title="Toggle theme">
-    </button>
-
   <script>
     // Mobile Menu Toggle
     const mobileMenuButton = document.getElementById('mobileMenuButton');
@@ -284,54 +255,6 @@
         const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true' || false;
         mobileMenuButton.setAttribute('aria-expanded', !isExpanded);
         mainNavLinks.classList.toggle('hidden');
-        // Optional: Change icon on toggle if you're not using SVG transform for hamburger lines
-        // mobileMenuButton.querySelector('svg').classList.toggle('is-active'); // Example
-      });
-    }
-    
-    // Theme toggle
-    const html = document.documentElement;
-    const toggle = document.getElementById('darkModeToggle');
-    const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-
-    function applyTheme(isDark) {
-      if (isDark) {
-        html.classList.add('dark');
-        if (toggle) {
-            toggle.setAttribute('aria-pressed', 'true');
-            toggle.innerHTML = '☀️'; // Sun icon for light mode (when dark mode is active)
-        }
-      } else {
-        html.classList.remove('dark');
-        if (toggle) {
-            toggle.setAttribute('aria-pressed', 'false');
-            toggle.innerHTML = '🌙'; // Moon icon for dark mode (when light mode is active)
-        }
-      }
-      // Manually update body background and text for immediate effect if needed, though CSS variables should handle this.
-      // document.body.style.backgroundColor = getComputedStyle(html).getPropertyValue(isDark ? '--background-dark' : '--background-light');
-      // document.body.style.color = getComputedStyle(html).getPropertyValue(isDark ? '--text-dark' : '--text-light');
-    }
-
-    const savedTheme = localStorage.getItem('darkMode');
-
-    if (savedTheme !== null) {
-      applyTheme(savedTheme === 'true');
-    } else {
-      applyTheme(prefersDarkScheme.matches);
-    }
-    
-    prefersDarkScheme.addEventListener('change', (e) => {
-      if (localStorage.getItem('darkMode') === null) {
-        applyTheme(e.matches);
-      }
-    });
-
-    if (toggle) {
-      toggle.addEventListener('click', () => {
-        const isDark = !html.classList.contains('dark'); // Check current state BEFORE toggle
-        localStorage.setItem('darkMode', isDark);
-        applyTheme(isDark); // Apply the new state
       });
     }
 
@@ -353,8 +276,6 @@
         const io = new IntersectionObserver((entries, observer) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
-              // Calculate delay based on index among all .animate-in elements
-              // This provides a consistent staggered effect across different sections
               const allAnimatedElements = Array.from(document.querySelectorAll('.animate-in'));
               const index = allAnimatedElements.indexOf(entry.target);
               const delay = index * 100;
