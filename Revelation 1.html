@@ -1,0 +1,1757 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Alive in Christ — Interactive Notes (Colossians 2:6–7)</title>
+  <style>
+    :root{
+      --bg:#0b0f17;
+      --panel:#0f1624;
+      --panel2:#121b2d;
+      --text:#e7ecf6;
+      --muted:#a8b3c7;
+      --faint:#6e7a93;
+      --border:#23304a;
+      --accent:#7dd3fc;
+      --accent2:#a78bfa;
+      --ok:#34d399;
+      --warn:#fbbf24;
+      --bad:#fb7185;
+
+      --radius:18px;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      --serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(1200px 800px at 15% 10%, rgba(167,139,250,.13), transparent 55%),
+        radial-gradient(900px 600px at 80% 15%, rgba(125,211,252,.10), transparent 55%),
+        radial-gradient(1200px 900px at 50% 100%, rgba(52,211,153,.06), transparent 50%),
+        var(--bg);
+    }
+
+    a{color:inherit}
+    button, input, textarea, select{font:inherit}
+    .app{
+      display:grid;
+      grid-template-columns: 290px 1fr;
+      min-height:100vh;
+    }
+
+    /* Sidebar */
+    .sidebar{
+      position:sticky;
+      top:0;
+      height:100vh;
+      padding:18px;
+      border-right:1px solid var(--border);
+      background: linear-gradient(180deg, rgba(18,27,45,.9), rgba(15,22,36,.85));
+      backdrop-filter: blur(10px);
+    }
+
+    .brand{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      padding:14px 14px;
+      border:1px solid var(--border);
+      background: rgba(15,22,36,.65);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .logo{
+      width:44px;height:44px;border-radius:14px;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(125,211,252,.9), rgba(125,211,252,.12) 60%),
+        radial-gradient(circle at 80% 70%, rgba(167,139,250,.9), rgba(167,139,250,.10) 60%),
+        rgba(18,27,45,.7);
+      border:1px solid var(--border);
+    }
+    .brand h1{margin:0;font-size:15px;letter-spacing:.2px}
+    .brand p{margin:2px 0 0;color:var(--muted);font-size:12px}
+
+    .nav{
+      margin-top:14px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .nav button{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      width:100%;
+      padding:11px 12px;
+      border-radius: 14px;
+      border:1px solid var(--border);
+      background: rgba(18,27,45,.55);
+      color:var(--text);
+      cursor:pointer;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      text-align:left;
+    }
+    .nav button:hover{transform: translateY(-1px); border-color: rgba(125,211,252,.35); background: rgba(18,27,45,.72);}
+    .nav button[aria-selected="true"]{
+      border-color: rgba(125,211,252,.55);
+      background: linear-gradient(90deg, rgba(125,211,252,.18), rgba(167,139,250,.12));
+      box-shadow: 0 8px 20px rgba(0,0,0,.25);
+    }
+    .pill{
+      margin-left:auto;
+      font-size:11px;
+      padding:3px 8px;
+      border:1px solid var(--border);
+      border-radius:999px;
+      color:var(--muted);
+      background: rgba(11,15,23,.35);
+    }
+
+    .toolbox{
+      margin-top:14px;
+      padding:12px;
+      border-radius: var(--radius);
+      border:1px solid var(--border);
+      background: rgba(15,22,36,.55);
+    }
+
+    .toolrow{display:flex; gap:8px; align-items:center; margin-bottom:10px;}
+    .toolrow:last-child{margin-bottom:0}
+    .toolrow input{
+      width:100%;
+      padding:10px 10px;
+      border-radius: 12px;
+      border:1px solid var(--border);
+      background: rgba(11,15,23,.45);
+      color:var(--text);
+      outline:none;
+    }
+    .toolrow input:focus{border-color: rgba(125,211,252,.55)}
+    .miniBtn{
+      padding:10px 10px;
+      border-radius: 12px;
+      border:1px solid var(--border);
+      background: rgba(18,27,45,.55);
+      color:var(--text);
+      cursor:pointer;
+      transition: transform .12s ease, border-color .12s ease;
+      white-space:nowrap;
+    }
+    .miniBtn:hover{transform: translateY(-1px); border-color: rgba(167,139,250,.45)}
+    .miniBtn:active{transform: translateY(0px)}
+    .hint{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.35;
+    }
+    .kbd{
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      border:1px solid var(--border);
+      border-bottom-color: rgba(255,255,255,.08);
+      padding:2px 6px;
+      border-radius: 8px;
+      background: rgba(11,15,23,.35);
+    }
+
+    .footerSide{
+      position:absolute;
+      left:18px;
+      right:18px;
+      bottom:18px;
+      color: var(--faint);
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    /* Main */
+    .main{
+      padding:22px;
+    }
+
+    .topbar{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:16px;
+    }
+    .topbar .title{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+    .topbar h2{
+      margin:0;
+      font-size:18px;
+      letter-spacing:.2px;
+    }
+    .topbar .sub{
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .chipRow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      justify-content:flex-end;
+      align-items:center;
+    }
+    .chip{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:8px 10px;
+      border-radius: 999px;
+      border:1px solid var(--border);
+      background: rgba(15,22,36,.55);
+      color: var(--muted);
+      font-size:12px;
+    }
+    .dot{
+      width:8px;height:8px;border-radius:999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 3px rgba(125,211,252,.12);
+    }
+    .dot.purple{background: var(--accent2); box-shadow: 0 0 0 3px rgba(167,139,250,.12);}
+    .dot.green{background: var(--ok); box-shadow: 0 0 0 3px rgba(52,211,153,.12);}
+    .dot.yellow{background: var(--warn); box-shadow: 0 0 0 3px rgba(251,191,36,.12);}
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:16px;
+      align-items:start;
+    }
+
+    .panel{
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(15,22,36,.6);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .panelHeader{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:14px 14px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(18,27,45,.55);
+    }
+    .panelHeader h3{margin:0;font-size:14px}
+    .panelHeader .meta{
+      color: var(--muted);
+      font-size:12px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+    .panelBody{padding:14px}
+    .muted{color:var(--muted)}
+    .small{font-size:12px; line-height:1.45}
+    .serif{font-family: var(--serif)}
+
+    .callout{
+      padding:12px;
+      border:1px solid rgba(125,211,252,.25);
+      border-radius: 14px;
+      background: linear-gradient(90deg, rgba(125,211,252,.09), rgba(167,139,250,.06));
+    }
+
+    .split{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+      margin-top:12px;
+    }
+    .tag{
+      display:inline-flex;
+      gap:6px;
+      align-items:center;
+      border:1px solid var(--border);
+      background: rgba(11,15,23,.35);
+      padding:6px 10px;
+      border-radius: 999px;
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    /* Verse */
+    .verse{
+      font-family: var(--serif);
+      font-size: 18px;
+      line-height: 1.55;
+      letter-spacing: .2px;
+      margin: 0;
+    }
+    .verse .ref{
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 10px;
+      display:block;
+    }
+    .phrase{
+      position:relative;
+      display:inline;
+      padding: 2px 3px;
+      border-radius: 8px;
+      cursor:pointer;
+      transition: background .12s ease, color .12s ease;
+    }
+    .phrase:hover{background: rgba(125,211,252,.12)}
+    .phrase.active{background: rgba(167,139,250,.18); outline: 1px solid rgba(167,139,250,.35)}
+    .phrase .mini{
+      font-family: var(--mono);
+      font-size: 10px;
+      color: rgba(231,236,246,.75);
+      margin-left: 4px;
+      opacity:.85;
+    }
+
+    /* Cards list */
+    .cards{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap:12px;
+    }
+    .card{
+      border:1px solid var(--border);
+      border-radius: 16px;
+      background: rgba(18,27,45,.42);
+      padding:12px;
+      cursor:pointer;
+      transition: transform .12s ease, border-color .12s ease, background .12s ease;
+      position:relative;
+      min-height: 108px;
+    }
+    .card:hover{transform: translateY(-1px); border-color: rgba(125,211,252,.35); background: rgba(18,27,45,.55);}
+    .card h4{margin:0 0 6px; font-size:13px; letter-spacing:.2px}
+    .card p{margin:0; color:var(--muted); font-size:12px; line-height:1.45}
+    .card .refs{margin-top:10px; display:flex; flex-wrap:wrap; gap:6px}
+    .badge{
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      border:1px solid var(--border);
+      background: rgba(11,15,23,.35);
+      color: rgba(231,236,246,.75);
+    }
+    .card .pin{
+      position:absolute;
+      top:10px;
+      right:10px;
+      width:10px;height:10px;border-radius:999px;
+      background: rgba(167,139,250,.8);
+      box-shadow: 0 0 0 3px rgba(167,139,250,.12);
+      opacity:.35;
+    }
+
+    /* Timeline */
+    .timeline{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:10px;
+      margin-top: 10px;
+    }
+    .rangeWrap{
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+    input[type="range"]{
+      width:100%;
+      accent-color: var(--accent);
+    }
+    .stageLabel{
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      min-width: 120px;
+      text-align:right;
+    }
+
+    /* Quiz */
+    .quizBox{
+      display:grid;
+      gap:12px;
+    }
+    .q{
+      border:1px solid var(--border);
+      background: rgba(18,27,45,.42);
+      border-radius: 16px;
+      padding: 14px;
+    }
+    .q .qMeta{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+    .q h4{margin:0 0 10px;font-size:14px; line-height:1.35}
+    .opts{display:grid; gap:8px; margin-top: 8px}
+    .opt{
+      display:flex; gap:10px; align-items:flex-start;
+      padding: 10px;
+      border-radius: 14px;
+      border:1px solid var(--border);
+      background: rgba(11,15,23,.35);
+      cursor:pointer;
+      transition: border-color .12s ease, transform .12s ease, background .12s ease;
+    }
+    .opt:hover{transform: translateY(-1px); border-color: rgba(125,211,252,.35); background: rgba(11,15,23,.45);}
+    .opt input{margin-top: 2px}
+    .letter{
+      width: 24px; height: 24px; border-radius: 10px;
+      display:grid; place-items:center;
+      font-family: var(--mono); font-size: 12px;
+      border:1px solid var(--border);
+      background: rgba(18,27,45,.45);
+      color: rgba(231,236,246,.8);
+      flex: 0 0 auto;
+    }
+    .explain{
+      border-top:1px dashed rgba(255,255,255,.12);
+      margin-top: 12px;
+      padding-top: 12px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+      display:none;
+    }
+    .actions{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .primary{
+      padding:10px 12px;
+      border-radius: 14px;
+      border:1px solid rgba(125,211,252,.35);
+      background: linear-gradient(90deg, rgba(125,211,252,.18), rgba(167,139,250,.12));
+      color: var(--text);
+      cursor:pointer;
+      transition: transform .12s ease, border-color .12s ease;
+    }
+    .primary:hover{transform: translateY(-1px); border-color: rgba(125,211,252,.55);}
+    .ghost{
+      padding:10px 12px;
+      border-radius: 14px;
+      border:1px solid var(--border);
+      background: rgba(18,27,45,.42);
+      color: var(--text);
+      cursor:pointer;
+    }
+    .status{
+      margin-left:auto;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .bar{
+      height: 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(11,15,23,.35);
+      overflow:hidden;
+    }
+    .bar > div{
+      height:100%;
+      width:0%;
+      background: linear-gradient(90deg, rgba(125,211,252,.9), rgba(167,139,250,.8));
+      border-radius: 999px;
+      transition: width .2s ease;
+    }
+
+    /* Modal */
+    .backdrop{
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,.55);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      z-index:50;
+    }
+    .modal{
+      width:min(860px, 100%);
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: rgba(15,22,36,.95);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .modalHeader{
+      padding:14px 14px;
+      border-bottom:1px solid var(--border);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      background: rgba(18,27,45,.55);
+    }
+    .modalHeader h3{margin:0;font-size:14px}
+    .modalBody{padding:14px}
+    .form{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    .form .full{grid-column: 1 / -1;}
+    .field label{
+      display:block;
+      font-size:12px;
+      color: var(--muted);
+      margin-bottom:6px;
+    }
+    .field input, .field textarea{
+      width:100%;
+      padding:10px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(11,15,23,.4);
+      color: var(--text);
+      outline:none;
+    }
+    .field textarea{min-height: 110px; resize: vertical}
+    .modalFooter{
+      padding:14px;
+      border-top:1px solid var(--border);
+      display:flex;
+      gap:10px;
+      justify-content:flex-end;
+      background: rgba(18,27,45,.45);
+    }
+
+    /* Views */
+    .view{display:none}
+    .view.active{display:block}
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .app{grid-template-columns: 1fr;}
+      .sidebar{
+        position:relative;
+        height:auto;
+        border-right: none;
+        border-bottom:1px solid var(--border);
+      }
+      .footerSide{position:relative; left:auto; right:auto; bottom:auto; margin-top:12px;}
+      .grid{grid-template-columns: 1fr;}
+      .cards{grid-template-columns: 1fr;}
+    }
+
+    @media print{
+      .sidebar, .chipRow, .actions, .toolbox{display:none !important;}
+      body{background:#fff;color:#000}
+      .panel{box-shadow:none}
+      .panel, .card, .q{background:#fff}
+      .muted{color:#333}
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand" role="banner">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>Alive in Christ</h1>
+          <p>Interactive study from your notes on Colossians 2:6–7</p>
+        </div>
+      </div>
+
+      <nav class="nav" role="tablist" aria-label="Views">
+        <button class="navBtn" role="tab" aria-selected="true" data-view="overview">
+          Overview <span class="pill" id="pillOverview">3</span>
+        </button>
+        <button class="navBtn" role="tab" aria-selected="false" data-view="verse">
+          Verse Walkthrough <span class="pill" id="pillVerse">7</span>
+        </button>
+        <button class="navBtn" role="tab" aria-selected="false" data-view="concepts">
+          Concept Cards <span class="pill" id="pillCards">12</span>
+        </button>
+        <button class="navBtn" role="tab" aria-selected="false" data-view="quiz">
+          Quiz <span class="pill" id="pillQuiz">6</span>
+        </button>
+      </nav>
+
+      <div class="toolbox" aria-label="Tools">
+        <div class="toolrow">
+          <input id="globalSearch" type="text" placeholder="Search cards, refs, phrases…" autocomplete="off" />
+          <button class="miniBtn" id="clearSearch" title="Clear search">Clear</button>
+        </div>
+        <div class="toolrow">
+          <button class="miniBtn" id="addNoteBtn" title="Add a new card (saved locally)">+ Add card</button>
+          <button class="miniBtn" id="resetBtn" title="Reset progress & custom cards">Reset</button>
+        </div>
+        <div class="hint">
+          Tips: click verse phrases • filter by search • quiz saves score locally<br/>
+          Keyboard: <span class="kbd">/</span> focus search • <span class="kbd">Esc</span> close modal
+        </div>
+      </div>
+
+      <div class="footerSide">
+        Based on your handwritten notes (Col 2:6–7 “heart,” sanctification, indicative→imperative, etc.).<br/>
+        Local-only: progress and added cards are stored in your browser.
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <div class="title">
+          <h2 id="viewTitle">Overview</h2>
+          <div class="sub" id="viewSub">A fast dashboard of the “heart” themes from your page of notes.</div>
+        </div>
+        <div class="chipRow">
+          <div class="chip"><span class="dot"></span><span><span class="muted">Heart:</span> Col 2:6–7</span></div>
+          <div class="chip"><span class="dot purple"></span><span><span class="muted">Flow:</span> Indicative → Imperative</span></div>
+          <div class="chip"><span class="dot green"></span><span><span class="muted">Aim:</span> Rooted, built up, thankful</span></div>
+          <div class="chip"><span class="dot yellow"></span><span><span class="muted">Check:</span> novelty / false humility</span></div>
+        </div>
+      </div>
+
+      <!-- OVERVIEW -->
+      <section class="view active" id="view-overview" aria-labelledby="Overview">
+        <div class="grid">
+          <section class="panel">
+            <div class="panelHeader">
+              <h3>Big picture (from your notes)</h3>
+              <div class="meta"><span id="lastSaved">Saved: —</span></div>
+            </div>
+            <div class="panelBody">
+              <div class="callout small">
+                <div class="muted" style="margin-bottom:8px;font-family:var(--mono);font-size:11px;">KEY IDEA</div>
+                <div style="font-size:13px;line-height:1.55">
+                  You noted that <b>Colossians 2:6–7 is the heart</b>, and the Christian life is
+                  a <b>gracious reception</b> that continues as a <b>walk</b>—never “moving on” from Christ,
+                  but going deeper: <b>rooted</b>, <b>built up</b>, <b>established</b>, and <b>abounding in thanksgiving</b>.
+                </div>
+              </div>
+
+              <div class="split">
+                <div class="panel" style="box-shadow:none;background:rgba(11,15,23,.25)">
+                  <div class="panelHeader" style="background:transparent">
+                    <h3>Justification → Sanctification → Glorification</h3>
+                    <div class="meta">“We live in between…”</div>
+                  </div>
+                  <div class="panelBody">
+                    <div class="timeline small">
+                      <div class="rangeWrap">
+                        <div class="stageLabel" id="stageLabel">Sanctification</div>
+                        <input id="stageRange" type="range" min="0" max="100" value="50" />
+                      </div>
+                      <div class="muted" id="stageExplain">
+                        Sanctification: progressive growth and transformation (your notes describe it as the necessary fruit of union, lived between justification and glorification).
+                      </div>
+                      <div class="small muted" style="margin-top:8px">
+                        Shortcut: your notes connect “new walk” to <span class="badge">Romans 6:4</span> and the need for regeneration to <span class="badge">Romans 8:7–8</span>.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="panel" style="box-shadow:none;background:rgba(11,15,23,.25)">
+                  <div class="panelHeader" style="background:transparent">
+                    <h3>Indicative → Imperative</h3>
+                    <div class="meta">state → command</div>
+                  </div>
+                  <div class="panelBody small">
+                    <div class="muted" style="margin-bottom:10px">
+                      Toggle what you’re reviewing:
+                    </div>
+                    <div class="actions" style="margin:0">
+                      <button class="ghost" id="showIndicative">Show Indicatives</button>
+                      <button class="ghost" id="showImperative">Show Imperatives</button>
+                    </div>
+                    <div id="iiList" style="margin-top:10px"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="margin-top:12px" class="small muted">
+                Notes you flagged as “warnings”: <b>lusting after novelty</b>, and <b>false humility / wrong devotion</b> (Col 2:18), vs. holding fast to the Head.
+              </div>
+            </div>
+          </section>
+
+          <aside class="panel">
+            <div class="panelHeader">
+              <h3>Quick actions</h3>
+              <div class="meta"><span class="badge" id="progressBadge">quiz 0/0</span></div>
+            </div>
+            <div class="panelBody">
+              <div class="small muted" style="margin-bottom:10px">
+                Jump in where you want:
+              </div>
+              <div class="actions">
+                <button class="primary" data-jump="verse">Start verse walkthrough</button>
+                <button class="ghost" data-jump="quiz">Take the quiz</button>
+                <button class="ghost" id="exportBtn">Export summary</button>
+              </div>
+
+              <div class="panel" style="margin-top:12px; box-shadow:none;background:rgba(11,15,23,.25)">
+                <div class="panelHeader" style="background:transparent">
+                  <h3>Mini summary (editable)</h3>
+                  <div class="meta"><span class="badge">local</span></div>
+                </div>
+                <div class="panelBody">
+                  <textarea id="summaryBox" class="small" style="width:100%; min-height:160px; padding:10px; border-radius:12px; border:1px solid var(--border); background:rgba(11,15,23,.35); color:var(--text); resize:vertical"></textarea>
+                  <div class="small muted" style="margin-top:8px">
+                    This autosaves as you type.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- VERSE -->
+      <section class="view" id="view-verse" aria-labelledby="Verse Walkthrough">
+        <div class="grid">
+          <section class="panel">
+            <div class="panelHeader">
+              <h3>Colossians 2:6–7 (click the underlined phrases)</h3>
+              <div class="meta"><span class="badge">interactive</span></div>
+            </div>
+            <div class="panelBody">
+              <p class="verse">
+                <span class="ref">Colossians 2:6–7</span>
+                “Therefore, as you
+                <span class="phrase" data-key="received">received<span class="mini">①</span></span>
+                Christ Jesus the Lord, so
+                <span class="phrase" data-key="walk">walk<span class="mini">②</span></span>
+                in him,
+                <span class="phrase" data-key="rooted">rooted<span class="mini">③</span></span>
+                and
+                <span class="phrase" data-key="built">built up<span class="mini">④</span></span>
+                in him and
+                <span class="phrase" data-key="established">established<span class="mini">⑤</span></span>
+                in the faith, just as you were
+                <span class="phrase" data-key="taught">taught<span class="mini">⑥</span></span>,
+                <span class="phrase" data-key="thanksgiving">abounding in thanksgiving<span class="mini">⑦</span></span>.”
+              </p>
+
+              <div class="panel" style="margin-top:14px; box-shadow:none;background:rgba(11,15,23,.25)">
+                <div class="panelHeader" style="background:transparent">
+                  <h3>Phrase map</h3>
+                  <div class="meta"><span class="badge">①–⑦</span></div>
+                </div>
+                <div class="panelBody small muted">
+                  Click any phrase to see how your notes connect it to themes like “old paths,” “His Word rules my conduct,” “conditioned by gospel proportion,” and “grace frees us to delightful service.”
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <aside class="panel">
+            <div class="panelHeader">
+              <h3 id="annoTitle">Click a phrase</h3>
+              <div class="meta"><span class="badge" id="annoRef">—</span></div>
+            </div>
+            <div class="panelBody">
+              <div id="annoBody" class="small muted">
+                Pick one of the underlined phrases from the verse. This will show the matching note-card, references, and “why it matters.”
+              </div>
+
+              <div class="actions" style="margin-top:12px">
+                <button class="ghost" id="pinAnno">Pin as card</button>
+                <button class="ghost" id="copyAnno">Copy</button>
+                <div class="status" id="annoStatus">—</div>
+              </div>
+
+              <div class="panel" style="margin-top:12px; box-shadow:none;background:rgba(11,15,23,.25)">
+                <div class="panelHeader" style="background:transparent">
+                  <h3>Cross references you noted</h3>
+                  <div class="meta"><span class="badge">from page</span></div>
+                </div>
+                <div class="panelBody small">
+                  <div class="refs" id="refList"></div>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- CONCEPTS -->
+      <section class="view" id="view-concepts" aria-labelledby="Concept Cards">
+        <div class="panel">
+          <div class="panelHeader">
+            <h3>Cards (click to expand)</h3>
+            <div class="meta">
+              <span class="badge" id="cardCount">—</span>
+              <span class="badge">searchable</span>
+            </div>
+          </div>
+          <div class="panelBody">
+            <div id="cardsWrap" class="cards"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- QUIZ -->
+      <section class="view" id="view-quiz" aria-labelledby="Quiz">
+        <div class="panel">
+          <div class="panelHeader">
+            <h3>Quiz (single best answer)</h3>
+            <div class="meta"><span class="badge" id="quizMeta">—</span></div>
+          </div>
+          <div class="panelBody">
+            <div class="bar" aria-label="Progress"><div id="quizBar"></div></div>
+            <div style="height:12px"></div>
+            <div id="quizMount" class="quizBox"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal -->
+  <div class="backdrop" id="backdrop" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal">
+      <div class="modalHeader">
+        <h3 id="modalTitle">Add / Edit Card</h3>
+        <button class="miniBtn" id="closeModal">Close</button>
+      </div>
+      <div class="modalBody">
+        <div class="form" id="modalForm">
+          <div class="field">
+            <label for="fTitle">Title</label>
+            <input id="fTitle" type="text" placeholder="e.g., Commands are not burdensome" />
+          </div>
+          <div class="field">
+            <label for="fTags">Tags (comma-separated)</label>
+            <input id="fTags" type="text" placeholder="e.g., obedience, grace" />
+          </div>
+          <div class="field full">
+            <label for="fBody">Body</label>
+            <textarea id="fBody" placeholder="Write the idea in your own words…"></textarea>
+          </div>
+          <div class="field full">
+            <label for="fRefs">References (comma-separated)</label>
+            <input id="fRefs" type="text" placeholder="e.g., Col 2:6-7, John 5:3" />
+          </div>
+        </div>
+      </div>
+      <div class="modalFooter">
+        <button class="ghost" id="deleteCardBtn" style="display:none">Delete</button>
+        <button class="primary" id="saveCardBtn">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /**
+     * Local storage keys
+     */
+    const LS = {
+      customCards: "aliveInChrist.customCards.v1",
+      quiz: "aliveInChrist.quiz.v1",
+      summary: "aliveInChrist.summary.v1",
+      lastSaved: "aliveInChrist.lastSaved.v1",
+    };
+
+    /**
+     * Built-in cards derived from the user's single page of notes.
+     * (You can add more with "+ Add card".)
+     */
+    const BUILTIN_CARDS = [
+      {
+        id: "heart-col-2-6-7",
+        title: "Colossians 2:6–7 is the heart",
+        body: "You framed Col 2:6–7 as the heart of the book: the Christian life continues the way it began—by receiving Christ, then walking in Him.",
+        refs: ["Col 2:6–7"],
+        tags: ["heart", "Colossians"]
+      },
+      {
+        id: "commands-not-burdensome",
+        title: "God’s commands aren’t burdensome",
+        body: "Obedience is not crushing; it’s the path of a child of God (you linked this to John 5:3 and to grace-driven service).",
+        refs: ["1 John 5:3"],
+        tags: ["obedience", "grace"]
+      },
+      {
+        id: "sanctification-between",
+        title: "Sanctification is progressive (between)",
+        body: "You noted sanctification as necessary fruit that grows by progressive transformation—lived between justification and glorification.",
+        refs: ["(theme) Justification / Sanctification / Glorification"],
+        tags: ["sanctification", "growth"]
+      },
+      {
+        id: "union-fruit",
+        title: "Union → fruit (objective union)",
+        body: "You tied sanctification to union with Christ: union is the root; sanctification is the necessary fruit that follows.",
+        refs: ["(union → fruit)"],
+        tags: ["union", "sanctification"]
+      },
+      {
+        id: "old-paths",
+        title: "Old paths: never move on from Christ",
+        body: "You wrote ‘old paths’ and ‘never move on from Christ’—going deeper in the same Gospel rather than chasing novelty.",
+        refs: ["Jer 6:16"],
+        tags: ["perseverance", "old paths"]
+      },
+      {
+        id: "novelty-warning",
+        title: "Warning: lust after novelty",
+        body: "You flagged how easy it is to crave novelty. The counter-move is to stay rooted, content in the Gospel, and grateful.",
+        refs: ["(warning) novelty"],
+        tags: ["warning", "novelty"]
+      },
+      {
+        id: "receive-as-lord",
+        title: "Receive Him as Lord",
+        body: "You wrote: receive Him as Lord—His Word becomes the rule of conduct (not merely ideas).",
+        refs: ["Col 2:6–7"],
+        tags: ["lordship", "word"]
+      },
+      {
+        id: "word-and-deed",
+        title: "Walk in word and deed",
+        body: "You connected the walk to concrete life: word and deed (and referenced Romans 6:4 as ‘newness of life’).",
+        refs: ["Rom 6:4"],
+        tags: ["walk", "practice"]
+      },
+      {
+        id: "indicative-imperative",
+        title: "Indicative → Imperative",
+        body: "You explicitly noted: Indicative (state/being) leads into Imperative (command). Commands flow from grace-received identity.",
+        refs: ["(framework) indicative / imperative"],
+        tags: ["framework", "gospel"]
+      },
+      {
+        id: "epaphras-taught",
+        title: "Taught by Epaphras",
+        body: "You noted the ‘taught’ part—faith is received, taught, and strengthened in the community of truth.",
+        refs: ["(note) Epaphras"],
+        tags: ["discipleship", "teaching"]
+      },
+      {
+        id: "col-2-18",
+        title: "Col 2:18: false devotion / wrong veneration",
+        body: "You wrote that Col 2:18 refutes veneration/false humility and pushes us to hold fast to the Head instead of spiritual counterfeits.",
+        refs: ["Col 2:18"],
+        tags: ["discernment", "Colossians"]
+      },
+      {
+        id: "regeneration-need",
+        title: "Need to be regenerated",
+        body: "You wrote ‘need to be regenerated’ and pointed to Romans 8:7–8 (the natural mind’s inability), implying new life is necessary for true walk.",
+        refs: ["Rom 8:7–8"],
+        tags: ["new birth", "Romans"]
+      },
+      {
+        id: "renewed-transformed",
+        title: "Being renewed / transformed",
+        body: "You mentioned renewal and transformation into the image of the invisible God (a growth/renewal theme tied to sanctification).",
+        refs: ["(theme) renewal / image"],
+        tags: ["renewal", "transformation"]
+      },
+      {
+        id: "grace-delightful-service",
+        title: "Grace frees us to delightful service",
+        body: "You summarized obedience as liberated service: grace frees us into glad, thankful walking—not forced performance.",
+        refs: ["1 John 5:3", "Col 2:6–7"],
+        tags: ["grace", "service"]
+      },
+      {
+        id: "content-in-gospel",
+        title: "Be content in the Gospel",
+        body: "You wrote ‘be content in the Gospel’—stability comes from deepening in Christ rather than shopping for spiritual novelty.",
+        refs: ["Col 2:6–7"],
+        tags: ["contentment", "gospel"]
+      },
+    ];
+
+    /**
+     * Phrase annotations for Col 2:6–7
+     */
+    const PHRASES = {
+      received: {
+        title: "① ‘Received’ — grounded in gracious reception",
+        body:
+          "Your note: the walk is grounded in a gracious reception. The Christian life begins by receiving Christ and continues that way—by depending on Him, not graduating from Him.",
+        refs: ["Col 2:6–7"]
+      },
+      walk: {
+        title: "② ‘Walk’ — word and deed",
+        body:
+          "You connected ‘walk’ to lived obedience in word and deed, and to newness of life (Rom 6:4). Identity leads to practice.",
+        refs: ["Rom 6:4"]
+      },
+      rooted: {
+        title: "③ ‘Rooted’ — old paths, not novelty",
+        body:
+          "You wrote ‘old paths’ and ‘never move on from Christ’ (Jer 6:16). Rooted means stability: you don’t chase novelty; you go deeper in the same Christ.",
+        refs: ["Jer 6:16"]
+      },
+      built: {
+        title: "④ ‘Built up’ — progressive growth",
+        body:
+          "Your notes describe sanctification as progressive transformation: growth happens over time as you’re built up in Christ.",
+        refs: ["(theme) sanctification"]
+      },
+      established: {
+        title: "⑤ ‘Established’ — discernment & holding fast",
+        body:
+          "You tied stability to resisting spiritual counterfeits (Col 2:18) and holding fast to the Head. Established faith doesn’t drift toward false humility/devotion.",
+        refs: ["Col 2:18"]
+      },
+      taught: {
+        title: "⑥ ‘Taught’ — received instruction",
+        body:
+          "You noted ‘taught by Epaphras.’ Being taught reminds you that growth happens with received truth—learning and remembering the Gospel proportion.",
+        refs: ["(note) Epaphras"]
+      },
+      thanksgiving: {
+        title: "⑦ ‘Thanksgiving’ — grace-fueled obedience",
+        body:
+          "You ended with: grace frees us into delightful service. Thanksgiving is the overflow: not burdensome commands (1 John 5:3), but glad obedience.",
+        refs: ["1 John 5:3"]
+      }
+    };
+
+    /**
+     * Indicative vs Imperative lists derived from your notes.
+     */
+    const INDICATIVE = [
+      "You have received Christ Jesus the Lord.",
+      "You are a child of God (identity precedes obedience).",
+      "You live between justification and glorification (sanctification is the ‘in-between’).",
+      "Regeneration is necessary (Rom 8:7–8 theme).",
+    ];
+    const IMPERATIVE = [
+      "Walk in Him (word and deed).",
+      "Stay rooted in the old paths; don’t move on from Christ (Jer 6:16 theme).",
+      "Hold fast to the Head; reject false devotion (Col 2:18).",
+      "Be content in the Gospel; resist novelty.",
+      "Abound in thanksgiving; serve delightfully under grace (1 John 5:3 theme)."
+    ];
+
+    /**
+     * Quiz: single best answer (A–J letter labels supported).
+     */
+    const QUIZ = [
+      {
+        id: "q1",
+        q: "In your notes, what is described as “the heart” of Colossians?",
+        options: [
+          "A. Colossians 2:6–7",
+          "B. Colossians 1:1–2",
+          "C. Colossians 3:1–4",
+          "D. Colossians 4:2–6"
+        ],
+        correctIndex: 0,
+        explain: "Your page explicitly says “Colossians 2:6–7 is the heart of the book.”"
+      },
+      {
+        id: "q2",
+        q: "Your notes place sanctification in what relationship to justification and glorification?",
+        options: [
+          "A. It replaces justification",
+          "B. It comes before justification",
+          "C. It is lived between justification and glorification",
+          "D. It is the same as glorification"
+        ],
+        correctIndex: 2,
+        explain: "You wrote: “We live in between justification and glorification: sanctification.”"
+      },
+      {
+        id: "q3",
+        q: "What did you connect with the warning “easy to lust after…”?",
+        options: [
+          "A. Thanksgiving",
+          "B. Novelty",
+          "C. Teaching",
+          "D. Rootedness"
+        ],
+        correctIndex: 1,
+        explain: "Your notes explicitly flag “easy to lust after novelty.”"
+      },
+      {
+        id: "q4",
+        q: "Which reference did you note alongside “commands … are not burdensome”?",
+        options: [
+          "A. 1 John 5:3",
+          "B. Romans 12:1",
+          "C. Hebrews 11:1",
+          "D. Jeremiah 29:11"
+        ],
+        correctIndex: 0,
+        explain: "Your page starts with “1 John 5:3” next to the idea that God’s commands are not burdensome."
+      },
+      {
+        id: "q5",
+        q: "In your notes, what does Colossians 2:18 refute/warn against?",
+        options: [
+          "A. Thanksgiving",
+          "B. Veneration / false devotion (wrong humility)",
+          "C. Teaching in the church",
+          "D. Sanctification"
+        ],
+        correctIndex: 1,
+        explain: "You wrote “Colossians 2:18 refutes veneration of the Saints” and implied holding fast to the Head."
+      },
+      {
+        id: "q6",
+        q: "What flow did you explicitly write down as a framework for reading commands?",
+        options: [
+          "A. Law → fear",
+          "B. Imperative → Indicative",
+          "C. Indicative (state/being) → Imperative (command)",
+          "D. Works → wages"
+        ],
+        correctIndex: 2,
+        explain: "Your notes say “Indicative—state being” and “Imperative—command.”"
+      },
+    ];
+
+    /**
+     * App state
+     */
+    const state = {
+      activeView: "overview",
+      activePhrase: null,
+      selectedAnno: null,
+      customCards: [],
+      editingCardId: null,
+      search: "",
+      quiz: { index: 0, correct: 0, answered: {} }
+    };
+
+    // Elements
+    const navBtns = [...document.querySelectorAll(".navBtn")];
+    const views = {
+      overview: document.getElementById("view-overview"),
+      verse: document.getElementById("view-verse"),
+      concepts: document.getElementById("view-concepts"),
+      quiz: document.getElementById("view-quiz"),
+    };
+    const viewTitle = document.getElementById("viewTitle");
+    const viewSub = document.getElementById("viewSub");
+
+    const globalSearch = document.getElementById("globalSearch");
+    const clearSearch = document.getElementById("clearSearch");
+    const cardsWrap = document.getElementById("cardsWrap");
+    const cardCount = document.getElementById("cardCount");
+
+    const phrases = [...document.querySelectorAll(".phrase")];
+    const annoTitle = document.getElementById("annoTitle");
+    const annoRef = document.getElementById("annoRef");
+    const annoBody = document.getElementById("annoBody");
+    const refList = document.getElementById("refList");
+    const annoStatus = document.getElementById("annoStatus");
+    const pinAnno = document.getElementById("pinAnno");
+    const copyAnno = document.getElementById("copyAnno");
+
+    const stageRange = document.getElementById("stageRange");
+    const stageLabel = document.getElementById("stageLabel");
+    const stageExplain = document.getElementById("stageExplain");
+    const showIndicative = document.getElementById("showIndicative");
+    const showImperative = document.getElementById("showImperative");
+    const iiList = document.getElementById("iiList");
+
+    const addNoteBtn = document.getElementById("addNoteBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const exportBtn = document.getElementById("exportBtn");
+    const summaryBox = document.getElementById("summaryBox");
+    const lastSaved = document.getElementById("lastSaved");
+
+    const progressBadge = document.getElementById("progressBadge");
+
+    const quizMount = document.getElementById("quizMount");
+    const quizMeta = document.getElementById("quizMeta");
+    const quizBar = document.getElementById("quizBar");
+
+    const backdrop = document.getElementById("backdrop");
+    const closeModal = document.getElementById("closeModal");
+    const saveCardBtn = document.getElementById("saveCardBtn");
+    const deleteCardBtn = document.getElementById("deleteCardBtn");
+
+    const fTitle = document.getElementById("fTitle");
+    const fTags = document.getElementById("fTags");
+    const fBody = document.getElementById("fBody");
+    const fRefs = document.getElementById("fRefs");
+
+    /**
+     * Utilities
+     */
+    function nowStamp(){
+      const d = new Date();
+      return d.toLocaleString(undefined, { year:"numeric", month:"short", day:"2-digit", hour:"2-digit", minute:"2-digit" });
+    }
+    function saveLS(key, value){
+      localStorage.setItem(key, JSON.stringify(value));
+      localStorage.setItem(LS.lastSaved, nowStamp());
+      renderLastSaved();
+    }
+    function loadLS(key, fallback){
+      try{
+        const raw = localStorage.getItem(key);
+        if(!raw) return fallback;
+        return JSON.parse(raw);
+      }catch(_){ return fallback; }
+    }
+    function uid(prefix="c"){
+      return `${prefix}_${Math.random().toString(16).slice(2)}_${Date.now().toString(16)}`;
+    }
+    function esc(s){
+      return (s ?? "").toString()
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#39;");
+    }
+    function includesAny(haystack, needles){
+      const h = haystack.toLowerCase();
+      return needles.some(n => h.includes(n.toLowerCase()));
+    }
+    function normalizeList(csv){
+      return (csv ?? "")
+        .split(",")
+        .map(s => s.trim())
+        .filter(Boolean);
+    }
+
+    /**
+     * Data: computed
+     */
+    function allCards(){
+      return [...BUILTIN_CARDS, ...state.customCards];
+    }
+
+    /**
+     * Navigation / view switching
+     */
+    function setView(view){
+      state.activeView = view;
+      // aria-selected
+      navBtns.forEach(b => b.setAttribute("aria-selected", b.dataset.view === view ? "true" : "false"));
+      // show/hide
+      Object.entries(views).forEach(([k, el]) => el.classList.toggle("active", k === view));
+
+      const titles = {
+        overview: ["Overview", "A fast dashboard of the “heart” themes from your page of notes."],
+        verse: ["Verse Walkthrough", "Click each phrase in Col 2:6–7 to see your linked notes & references."],
+        concepts: ["Concept Cards", "Your notes as searchable cards (plus anything you add)."],
+        quiz: ["Quiz", "Single best answer based on what you wrote on the page."]
+      };
+      viewTitle.textContent = titles[view][0];
+      viewSub.textContent = titles[view][1];
+
+      // Render view-specific things on enter
+      if(view === "concepts") renderCards();
+      if(view === "quiz") renderQuiz();
+    }
+
+    navBtns.forEach(btn => btn.addEventListener("click", () => setView(btn.dataset.view)));
+
+    document.querySelectorAll("[data-jump]").forEach(b => {
+      b.addEventListener("click", () => setView(b.dataset.jump));
+    });
+
+    /**
+     * Search
+     */
+    function setSearch(value){
+      state.search = value;
+      if(state.activeView === "concepts") renderCards();
+      if(state.activeView === "verse") {
+        // optional: highlight phrases if search matches
+        phrases.forEach(p => {
+          const key = p.dataset.key;
+          const a = PHRASES[key];
+          const match = value && includesAny(`${p.textContent} ${a?.title ?? ""} ${a?.body ?? ""}`, [value]);
+          p.style.outline = match ? "1px solid rgba(125,211,252,.55)" : "none";
+        });
+      }
+    }
+
+    globalSearch.addEventListener("input", (e) => setSearch(e.target.value));
+    clearSearch.addEventListener("click", () => { globalSearch.value=""; setSearch(""); globalSearch.focus(); });
+
+    /**
+     * Verse phrase click
+     */
+    function activatePhrase(key){
+      state.activePhrase = key;
+      phrases.forEach(p => p.classList.toggle("active", p.dataset.key === key));
+      const a = PHRASES[key];
+      if(!a) return;
+
+      state.selectedAnno = { key, ...a };
+      annoTitle.textContent = a.title;
+      annoRef.textContent = (a.refs && a.refs.length) ? a.refs.join(" · ") : "—";
+      annoBody.textContent = a.body;
+      annoStatus.textContent = "Selected";
+
+      // refs list
+      refList.innerHTML = "";
+      (a.refs || []).forEach(r => {
+        const span = document.createElement("span");
+        span.className = "badge";
+        span.textContent = r;
+        refList.appendChild(span);
+      });
+    }
+
+    phrases.forEach(p => {
+      p.addEventListener("click", () => activatePhrase(p.dataset.key));
+      p.addEventListener("keydown", (e) => {
+        if(e.key === "Enter" || e.key === " ") { e.preventDefault(); activatePhrase(p.dataset.key); }
+      });
+      p.setAttribute("tabindex", "0");
+      p.setAttribute("role", "button");
+      p.setAttribute("aria-label", `Show note for phrase ${p.textContent}`);
+    });
+
+    pinAnno.addEventListener("click", () => {
+      if(!state.selectedAnno) return;
+      const a = state.selectedAnno;
+      openModal({
+        id: null,
+        title: a.title.replace(/^⑦?\s?①?\s?②?\s?③?\s?④?\s?⑤?\s?⑥?\s?⑦?\s?/,""),
+        body: a.body,
+        refs: (a.refs || []).join(", "),
+        tags: "verse, Col 2:6-7"
+      });
+    });
+
+    copyAnno.addEventListener("click", async () => {
+      if(!state.selectedAnno) return;
+      const a = state.selectedAnno;
+      const text = `${a.title}\n${a.body}\nRefs: ${(a.refs||[]).join(", ")}`;
+      try{
+        await navigator.clipboard.writeText(text);
+        annoStatus.textContent = "Copied!";
+        setTimeout(() => annoStatus.textContent = "Selected", 900);
+      }catch(_){
+        annoStatus.textContent = "Copy blocked";
+      }
+    });
+
+    /**
+     * Timeline slider
+     */
+    function renderStage(value){
+      const v = Number(value);
+      let label = "Sanctification";
+      let explain = "Sanctification: progressive growth and transformation (your notes describe it as the necessary fruit of union, lived between justification and glorification).";
+      if(v < 25){
+        label = "Justification";
+        explain = "Justification: the starting line. Your notes place sanctification after this—living out what you’ve received in Christ.";
+      } else if(v > 75){
+        label = "Glorification";
+        explain = "Glorification: the finish line. Your notes emphasize we’re currently in the in-between, where growth is real and progressive.";
+      }
+      stageLabel.textContent = label;
+      stageExplain.textContent = explain;
+    }
+    stageRange.addEventListener("input", (e) => renderStage(e.target.value));
+    renderStage(stageRange.value);
+
+    /**
+     * Indicative / Imperative toggle
+     */
+    function renderII(kind){
+      const items = kind === "indicative" ? INDICATIVE : IMPERATIVE;
+      const title = kind === "indicative" ? "Indicatives (state/being)" : "Imperatives (commands)";
+      iiList.innerHTML = `
+        <div class="tag" style="margin-bottom:10px"><span class="dot ${kind==="indicative"?"purple":"green"}" style="box-shadow:none"></span><span>${esc(title)}</span></div>
+        <ul class="small muted" style="margin:0; padding-left:18px; line-height:1.6">
+          ${items.map(x => `<li>${esc(x)}</li>`).join("")}
+        </ul>
+      `;
+    }
+    showIndicative.addEventListener("click", () => renderII("indicative"));
+    showImperative.addEventListener("click", () => renderII("imperative"));
+    renderII("indicative");
+
+    /**
+     * Cards rendering
+     */
+    function cardMatches(card, q){
+      if(!q) return true;
+      const hay = `${card.title} ${card.body} ${(card.refs||[]).join(" ")} ${(card.tags||[]).join(" ")}`.toLowerCase();
+      return hay.includes(q.toLowerCase());
+    }
+
+    function renderCards(){
+      const q = state.search.trim();
+      const list = allCards().filter(c => cardMatches(c, q));
+      cardsWrap.innerHTML = "";
+      list.forEach(card => {
+        const el = document.createElement("div");
+        el.className = "card";
+        el.tabIndex = 0;
+        el.role = "button";
+        el.innerHTML = `
+          <div class="pin" aria-hidden="true"></div>
+          <h4>${esc(card.title)}</h4>
+          <p>${esc(card.body.slice(0, 140))}${card.body.length > 140 ? "…" : ""}</p>
+          <div class="refs">
+            ${(card.refs||[]).slice(0,3).map(r => `<span class="badge">${esc(r)}</span>`).join("")}
+            ${(card.tags||[]).slice(0,2).map(t => `<span class="badge">${esc("#"+t)}</span>`).join("")}
+          </div>
+        `;
+        el.addEventListener("click", () => openModalForCard(card.id));
+        el.addEventListener("keydown", (e) => {
+          if(e.key==="Enter"||e.key===" "){ e.preventDefault(); openModalForCard(card.id); }
+        });
+        cardsWrap.appendChild(el);
+      });
+      cardCount.textContent = `${list.length} shown`;
+    }
+
+    function openModalForCard(id){
+      const card = allCards().find(c => c.id === id);
+      if(!card) return;
+      openModal({
+        id: card.id,
+        title: card.title,
+        body: card.body,
+        refs: (card.refs||[]).join(", "),
+        tags: (card.tags||[]).join(", ")
+      });
+    }
+
+    /**
+     * Modal control
+     */
+    function openModal({id, title, body, refs, tags}){
+      state.editingCardId = id;
+      fTitle.value = title || "";
+      fBody.value = body || "";
+      fRefs.value = refs || "";
+      fTags.value = tags || "";
+      deleteCardBtn.style.display = id && !BUILTIN_CARDS.some(c => c.id === id) ? "inline-flex" : "none";
+      backdrop.style.display = "flex";
+      backdrop.setAttribute("aria-hidden", "false");
+      setTimeout(() => fTitle.focus(), 0);
+    }
+
+    function closeModalFn(){
+      backdrop.style.display = "none";
+      backdrop.setAttribute("aria-hidden", "true");
+      state.editingCardId = null;
+    }
+
+    closeModal.addEventListener("click", closeModalFn);
+    backdrop.addEventListener("click", (e) => { if(e.target === backdrop) closeModalFn(); });
+
+    addNoteBtn.addEventListener("click", () => openModal({id:null,title:"",body:"",refs:"",tags:""}));
+
+    saveCardBtn.addEventListener("click", () => {
+      const title = fTitle.value.trim();
+      const body = fBody.value.trim();
+      if(!title || !body) return;
+
+      const refs = normalizeList(fRefs.value);
+      const tags = normalizeList(fTags.value);
+
+      // editing?
+      const editingId = state.editingCardId;
+      if(editingId && !BUILTIN_CARDS.some(c => c.id === editingId)){
+        const i = state.customCards.findIndex(c => c.id === editingId);
+        if(i >= 0){
+          state.customCards[i] = { ...state.customCards[i], title, body, refs, tags };
+        }
+      } else if(editingId && BUILTIN_CARDS.some(c => c.id === editingId)){
+        // If it's builtin, make a custom copy instead of editing builtin.
+        state.customCards.unshift({ id: uid("custom"), title, body, refs, tags });
+      } else {
+        state.customCards.unshift({ id: uid("custom"), title, body, refs, tags });
+      }
+
+      saveLS(LS.customCards, state.customCards);
+      closeModalFn();
+      renderCounts();
+      if(state.activeView === "concepts") renderCards();
+    });
+
+    deleteCardBtn.addEventListener("click", () => {
+      const id = state.editingCardId;
+      if(!id) return;
+      state.customCards = state.customCards.filter(c => c.id !== id);
+      saveLS(LS.customCards, state.customCards);
+      closeModalFn();
+      renderCounts();
+      if(state.activeView === "concepts") renderCards();
+    });
+
+    /**
+     * Reset
+     */
+    resetBtn.addEventListener("click", () => {
+      if(!confirm("Reset quiz progress AND delete custom cards?")) return;
+      localStorage.removeItem(LS.customCards);
+      localStorage.removeItem(LS.quiz);
+      localStorage.removeItem(LS.summary);
+      localStorage.removeItem(LS.lastSaved);
+      state.customCards = [];
+      state.quiz = { index: 0, correct: 0, answered: {} };
+      summaryBox.value = defaultSummary();
+      renderLastSaved();
+      renderCounts();
+      if(state.activeView === "concepts") renderCards();
+      if(state.activeView === "quiz") renderQuiz();
+    });
+
+    /**
+     * Summary
+     */
+    function defaultSummary(){
+      return [
+        "Col 2:6–7 is the heart: receive Christ → walk in Him.",
+        "Rooted = old paths; never ‘move on’ from Christ (Jer 6:16 theme).",
+        "Built up = progressive sanctification (between justification & glorification).",
+        "Established = discernment; reject false devotion (Col 2:18) and hold fast to the Head.",
+        "Taught = received instruction (Epaphras note).",
+        "Thanksgiving = grace-fueled obedience; commands not burdensome (1 John 5:3 theme).",
+        "Warning: lust after novelty; be content in the Gospel."
+      ].join("\n");
+    }
+
+    summaryBox.value = loadLS(LS.summary, defaultSummary());
+    summaryBox.addEventListener("input", () => saveLS(LS.summary, summaryBox.value));
+
+    function renderLastSaved(){
+      const stamp = localStorage.getItem(LS.lastSaved);
+      lastSaved.textContent = stamp ? `Saved: ${stamp.replaceAll('"','')}` : "Saved: —";
+      document.getElementById("lastSaved").textContent = lastSaved.textContent.replace("Saved: ","Saved: ");
+    }
+    renderLastSaved();
+
+    /**
+     * Export summary
+     */
+    exportBtn?.addEventListener("click", () => {
+      const md =
+`# Alive in Christ — Notes Summary
+
+## Heart (Colossians 2:6–7)
+${summaryBox.value}
+
+## Cards
+${allCards().map(c => `- **${c.title}** (${(c.refs||[]).join("; ")})\n  - ${c.body}`).join("\n")}
+
+(Exported locally from your interactive page.)
+`;
+      const blob = new Blob([md], {type:"text/markdown"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "alive-in-christ-notes.md";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    /**
+     * Quiz rendering
+     */
+    function loadQuizState(){
+      state.quiz = loadLS(LS.quiz, { index: 0, correct: 0, answered: {} });
+    }
+    function saveQuizState(){
+      saveLS(LS.quiz, state.quiz);
+    }
+
+    function renderQuiz(){
+      loadQuizState();
+
+      const total = QUIZ.length;
+      const idx = Math.min(state.quiz.index, total - 1);
+      const qObj = QUIZ[idx];
+
+      quizMeta.textContent = `Q ${idx+1}/${total} · correct ${state.quiz.correct}`;
+      quizBar.style.width = `${((idx)/total)*100}%`;
+
+      // If already answered, we still render but lock selection.
+      const answered = state.quiz.answered[qObj.id];
+      const locked = Boolean(answered);
+
+      quizMount.innerHTML = "";
+      const box = document.createElement("div");
+      box.className = "q";
+      box.innerHTML = `
+        <div class="qMeta">
+          <span>${esc(qObj.id.toUpperCase())}</span>
+          <span class="badge">${locked ? "answered" : "choose one"}</span>
+        </div>
+        <h4>${esc(qObj.q)}</h4>
+        <div class="opts" id="opts"></div>
+        <div class="actions">
+          <button class="primary" id="checkBtn">${locked ? "Next" : "Check"}</button>
+          <button class="ghost" id="restartBtn">Restart</button>
+          <div class="status" id="qStatus">—</div>
+        </div>
+        <div class="explain" id="explain"></div>
+      `;
+      quizMount.appendChild(box);
+
+      const optsEl = box.querySelector("#opts");
+      const explainEl = box.querySelector("#explain");
+      const statusEl = box.querySelector("#qStatus");
+      const checkBtn = box.querySelector("#checkBtn");
+      const restartBtn = box.querySelector("#restartBtn");
+
+      // render options
+      const letters = "ABCDEFGHIJ".split("");
+      qObj.options.forEach((text, i) => {
+        const opt = document.createElement("label");
+        opt.className = "opt";
+        opt.innerHTML = `
+          <div class="letter">${letters[i] || "?"}</div>
+          <input type="radio" name="opt" value="${i}" ${locked ? "disabled" : ""} />
+          <div class="small" style="color:var(--text); line-height:1.35">${esc(text)}</div>
+        `;
+        optsEl.appendChild(opt);
+      });
+
+      if(locked){
+        // show explanation and highlight
+        const chosen = answered.choice;
+        const correct = qObj.correctIndex;
+        // highlight chosen/correct
+        [...optsEl.children].forEach((child, i) => {
+          child.style.borderColor =
+            i === correct ? "rgba(52,211,153,.65)" :
+            i === chosen ? "rgba(251,113,133,.65)" : "var(--border)";
+          child.style.background =
+            i === correct ? "rgba(52,211,153,.10)" :
+            i === chosen ? "rgba(251,113,133,.08)" : "rgba(11,15,23,.35)";
+        });
+        explainEl.style.display = "block";
+        explainEl.textContent = qObj.explain;
+        statusEl.textContent = answered.isCorrect ? "Correct ✓" : "Incorrect ✕";
+        quizBar.style.width = `${((idx+1)/total)*100}%`;
+      }
+
+      checkBtn.addEventListener("click", () => {
+        if(locked){
+          nextQuiz();
+          return;
+        }
+        const sel = box.querySelector('input[name="opt"]:checked');
+        if(!sel){ statusEl.textContent = "Pick an answer"; return; }
+
+        const choice = Number(sel.value);
+        const isCorrect = choice === qObj.correctIndex;
+
+        state.quiz.answered[qObj.id] = { choice, isCorrect };
+        if(isCorrect) state.quiz.correct += 1;
+
+        saveQuizState();
+        renderCounts();
+
+        // rerender to lock & show explanation
+        renderQuiz();
+      });
+
+      restartBtn.addEventListener("click", () => {
+        if(!confirm("Restart quiz from Q1 and clear answers?")) return;
+        state.quiz = { index: 0, correct: 0, answered: {} };
+        saveQuizState();
+        renderCounts();
+        renderQuiz();
+      });
+    }
+
+    function nextQuiz(){
+      const total = QUIZ.length;
+      state.quiz.index = Math.min(state.quiz.index + 1, total - 1);
+
+      // If user answered all, keep on last question but show completion in badge
+      const answeredCount = Object.keys(state.quiz.answered).length;
+      if(answeredCount === total){
+        // no-op; user can restart
+      }
+      saveQuizState();
+      renderCounts();
+      renderQuiz();
+    }
+
+    /**
+     * Counts / pills
+     */
+    function renderCounts(){
+      document.getElementById("pillOverview").textContent = "3";
+      document.getElementById("pillVerse").textContent = Object.keys(PHRASES).length.toString();
+      document.getElementById("pillCards").textContent = allCards().length.toString();
+      document.getElementById("pillQuiz").textContent = QUIZ.length.toString();
+
+      const qState = loadLS(LS.quiz, { index: 0, correct: 0, answered: {} });
+      const answered = Object.keys(qState.answered || {}).length;
+      progressBadge.textContent = `quiz ${qState.correct}/${answered}`;
+      renderLastSaved();
+    }
+
+    /**
+     * Keyboard shortcuts
+     */
+    document.addEventListener("keydown", (e) => {
+      if(e.key === "/"){
+        // Focus search unless typing in an input/textarea already
+        const tag = (document.activeElement?.tagName || "").toLowerCase();
+        if(tag !== "input" && tag !== "textarea"){
+          e.preventDefault();
+          globalSearch.focus();
+        }
+      }
+      if(e.key === "Escape"){
+        if(backdrop.style.display === "flex") closeModalFn();
+      }
+    });
+
+    /**
+     * Init load
+     */
+    function init(){
+      // load custom cards
+      state.customCards = loadLS(LS.customCards, []);
+      // set last saved stamp display
+      if(!localStorage.getItem(LS.summary)){
+        saveLS(LS.summary, summaryBox.value);
+      }
+      renderCounts();
+      // render card list if starting there
+      renderCards();
+
+      // Make verse start with first phrase selected
+      activatePhrase("received");
+
+      // Update sidebar counts
+      renderCounts();
+
+      // Set "Saved: ..." in overview header
+      const stamp = localStorage.getItem(LS.lastSaved);
+      document.getElementById("lastSaved").textContent = stamp ? stamp.replaceAll('"','') : "—";
+    }
+
+    init();
+  </script>
+</body>
+</html>

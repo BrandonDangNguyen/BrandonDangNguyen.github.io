@@ -1,447 +1,240 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Personal devotional blog by Brandon Nguyen sharing spiritual insights and reflections">
-  <meta name="keywords" content="devotional, Christian blog, faith, spiritual growth, Brandon Nguyen">
-  <meta name="author" content="Brandon Nguyen">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Steadfast Blog</title>
+  <link rel="stylesheet" href="style.css" />
 
-  <!-- Favicon -->
-  <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
-  <link rel="manifest" href="images/favicon/site.webmanifest">
-  <link rel="shortcut icon" href="images/favicon/favicon.ico">
-
-  <!-- Open Graph / Twitter -->
-  <meta property="og:title" content="Devotions by Brandon Nguyen">
-  <meta property="og:description" content="Personal devotional blog sharing spiritual insights and reflections">
-  <meta property="og:image" content="og-image.jpg">
-  <meta property="og:url" content="https://brandondangnguyen.github.io">
-  <meta name="twitter:card" content="summary_large_image">
-
-  <title>Devotions by Brandon Nguyen</title>
-  <link rel="stylesheet" href="styles.css?v=20250502">
-
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Sorts+Mill+Goudy:ital@0;1&display=swap"
-    rel="stylesheet"
-  >
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-    rel="stylesheet"
-  >
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 </head>
 <body>
-  <header class="site-header">
-    <div class="container header-container">
-      <h1 class="site-title"><a href="/">Brandon Nguyen</a></h1>
-      <nav class="main-nav" aria-label="Main navigation">
-        <ul>
-          <li><a href="/" aria-current="page">Home</a></li>
-          <li><a href="/about">About</a></li>
-          <li><a href="/contact">Contact</a></li>
-        </ul>
+
+  <!-- NAV -->
+  <header class="nav">
+    <div class="container navInner">
+      <a class="brand" href="index.html">steadfastnguyen.com</a>
+
+      <nav class="navLinks">
+        <a href="index.html" class="navLink">Home</a>
+        <a href="blog.html" class="navLink">Blog</a>
+        <a href="#about" class="navLink">About</a>
+        <a href="#contact" class="navLink">Contact</a>
+
+        <div class="navDropdown">
+          <button class="navLink navDropBtn" id="bookToggle">Pick a Book ▾</button>
+          <div class="dropMenu" id="dropMenu">
+            <select id="bookSelect" class="bookSelect">
+              <option value="" disabled selected>Choose a book…</option>
+              <optgroup label="Old Testament">
+                <option value="genesis">Genesis</option>
+                <option value="exodus">Exodus</option>
+                <option value="leviticus">Leviticus</option>
+                <option value="numbers">Numbers</option>
+                <option value="deuteronomy">Deuteronomy</option>
+                <option value="joshua">Joshua</option>
+                <option value="judges">Judges</option>
+                <option value="ruth">Ruth</option>
+                <option value="1-samuel">1 Samuel</option>
+                <option value="2-samuel">2 Samuel</option>
+                <option value="1-kings">1 Kings</option>
+                <option value="2-kings">2 Kings</option>
+                <option value="1-chronicles">1 Chronicles</option>
+                <option value="2-chronicles">2 Chronicles</option>
+                <option value="ezra">Ezra</option>
+                <option value="nehemiah">Nehemiah</option>
+                <option value="esther">Esther</option>
+                <option value="job">Job</option>
+                <option value="psalms">Psalms</option>
+                <option value="proverbs">Proverbs</option>
+                <option value="ecclesiastes">Ecclesiastes</option>
+                <option value="song-of-solomon">Song of Solomon</option>
+                <option value="isaiah">Isaiah</option>
+                <option value="jeremiah">Jeremiah</option>
+                <option value="lamentations">Lamentations</option>
+                <option value="ezekiel">Ezekiel</option>
+                <option value="daniel">Daniel</option>
+                <option value="hosea">Hosea</option>
+                <option value="joel">Joel</option>
+                <option value="amos">Amos</option>
+                <option value="obadiah">Obadiah</option>
+                <option value="jonah">Jonah</option>
+                <option value="micah">Micah</option>
+                <option value="nahum">Nahum</option>
+                <option value="habakkuk">Habakkuk</option>
+                <option value="zephaniah">Zephaniah</option>
+                <option value="haggai">Haggai</option>
+                <option value="zechariah">Zechariah</option>
+                <option value="malachi">Malachi</option>
+              </optgroup>
+              <optgroup label="New Testament">
+                <option value="matthew">Matthew</option>
+                <option value="mark">Mark</option>
+                <option value="luke">Luke</option>
+                <option value="john">John</option>
+                <option value="acts">Acts</option>
+                <option value="romans">Romans</option>
+                <option value="1-corinthians">1 Corinthians</option>
+                <option value="2-corinthians">2 Corinthians</option>
+                <option value="galatians">Galatians</option>
+                <option value="ephesians">Ephesians</option>
+                <option value="philippians">Philippians</option>
+                <option value="colossians">Colossians</option>
+                <option value="1-thessalonians">1 Thessalonians</option>
+                <option value="2-thessalonians">2 Thessalonians</option>
+                <option value="1-timothy">1 Timothy</option>
+                <option value="2-timothy">2 Timothy</option>
+                <option value="titus">Titus</option>
+                <option value="philemon">Philemon</option>
+                <option value="hebrews">Hebrews</option>
+                <option value="james">James</option>
+                <option value="1-peter">1 Peter</option>
+                <option value="2-peter">2 Peter</option>
+                <option value="1-john">1 John</option>
+                <option value="2-john">2 John</option>
+                <option value="3-john">3 John</option>
+                <option value="jude">Jude</option>
+                <option value="revelation">Revelation</option>
+              </optgroup>
+            </select>
+          </div>
+        </div>
       </nav>
     </div>
   </header>
-  <main class="container main-grid">
-    <section class="featured-post animate-in">
-      <h2 class="section-title">Featured Post</h2>
-      <article class="devo featured-devo">
-        <header class="devo-header">
-          <h2><a href="/spring-retreat">Spring Retreat 2025</a></h2>
-          <div class="post-meta">
-            <p>May 2025 · Faith That Endures</p>
-          </div>
-        </header>
-        <div class="featured-excerpt">
-          <p>Join me as we explore the nature of faith through Hebrews 11. Three sessions and an interactive Q&A will help us understand what true, biblical faith looks like in the Christian life.</p>
-        </div>
-        <a href="/spring-retreat" class="btn btn-primary">View Sessions</a>
-      </article>
-    </section>
 
-    <section class="other-posts">
-      <div class="search-container">
-        <label for="post-search" class="visually-hidden">Search posts</label>
-        <div class="search-input-wrapper">
-          <input 
-            type="search" 
-            id="post-search" 
-            class="search-input" 
-            placeholder="Search posts..." 
-            aria-controls="posts-grid"
-          >
-          <button type="button" id="clear-search" class="clear-search" aria-label="Clear search">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-      </div>
-      <h2 class="section-title">More Posts</h2>
-      <div id="posts-grid" class="posts-grid" aria-live="polite">
-        <article class="devo animate-in">
-          <header class="devo-header">
-            <h2><a href="/FearofGod">Crucifying the Fear of Man</a></h2>
-            <div class="post-meta">
-              <p>May 20, 2025 · 5 min read</p>
-            </div>
-          </header>
-          <div class="post-excerpt">
-            <p>In this post, I share my inner struggles with the fear of man—a subtle yet pervasive temptation to seek the approval of others rather than that of God Himself. Join me as I reveal my convictions and self-reflections in the pursuit of crucifying this fear, that I might walk away with a deeper, reverent fear of the Lord.</p>
-          </div>
-          <a href="/FearofGod" class="read-more">Read More</a>
-        </article>
+  <!-- HERO -->
+  <main>
+    <section class="hero">
+      <div class="container heroInner">
+        <h1 class="title js-rgbTitle">Steadfast Nguyen</h1>
+        <p class="subtitle js-subtitle">
+          Member of Grace Community Church. 
+        </p>
 
-        <article class="devo animate-in">
-          <header class="devo-header">
-            <h2><a href="/ephesians-3-1-13">Ephesians 3:1-13</a></h2>
-            <div class="post-meta">
-              <p>May 16, 2025 · 2.5 min read</p>
-            </div>
-          </header>
-          <div class="post-excerpt">
-            <p>Paul reveals the mystery of the Gospel: the inclusion of the Gentiles into the New Covenant.</p>
-          </div>
-          <a href="/ephesians-3-1-13" class="read-more">Read More</a>
-        </article>
-
-        <article class="devo animate-in">
-          <header class="devo-header">
-            <h2><a href="/1thessalonians-2-1-12">1 Thessalonians 2:1-12</a></h2>
-            <div class="post-meta">
-              <p>May 11, 2025 · 2.5 min read</p>
-            </div>
-          </header>
-          <div class="post-excerpt">
-            <p>Paul expresses his deep sense of responsibility in proclaiming the Gospel, his unwavering care for the Thessalonians, and his constant exhortation that they walk worthy of the calling they have received.</p>
-          </div>
-          <a href="/1thessalonians-2-1-12" class="read-more">Read More</a>
-        </article>
-        
-        <article class="devo animate-in">
-          <header class="devo-header">
-            <h2><a href="/galatians-1-1-10">Galatians 1:1‑10</a></h2>
-            <div class="post-meta">
-              <p>May 6, 2025 · 2 min read</p>
-            </div>
-          </header>
-          <div class="post-excerpt">
-            <p>Paul introduces himself as an apostle of Christ in his letter to the churches of Galatia. He warns the Galatians of the dangers of turning to a false and distorted gospel, emphasizing the serious consequences for those who preach such a gospel.</p>
-          </div>
-          <a href="/galatians-1-1-10" class="read-more">Read More</a>
-        </article>
-        
-        <article class="devo animate-in">
-          <header class="devo-header">
-            <h2><a href="/1peter1-6-9">1 Peter 1:6‑9</a></h2>
-            <div class="post-meta">
-              <p>April 29, 2025 · 2 min read</p>
-            </div>
-          </header>
-          <div class="post-excerpt">
-            <p>In this passage, Peter reminds believers that even though they face various trials, these momentary afflictions are refining their faith like gold in fire. Our genuine faith will result in praise, glory, and honor when Jesus Christ is revealed.</p>
-          </div>
-          <a href="/1peter1-6-9" class="read-more">Read More</a>
-        </article>
-        
-        <article class="devo animate-in">
-          <header class="devo-header">
-            <h2><a href="/1peter1-3-5">1 Peter 1:3‑5</a></h2>
-            <div class="post-meta">
-              <p>April 26, 2025 · 1.5 min read</p>
-            </div>
-          </header>
-          <div class="post-excerpt">
-            <p>Peter begins his letter with praise to God for the living hope we have through Christ's resurrection. Our inheritance is kept in heaven, secure and imperishable, as we're guarded by God's power.</p>
-          </div>
-          <a href="/1peter1-3-5" class="read-more">Read More</a>
-        </article>
-        
-        <article class="devo animate-in">
-          <header class="devo-header">
-            <h2><a href="/1peter1-2">1 Peter 1:1‑2</a></h2>
-            <div class="post-meta">
-              <p>April 26, 2025 · 1.5 min read</p>
-            </div>
-          </header>
-          <div class="post-excerpt">
-            <p>Peter addresses his letter to believers scattered throughout Asia Minor. He reminds them they were chosen according to God's foreknowledge, sanctified by the Spirit, for obedience to Jesus Christ.</p>
-          </div>
-          <a href="/1peter1-2" class="read-more">Read More</a>
-        </article>
-
-        <article class="devo animate-in">
-          <header class="devo-header">
-            <h2><a href="/why-im-starting-a-christian-blog">Why I'm Starting a Christian Blog</a></h2>
-            <div class="post-meta">
-              <p>April 23, 2025 · 2 min 36 sec read</p>
-            </div>
-          </header>
-          <div class="post-excerpt">
-            <p>In this pilot post, I explain why I've decided to start this devotional blog. I hope to encourage others in their walk with Christ through this website.</p>
-          </div>
-          <a href="/why-im-starting-a-christian-blog" class="read-more">Read More</a>
-        </article>
-        
-        <div class="no-results-message" hidden>
-          <p>No posts found matching your search. Try different keywords.</p>
+        <div class="heroCtas js-ctas">
+          <a class="btn" href="blog.html">Read the Blog</a>
+          <a class="btn btnGhost" href="#featured">Featured Post</a>
         </div>
       </div>
     </section>
 
-    <aside class="sidebar animate-in">
-      <div class="about-widget widget">
-        <h2>About Me</h2>
-        <a href="/about" class="read-more">Learn More</a>
+    <!-- FEATURED -->
+    <section id="featured" class="section">
+      <div class="container">
+        <div class="sectionHead">
+          <h2 class="sectionTitle js-reveal">Featured</h2>
+          <p class="sectionDesc js-reveal">Start here if you’re new.</p>
+        </div>
+
+        <article class="card postCard js-card">
+          <a class="postLink" href="posts/walking-through-doubt.html">
+            <div class="postMeta">
+              <span class="tag">Doubt</span>
+              <span class="dot">•</span>
+              <span class="date">Feb 26, 2026</span>
+              <span class="dot">•</span>
+              <span class="read">6 min read</span>
+            </div>
+            <h3 class="postTitle">Walking Through Doubt</h3>
+            <p class="postExcerpt">
+              Faith is not the absence of questions — it’s choosing to bring them to God.
+            </p>
+            <span class="postArrow">Read →</span>
+          </a>
+        </article>
       </div>
-    </aside>
+    </section>
+
+    <!-- RECENT POSTS PREVIEW -->
+    <section class="section">
+      <div class="container">
+        <div class="sectionHead">
+          <h2 class="sectionTitle js-reveal">Recent Posts</h2>
+          <a class="smallLink js-reveal" href="blog.html">View all →</a>
+        </div>
+
+        <div class="grid">
+          <article class="card js-card">
+            <a class="postLink" href="posts/prayer-when-you-feel-nothing.html">
+              <div class="postMeta">
+                <span class="tag">Prayer</span><span class="dot">•</span><span class="date">Feb 18, 2026</span>
+              </div>
+              <h3 class="postTitle">Prayer When You Feel Nothing</h3>
+              <p class="postExcerpt">What to do when your heart feels quiet, but God is not.</p>
+              <span class="postArrow">Read →</span>
+            </a>
+          </article>
+
+          <article class="card js-card">
+            <a class="postLink" href="posts/discipline-as-worship.html">
+              <div class="postMeta">
+                <span class="tag">Discipline</span><span class="dot">•</span><span class="date">Feb 10, 2026</span>
+              </div>
+              <h3 class="postTitle">Discipline as Worship</h3>
+              <p class="postExcerpt">Small obediences that shape big faith.</p>
+              <span class="postArrow">Read →</span>
+            </a>
+          </article>
+
+          <article class="card js-card">
+            <a class="postLink" href="posts/god-in-the-waiting.html">
+              <div class="postMeta">
+                <span class="tag">Waiting</span><span class="dot">•</span><span class="date">Jan 30, 2026</span>
+              </div>
+              <h3 class="postTitle">God in the Waiting</h3>
+              <p class="postExcerpt">When nothing moves, God still works.</p>
+              <span class="postArrow">Read →</span>
+            </a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="section">
+      <div class="container about">
+        <div class="aboutCard js-reveal">
+          <h2 class="sectionTitle">About</h2>
+          <p class="sectionDesc">
+            This blog is a place for scripture-rooted storytelling — honest moments, practical faith, and encouragement.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT / NEWSLETTER -->
+    <section id="contact" class="section">
+      <div class="container newsletter">
+        <div class="newsletterCard js-reveal">
+          <h2 class="sectionTitle">Stay in the loop</h2>
+          <p class="sectionDesc">Monthly letters: scripture, reflections, and new posts.</p>
+
+          <form class="form" action="#" method="post">
+            <input class="input" type="email" placeholder="Email address" required />
+            <button class="btn" type="submit">Subscribe</button>
+          </form>
+
+          <p class="fineprint">No spam. Unsubscribe anytime.</p>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <footer class="site-footer animate-in">
-    <div class="container">
-      <p class="copyright">&copy; 2025 Brandon Nguyen. All rights reserved.</p>
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footerInner">
+      <p class="muted">© <span id="year"></span> Steadfast Blog</p>
+      <div class="footerLinks">
+        <a href="blog.html">Blog</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </div>
     </div>
   </footer>
 
-  <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode">
-  </button>
-
-  <script>
-    // Theme toggle
-    const html = document.documentElement;
-    const toggle = document.getElementById('darkModeToggle');
-
-    // Initialize from localStorage
-    if (localStorage.getItem('darkMode') === 'false') {
-      html.classList.remove('dark');
-    } else { // Default to dark if not set or set to true
-        html.classList.add('dark');
-    }
-
-    toggle.addEventListener('click', () => {
-      html.classList.toggle('dark');
-      localStorage.setItem('darkMode', html.classList.contains('dark'));
-    });
-
-    // IntersectionObserver for animations
-    document.addEventListener('DOMContentLoaded', () => {
-      // Animation setup
-      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (prefersReducedMotion) {
-        // Make all elements visible immediately without animation
-        document.querySelectorAll('.animate-in, .featured-post, .featured-devo').forEach(el => {
-          el.classList.add('visible');
-        });
-      } else {
-        // Set up observer for animation
-        const items = document.querySelectorAll('.animate-in, .featured-post, .featured-devo');
-        const io = new IntersectionObserver(entries => {
-          entries.forEach(e => {
-            if (e.isIntersecting) {
-              e.target.classList.add('visible');
-              io.unobserve(e.target);
-            }
-          });
-        }, { 
-          threshold: 0,
-          rootMargin: '0px'
-        });
-        
-        items.forEach(el => io.observe(el));
-      }
-
-      // Post Search Functionality
-      const searchInput = document.getElementById('post-search');
-      const clearButton = document.getElementById('clear-search');
-      const postsGrid = document.getElementById('posts-grid');
-      const posts = Array.from(postsGrid.querySelectorAll('.devo'));
-      const noResultsMessage = postsGrid.querySelector('.no-results-message');
-
-      // Format date for additional search patterns
-      function formatDateVariations(dateStr) {
-        // Extract date components from string like "April 29, 2025"
-        const date = new Date(dateStr);
-        if (isNaN(date)) return [dateStr]; // Return original if parsing fails
-
-        const month = date.toLocaleString('en-US', { month: 'long' }); // "April"
-        const shortMonth = date.toLocaleString('en-US', { month: 'short' }); // "Apr"
-        const numericMonth = (date.getMonth() + 1).toString().padStart(2, '0'); // "04"
-        const day = date.getDate().toString(); // "29"
-        const paddedDay = day.padStart(2, '0'); // "09"
-        const year = date.getFullYear().toString(); // "2025"
-
-        // Return array of different date formats for matching
-        return [
-          dateStr, // Original: "April 29, 2025"
-          `${month} ${day}`, // "April 29"
-          `${month} ${year}`, // "April 2025"
-          `${shortMonth} ${day}`, // "Apr 29"
-          `${numericMonth}/${paddedDay}`, // "04/29"
-          `${numericMonth}/${paddedDay}/${year}`, // "04/29/2025"
-          `${numericMonth}-${paddedDay}-${year}`, // "04-29-2025"
-          month, // "April"
-          shortMonth, // "Apr"
-          year, // "2025"
-          day, // "29"
-          numericMonth, // "04"
-        ];
-      }
-      
-      // Calculate relevance score for a post based on search query
-      function calculateRelevance(post, query) {
-        if (!query) return Infinity;
-        
-        const title = post.querySelector('.devo-header h2 a').textContent.toLowerCase();
-        const excerpt = post.querySelector('.post-excerpt')?.textContent.toLowerCase() || '';
-        const dateText = post.querySelector('.post-meta p').textContent;
-        const dateVariations = formatDateVariations(dateText.split('·')[0].trim()).map(d => d.toLowerCase());
-        
-        // Initialize scores as "not found"
-        let titleScore = Infinity;
-        let excerptScore = Infinity;
-        let dateScore = Infinity;
-        let exactTitleMatch = false;
-        let exactExcerptMatch = false;
-        let exactDateMatch = false;
-        
-        // Check for exact matches (case-insensitive)
-        if (title.includes(query)) {
-          titleScore = title.indexOf(query);
-          exactTitleMatch = title === query;
-        }
-        
-        if (excerpt.includes(query)) {
-          excerptScore = excerpt.indexOf(query);
-          exactExcerptMatch = excerpt === query;
-        }
-
-        // Check all date variations for matches
-        for (const dateStr of dateVariations) {
-          if (dateStr.includes(query)) {
-            dateScore = Math.min(dateScore, dateStr.indexOf(query));
-            exactDateMatch = dateStr === query;
-            if (exactDateMatch) break;
-          }
-        }
-        
-        // Calculate final score (lower is better)
-        // Priority order:
-        // 1. Exact title match
-        // 2. Title contains query
-        // 3. Exact date match
-        // 4. Date contains query
-        // 5. Exact excerpt match
-        // 6. Excerpt contains query
-        let score = Infinity;
-        
-        if (exactTitleMatch) {
-          score = -1000;
-        } else if (titleScore !== Infinity) {
-          score = titleScore;
-        } else if (exactDateMatch) {
-          score = 500;
-        } else if (dateScore !== Infinity) {
-          score = dateScore + 1000;
-        } else if (exactExcerptMatch) {
-          score = 2000;
-        } else if (excerptScore !== Infinity) {
-          score = excerptScore + 3000;
-        }
-        
-        return score;
-      }
-      
-      // Filter and sort posts by relevance
-      function filterAndSortPosts() {
-        const query = searchInput.value.toLowerCase().trim();
-        let matchCount = 0;
-        
-        // Get matching posts with their relevance scores
-        const matchingPosts = posts
-          .map(post => {
-            const title = post.querySelector('.devo-header h2 a').textContent.toLowerCase();
-            const excerpt = post.querySelector('.post-excerpt')?.textContent.toLowerCase() || '';
-            const dateText = post.querySelector('.post-meta p').textContent.toLowerCase();
-            const dateVariations = formatDateVariations(dateText.split('·')[0].trim()).map(d => d.toLowerCase());
-            
-            const isMatch = !query || 
-              title.includes(query) || 
-              excerpt.includes(query) || 
-              dateVariations.some(d => d.includes(query));
-            
-            return {
-              element: post,
-              isMatch,
-              relevance: isMatch ? calculateRelevance(post, query) : Infinity
-            };
-          })
-          .filter(post => post.isMatch);
-        
-        matchCount = matchingPosts.length;
-        
-        // Sort by relevance (lower score = higher relevance)
-        matchingPosts.sort((a, b) => a.relevance - b.relevance);
-        
-        // Update DOM
-        posts.forEach(post => post.style.display = 'none');
-        matchingPosts.forEach(({ element }, index) => {
-          element.style.display = '';
-          element.style.order = index; // Use CSS order for positioning
-        });
-        
-        // Show/hide no results message
-        noResultsMessage.hidden = matchCount > 0;
-        
-        // Update the ARIA live region with search results info
-        if (query && matchCount === 0) {
-          postsGrid.setAttribute('aria-label', `No posts found matching "${query}"`);
-        } else if (query) {
-          postsGrid.setAttribute('aria-label', 
-            `${matchCount} post${matchCount !== 1 ? 's' : ''} found matching "${query}", sorted by relevance`
-          );
-        } else {
-          postsGrid.removeAttribute('aria-label');
-          // Reset post order when search is cleared
-          posts.forEach(post => post.style.order = '');
-        }
-      }
-      
-      // Debounce function to limit how often the search runs
-      function debounce(func, wait) {
-        let timeout;
-        return function executedFunction(...args) {
-          const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-          };
-          clearTimeout(timeout);
-          timeout = setTimeout(later, wait);
-        };
-      }
-      
-      // Event listeners
-      searchInput.addEventListener('input', debounce(filterAndSortPosts, 150));
-      
-      clearButton.addEventListener('click', () => {
-        searchInput.value = '';
-        filterAndSortPosts();
-        searchInput.focus();
-      });
-      
-      // Support pressing Escape to clear search
-      searchInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-          searchInput.value = '';
-          filterAndSortPosts();
-        }
-      });
-    });
-  </script>
+  <script src="main.js"></script>
 </body>
 </html>

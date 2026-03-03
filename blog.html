@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Blog • Steadfast</title>
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+</head>
+<body>
+
+  <!-- NAV -->
+  <header class="nav">
+    <div class="container navInner">
+      <a class="brand" href="index.html">Steadfast</a>
+
+      <nav class="navLinks">
+        <a href="index.html" class="navLink">Home</a>
+        <a href="blog.html" class="navLink navActive">Blog</a>
+        <a href="index.html#about" class="navLink">About</a>
+        <a href="index.html#contact" class="navLink">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- BLOG HERO -->
+    <section class="pageHero">
+      <div class="container pageHeroInner">
+        <h1 class="pageTitle js-title">Blog</h1>
+        <p class="pageSubtitle js-subtitle">
+          Member of Grace Community Church.
+        </p>
+
+        <!-- filters (optional now, useful later) -->
+        <div class="filters js-ctas">
+          <button class="pill isActive" type="button">All</button>
+          <button class="pill" type="button">Prayer</button>
+          <button class="pill" type="button">Doubt</button>
+          <button class="pill" type="button">Discipline</button>
+          <button class="pill" type="button">Waiting</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- POSTS LIST -->
+    <section class="section">
+      <div class="container">
+        <div class="postsList">
+          <article class="card postRow js-card">
+            <a class="postLink" href="posts/walking-through-doubt.html">
+              <div class="postMeta">
+                <span class="tag">Doubt</span>
+                <span class="dot">•</span>
+                <span class="date">Feb 26, 2026</span>
+                <span class="dot">•</span>
+                <span class="read">6 min read</span>
+              </div>
+              <h2 class="postTitle">Walking Through Doubt</h2>
+              <p class="postExcerpt">
+                Faith is not the absence of questions — it’s choosing to bring them to God.
+              </p>
+              <span class="postArrow">Read →</span>
+            </a>
+          </article>
+
+          <article class="card postRow js-card">
+            <a class="postLink" href="posts/prayer-when-you-feel-nothing.html">
+              <div class="postMeta">
+                <span class="tag">Prayer</span>
+                <span class="dot">•</span>
+                <span class="date">Feb 18, 2026</span>
+                <span class="dot">•</span>
+                <span class="read">5 min read</span>
+              </div>
+              <h2 class="postTitle">Prayer When You Feel Nothing</h2>
+              <p class="postExcerpt">
+                What to do when your heart feels quiet, but God is not.
+              </p>
+              <span class="postArrow">Read →</span>
+            </a>
+          </article>
+
+          <article class="card postRow js-card">
+            <a class="postLink" href="posts/discipline-as-worship.html">
+              <div class="postMeta">
+                <span class="tag">Discipline</span>
+                <span class="dot">•</span>
+                <span class="date">Feb 10, 2026</span>
+                <span class="dot">•</span>
+                <span class="read">7 min read</span>
+              </div>
+              <h2 class="postTitle">Discipline as Worship</h2>
+              <p class="postExcerpt">
+                Small obediences that shape big faith.
+              </p>
+              <span class="postArrow">Read →</span>
+            </a>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footerInner">
+      <p class="muted">© <span id="year"></span> Steadfast Blog</p>
+      <div class="footerLinks">
+        <a href="index.html">Home</a>
+        <a href="blog.html">Blog</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>

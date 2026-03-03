@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Article Template</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <style>
+    /* ========== DESIGN TOKENS ========== */
+    :root {
+      --accent: #1a6b6b;
+      --accent-muted: rgba(26, 107, 107, 0.15);
+      --text: #1a1a1a;
+      --text-muted: #555;
+      --bg: #f8f9fa;
+      --card-bg: #ffffff;
+      --border: rgba(0, 0, 0, 0.08);
+      --shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+      --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.08);
+      --radius: 24px;
+      --nav-height: 56px;
+    }
+
+    /* ========== RESET & BASE ========== */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Merriweather, Georgia, serif;
+      line-height: 1.75;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    /* ========== STICKY READING NAV ========== */
+    .reading-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--nav-height);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px);
+      transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.25s ease;
+    }
+    .reading-nav.is-visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    .reading-nav-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+      max-width: 140px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .reading-nav-section {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      max-width: 200px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      text-align: center;
+    }
+    .reading-nav-section.is-active { color: var(--accent); font-weight: 700; }
+    .reading-progress-wrap {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--border);
+    }
+    .reading-progress {
+      height: 100%;
+      width: 0%;
+      background: var(--accent);
+      transition: width 0.1s linear;
+    }
+
+    /* ========== LAYOUT ========== */
+    .container { width: min(880px, 92%); margin: 0 auto; }
+
+    /* ========== HERO ========== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(165deg, #f0f4f8 0%, #e6ecef 50%, #dde5eb 100%);
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 50% at 50% 20%, var(--accent-muted) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .hero-inner { text-align: center; position: relative; z-index: 1; }
+    .hero-title {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin: 0 0 0.5rem;
+      opacity: 0;
+      display: inline-block;
+      padding-bottom: 0.2em;
+      border-bottom: 3px solid var(--accent);
+      border-radius: 2px;
+    }
+    .hero-subtitle {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      color: var(--text-muted);
+      max-width: 42ch;
+      margin: 0 auto;
+      opacity: 0;
+    }
+
+    /* ========== CONTENT AREA (cards + spacing) ========== */
+    .content-wrap {
+      padding: clamp(2.5rem, 6vw, 4rem) 0;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(2rem, 5vw, 3rem);
+    }
+    .section {
+      scroll-margin-top: calc(var(--nav-height) + 1rem);
+    }
+    .section-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: clamp(2rem, 5vw, 3rem);
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+      max-width: 78ch;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .section-card:hover {
+      box-shadow: var(--shadow-hover);
+    }
+    .section-heading-wrap { margin-bottom: 1.25rem; }
+    .section-heading {
+      font-size: clamp(1.4rem, 2.8vw, 1.85rem);
+      font-weight: 700;
+      margin: 0 0 0.35rem;
+      letter-spacing: -0.01em;
+      line-height: 1.25;
+    }
+    .verse-chip {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+    .section-text {
+      font-size: 1.0625rem;
+      color: var(--text);
+      margin: 0;
+      line-height: 1.8;
+      max-width: 78ch;
+    }
+
+    /* ========== SUMMARY CARD ========== */
+    .summary {
+      padding: clamp(2.5rem, 6vw, 4rem) 0;
+      scroll-margin-top: calc(var(--nav-height) + 1rem);
+    }
+    .summary-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: clamp(2rem, 5vw, 3rem);
+      max-width: 70ch;
+      margin: 0 auto;
+      text-align: center;
+      transition: box-shadow 0.3s ease;
+    }
+    .summary-card:hover { box-shadow: var(--shadow-hover); }
+    .summary-heading {
+      font-size: clamp(1.3rem, 2.5vw, 1.65rem);
+      font-weight: 700;
+      margin: 0 0 1rem;
+      letter-spacing: -0.01em;
+    }
+    .summary-text {
+      font-size: 1.0625rem;
+      color: var(--text-muted);
+      margin: 0;
+      line-height: 1.8;
+    }
+
+    /* ========== GRAIN OVERLAY (optional) ========== */
+    .grain {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* ========== REDUCED MOTION ========== */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+      .reading-nav { transition: none; }
+      .reading-progress { transition: none; }
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 600px) {
+      .hero { padding: 1.5rem; }
+      .reading-nav { padding: 0 1rem; }
+      .reading-nav-title { max-width: 100px; }
+      .reading-nav-section { max-width: 120px; font-size: 0.75rem; }
+      .section-card, .summary-card { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sticky reading UI -->
+  <nav class="reading-nav" id="readingNav" aria-label="Article progress">
+    <span class="reading-nav-title" id="navTitle">Article</span>
+    <span class="reading-nav-section" id="navSection">Introduction</span>
+    <div class="reading-progress-wrap">
+      <div class="reading-progress" id="readingProgress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+  </nav>
+
+  <!-- Optional grain overlay -->
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="hero">
+    <div class="hero-bg js-hero-bg" aria-hidden="true"></div>
+    <div class="hero-inner container">
+      <h1 class="hero-title js-hero-title">Isaac Wong</h1>
+      <p class="hero-subtitle js-hero-subtitle">is the GOAT</p>
+    </div>
+  </header>
+
+  <main>
+    <div class="content-wrap">
+      <section class="section js-section" id="section-1" data-heading="Paul thanks the Father">
+        <div class="section-card js-section-card">
+          <div class="section-heading-wrap">
+            <h2 class="section-heading js-section-heading">Paul thanks the Father</h2>
+            <span class="verse-chip" data-verse="1:3–8">Col 1:3–8</span>
+          </div>
+          <p class="section-text js-section-text">
+            We always thank God, the Father of our Lord Jesus Christ, when we pray for you, since we heard of your faith in Christ Jesus and of the love that you have for all the saints, because of the hope laid up for you in heaven. Of this you have heard before in the word of the truth, the gospel, which has come to you, as indeed in the whole world it is bearing fruit and increasing—as it also does among you, since the day you heard it and understood the grace of God in truth, just as you learned it from Epaphras our beloved fellow servant. He is a faithful minister of Christ on your behalf and has made known to us your love in the Spirit. — Colossians 1:3–8
+          </p>
+        </div>
+      </section>
+
+      <section class="section js-section" id="section-2" data-heading="Section 2 Heading Placeholder">
+        <div class="section-card js-section-card">
+          <div class="section-heading-wrap">
+            <h2 class="section-heading js-section-heading">Section 2 Heading Placeholder</h2>
+          </div>
+          <p class="section-text js-section-text">
+            Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Replace with your content.
+          </p>
+        </div>
+      </section>
+
+      <section class="section js-section" id="section-3" data-heading="Section 3 Heading Placeholder">
+        <div class="section-card js-section-card">
+          <div class="section-heading-wrap">
+            <h2 class="section-heading js-section-heading">Section 3 Heading Placeholder</h2>
+          </div>
+          <p class="section-text js-section-text">
+            Ut enim ad minim veniam, quis nostrud exercitation. Replace with your content.
+          </p>
+        </div>
+      </section>
+
+      <section class="section js-section" id="section-4" data-heading="Section 4 Heading Placeholder">
+        <div class="section-card js-section-card">
+          <div class="section-heading-wrap">
+            <h2 class="section-heading js-section-heading">Section 4 Heading Placeholder</h2>
+          </div>
+          <p class="section-text js-section-text">
+            Duis aute irure dolor in reprehenderit in voluptate. Replace with your content.
+          </p>
+        </div>
+      </section>
+    </div>
+
+    <section class="summary js-summary" id="section-summary" data-heading="Summary or Takeaway Heading">
+      <div class="summary-card js-summary-card">
+        <h2 class="summary-heading js-summary-heading">Summary or Takeaway Heading</h2>
+        <p class="summary-text js-summary-text">
+          One or two sentences that wrap up the article. Replace with your closing thoughts.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // ========== GSAP SETUP ==========
+    gsap.registerPlugin(ScrollTrigger);
+
+    // ---------- Central animation config ----------
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const config = {
+      hero: {
+        duration: 1,
+        delay: 0.25,
+        stagger: 0.18,
+        ease: "power2.out",
+        parallaxAmount: 80
+      },
+      cards: {
+        y: 28,
+        duration: 0.65,
+        stagger: 0.14,
+        ease: "power2.out",
+        start: "top 88%"
+      },
+      summary: {
+        y: 24,
+        duration: 0.6,
+        stagger: 0.12,
+        ease: "power2.out",
+        start: "top 88%"
+      }
+    };
+
+    // ---------- Sticky nav: show after hero, update section + progress ----------
+    const nav = document.getElementById("readingNav");
+    const navTitle = document.getElementById("navTitle");
+    const navSection = document.getElementById("navSection");
+    const progressBar = document.getElementById("readingProgress");
+    const heroTitle = document.querySelector(".js-hero-title");
+    if (heroTitle) navTitle.textContent = heroTitle.textContent.trim();
+
+    const sections = [
+      ...document.querySelectorAll(".js-section"),
+      document.querySelector(".js-summary")
+    ].filter(Boolean);
+
+    ScrollTrigger.create({
+      trigger: "header.hero",
+      start: "bottom top",
+      end: "bottom top",
+      onUpdate: (self) => {
+        const show = self.progress > 0.15;
+        nav.classList.toggle("is-visible", show);
+      }
+    });
+
+    sections.forEach((section) => {
+      const heading = section.getAttribute("data-heading") || "";
+      ScrollTrigger.create({
+        trigger: section,
+        start: "top 40%",
+        end: "bottom 50%",
+        onEnter: () => { navSection.textContent = heading; navSection.classList.add("is-active"); },
+        onEnterBack: () => { navSection.textContent = heading; navSection.classList.add("is-active"); },
+        onLeave: () => { navSection.classList.remove("is-active"); },
+        onLeaveBack: () => { navSection.classList.remove("is-active"); }
+      });
+    });
+    ScrollTrigger.create({
+      trigger: "header.hero",
+      start: "top bottom",
+      end: "bottom top",
+      onEnterBack: () => { navSection.textContent = "Introduction"; navSection.classList.remove("is-active"); },
+      onLeave: () => { }
+    });
+
+    // Scroll progress bar
+    ScrollTrigger.create({
+      trigger: "body",
+      start: "top top",
+      end: "bottom bottom",
+      onUpdate: (self) => {
+        const pct = Math.round(self.progress * 100);
+        progressBar.style.width = pct + "%";
+        progressBar.setAttribute("aria-valuenow", pct);
+      }
+    });
+
+    // ---------- Hero: fade-in + subtle parallax ----------
+    const heroTitleEl = document.querySelector(".js-hero-title");
+    const heroSubtitleEl = document.querySelector(".js-hero-subtitle");
+    const heroBg = document.querySelector(".js-hero-bg");
+    if (heroTitleEl && heroSubtitleEl && !prefersReducedMotion) {
+      gsap.to([heroTitleEl, heroSubtitleEl], {
+        opacity: 1,
+        duration: config.hero.duration,
+        delay: config.hero.delay,
+        stagger: config.hero.stagger,
+        ease: config.hero.ease
+      });
+      if (heroBg) {
+        gsap.to(heroBg, {
+          y: config.hero.parallaxAmount * 0.3,
+          ease: "none",
+          scrollTrigger: {
+            trigger: ".hero",
+            start: "top top",
+            end: "bottom top",
+            scrub: 1.2
+          }
+        });
+      }
+    } else if (heroTitleEl && heroSubtitleEl) {
+      heroTitleEl.style.opacity = 1;
+      heroSubtitleEl.style.opacity = 1;
+    }
+
+    // ---------- Section cards: lift + fade on scroll (heading then paragraph) ----------
+    document.querySelectorAll(".js-section-card").forEach((card) => {
+      const section = card.closest(".js-section");
+      const heading = card.querySelector(".js-section-heading");
+      const text = card.querySelector(".js-section-text");
+      const wrap = card.querySelector(".section-heading-wrap");
+      if (!heading || !text || prefersReducedMotion) {
+        if (heading) heading.style.opacity = 1;
+        if (text) text.style.opacity = 1;
+        return;
+      }
+      const fromEls = wrap ? [wrap, text] : [heading, text];
+      gsap.from(card, {
+        scrollTrigger: { trigger: section || card, start: config.cards.start, toggleActions: "play none none none" },
+        y: config.cards.y,
+        opacity: 0,
+        duration: config.cards.duration,
+        ease: config.cards.ease
+      });
+      gsap.from(fromEls, {
+        scrollTrigger: { trigger: section || card, start: config.cards.start, toggleActions: "play none none none" },
+        y: 20,
+        opacity: 0,
+        duration: config.cards.duration * 0.9,
+        stagger: config.cards.stagger,
+        ease: config.cards.ease,
+        delay: 0.08
+      });
+    });
+
+    // ---------- Summary card: same treatment ----------
+    const summarySection = document.querySelector(".js-summary");
+    const summaryCard = document.querySelector(".js-summary-card");
+    const summaryHeading = document.querySelector(".js-summary-heading");
+    const summaryText = document.querySelector(".js-summary-text");
+    if (summarySection && summaryCard && summaryHeading && summaryText && !prefersReducedMotion) {
+      gsap.from(summaryCard, {
+        scrollTrigger: { trigger: summarySection, start: config.summary.start, toggleActions: "play none none none" },
+        y: config.summary.y,
+        opacity: 0,
+        duration: config.summary.duration,
+        ease: config.summary.ease
+      });
+      gsap.from([summaryHeading, summaryText], {
+        scrollTrigger: { trigger: summarySection, start: config.summary.start, toggleActions: "play none none none" },
+        y: 18,
+        opacity: 0,
+        duration: config.summary.duration * 0.9,
+        stagger: config.summary.stagger,
+        ease: config.summary.ease,
+        delay: 0.08
+      });
+    } else if (summaryHeading && summaryText) {
+      summaryHeading.style.opacity = 1;
+      summaryText.style.opacity = 1;
+    }
+  </script>
+</body>
+</html>
