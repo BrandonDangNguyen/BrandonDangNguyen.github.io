@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mortification of Sin — Chapter 1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/rough-notation@0.5.1/lib/rough-notation.iife.js"></script>
+  <script src="https://unpkg.com/roughjs@4.6.6/bundled/rough.js"></script>
+  <style>
+    :root {
+      --accent: #b54a4a;
+      --accent-muted: rgba(181, 74, 74, 0.15);
+      --text: #000000;
+      --text-muted: #000000;
+      --bg: #f8f9fa;
+      --card-bg: #ffffff;
+      --border: rgba(0, 0, 0, 0.08);
+      --shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+      --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.08);
+      --radius: 24px;
+      --nav-height: 56px;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Merriweather, Georgia, serif;
+      line-height: 1.75;
+      color: var(--text);
+      background: var(--bg);
+    }
+    .reading-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--nav-height);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px);
+      transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.25s ease;
+    }
+    .reading-nav.is-visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    .reading-nav-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+      max-width: 180px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .reading-nav-section {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      max-width: 200px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      text-align: center;
+    }
+    .reading-nav-section.is-active { color: var(--accent); font-weight: 700; }
+    .reading-progress-wrap {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--border);
+    }
+    .reading-progress {
+      height: 100%;
+      width: 0%;
+      background: var(--accent);
+      transition: width 0.1s linear;
+    }
+    .container { width: min(880px, 92%); margin: 0 auto; }
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(165deg, #f0f4f8 0%, #e6ecef 50%, #dde5eb 100%);
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 50% at 50% 20%, var(--accent-muted) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .hero-inner { text-align: center; position: relative; z-index: 1; }
+    .hero-title {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin: 0 0 0.5rem;
+      opacity: 1;
+      display: inline-block;
+      padding-bottom: 0.2em;
+      border-bottom: 3px solid var(--accent);
+      border-radius: 2px;
+      perspective: 600px;
+    }
+    .hero-title .word {
+      display: inline-block;
+      opacity: 0;
+    }
+    .hero-subtitle {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      color: var(--text-muted);
+      max-width: 42ch;
+      margin: 0 auto;
+      opacity: 0;
+    }
+    .content-wrap {
+      padding: clamp(2.5rem, 6vw, 4rem) 0;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(2rem, 5vw, 3rem);
+    }
+    .section { scroll-margin-top: calc(var(--nav-height) + 1rem); }
+    .section-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: clamp(2rem, 5vw, 3rem);
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+      max-width: 78ch;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .section-card:hover { box-shadow: var(--shadow-hover); }
+    .section-heading-wrap { margin-bottom: 1.25rem; }
+    .section-heading {
+      font-size: clamp(1.4rem, 2.8vw, 1.85rem);
+      font-weight: 700;
+      margin: 0 0 0.35rem;
+      letter-spacing: -0.01em;
+      line-height: 1.25;
+      position: relative;
+      display: inline-block;
+    }
+    .section-heading::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      width: 100%;
+      height: 3px;
+      background: var(--accent);
+      border-radius: 2px;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.45s cubic-bezier(.22,.61,.36,1) 0.05s;
+    }
+    .section-heading.js-underline-visible::after {
+      transform: scaleX(1);
+    }
+    .verse-chip {
+      display: inline-block;
+      font-size: 0.78rem;
+      color: var(--accent);
+      background: var(--accent-muted);
+      padding: 0.2em 0.6em;
+      border-radius: 6px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    .section-text {
+      font-size: 1.0625rem;
+      color: var(--text);
+      margin: 0;
+      line-height: 1.8;
+      max-width: 78ch;
+    }
+    .section-text ul {
+      margin: 0.75rem 0 0;
+      padding-left: 1.5rem;
+    }
+    .section-text li {
+      margin-bottom: 0.5rem;
+      line-height: 1.75;
+    }
+    .section-text p + p,
+    .section-text p + ul {
+      margin-top: 1.25rem;
+    }
+    /* ── Rough.js diagram ── */
+    .rough-diagram {
+      width: 100%;
+      max-width: 640px;
+      margin: 1.25rem 0 1.75rem;
+    }
+    .rough-diagram svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .js-stagger-child {
+      opacity: 0;
+    }
+    .section-text ul + p {
+      margin-top: 1.25rem;
+    }
+    blockquote {
+      margin: 1.5rem 0;
+      padding: 1rem 1.5rem;
+      border-left: 4px solid var(--accent);
+      background: var(--accent-muted);
+      border-radius: 0 12px 12px 0;
+      font-style: italic;
+      color: var(--text-muted);
+    }
+    blockquote p { margin: 0; }
+    blockquote cite {
+      display: block;
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      font-style: normal;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .verse-only-card {
+      text-align: center;
+      max-width: 68ch;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      padding: 0;
+    }
+    .verse-only-card:hover { box-shadow: none; }
+    .verse-only-card .section-text {
+      max-width: 100%;
+    }
+    .verse-only-card blockquote {
+      margin: 0;
+      padding: clamp(1.5rem, 4vw, 2.25rem);
+      border-left: none;
+      border-radius: 18px;
+      position: relative;
+      font-style: normal;
+      background: linear-gradient(150deg, rgba(181, 74, 74, 0.12), rgba(181, 74, 74, 0.2));
+      color: var(--text);
+    }
+    .verse-only-card blockquote::before {
+      content: "“";
+      position: absolute;
+      top: 0.2rem;
+      left: 0.75rem;
+      font-size: 2.4rem;
+      line-height: 1;
+      color: var(--accent);
+      opacity: 0.6;
+      font-family: Georgia, serif;
+    }
+    .verse-only-card blockquote p {
+      font-size: clamp(1.08rem, 2.2vw, 1.32rem);
+      font-weight: 700;
+      line-height: 1.65;
+      letter-spacing: 0.01em;
+    }
+    .verse-only-card blockquote cite {
+      margin-top: 1rem;
+      font-size: 0.95rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+    .summary {
+      padding: clamp(2.5rem, 6vw, 4rem) 0;
+      scroll-margin-top: calc(var(--nav-height) + 1rem);
+    }
+    .summary-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: clamp(2rem, 5vw, 3rem);
+      max-width: 70ch;
+      margin: 0 auto;
+      text-align: center;
+      transition: box-shadow 0.3s ease;
+    }
+    .summary-card:hover { box-shadow: var(--shadow-hover); }
+    .summary-card { text-align: left; }
+    .summary-heading {
+      font-size: clamp(1.3rem, 2.5vw, 1.65rem);
+      font-weight: 700;
+      margin: 0 0 1rem;
+      letter-spacing: -0.01em;
+      text-align: left;
+    }
+    .summary-text {
+      font-size: 1.0625rem;
+      color: var(--text-muted);
+      margin: 0;
+      line-height: 1.8;
+    }
+    .grain {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+      .reading-nav { transition: none; }
+      .reading-progress { transition: none; }
+    }
+    @media (max-width: 768px) {
+      :root { --nav-height: 48px; }
+      .hero { min-height: 100vh; padding: 1.5rem; }
+      .hero-title { font-size: clamp(1.6rem, 7vw, 2.4rem); padding-bottom: 0.15em; border-bottom-width: 2px; }
+      .reading-nav { padding: 0 0.75rem; height: 48px; }
+      .reading-nav-title { max-width: 110px; font-size: 0.85rem; }
+      .reading-nav-section { max-width: 100px; font-size: 0.7rem; }
+      .container { width: 94%; }
+      .content-wrap { padding: clamp(1.5rem, 4vw, 2.5rem) 0; gap: 1.5rem; }
+      .section-card, .summary-card {
+        padding: 1.25rem;
+        border-radius: 16px;
+        max-width: 100%;
+      }
+      .section-text { font-size: 0.95rem; line-height: 1.75; }
+      .section-text ul { padding-left: 1.25rem; }
+      .summary-text { font-size: 0.95rem; }
+    }
+    @media (max-width: 400px) {
+      .hero { min-height: 100vh; padding: 1rem; }
+      .hero-title { font-size: 1.5rem; }
+      .reading-nav-title { max-width: 90px; font-size: 0.8rem; }
+      .reading-nav-section { display: none; }
+      .section-card, .summary-card { padding: 1rem; border-radius: 12px; }
+      .section-text { font-size: 0.9rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="reading-nav" id="readingNav" aria-label="Article progress">
+    <span class="reading-nav-title" id="navTitle">Mort. of Sin — Ch. 1</span>
+    <span class="reading-nav-section" id="navSection">Introduction</span>
+    <div class="reading-progress-wrap">
+      <div class="reading-progress" id="readingProgress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+  </nav>
+
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="hero">
+    <div class="hero-bg js-hero-bg" aria-hidden="true"></div>
+    <div class="hero-inner container">
+      <h1 class="hero-title js-hero-title">Mortification of Sin — Chapter 1</h1>
+      <p class="hero-subtitle js-hero-subtitle"><!-- INSERT: subtitle, e.g. "Notes & reflections on John Owen's classic" --></p>
+    </div>
+  </header>
+
+  <main>
+    <div class="content-wrap container">
+
+      <!-- ======== SECTION 1 ======== -->
+      <section class="section js-section" data-heading="Romans 8:13">
+        <div class="section-card js-section-card verse-only-card">
+          <div class="section-text js-section-text">
+            <blockquote>
+              <p>For if you live according to the flesh you will die, but if by the Spirit you put to death the deeds of the body, you will live.</p>
+              <cite>Romans 8:13</cite>
+            </blockquote>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======== SECTION 2 ======== -->
+      <section class="section js-section" data-heading="This is directed to all believers.">
+        <div class="section-card js-section-card">
+          <div class="section-heading-wrap">
+            <h2 class="section-heading">This imperative is directed to all believers.</h2>
+          </div>
+          <div class="section-text js-section-text">
+            <p>All believers possess the Holy Spirit. According to Romans 8:9, anyone who belongs to God has the Spirit of Christ.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======== SECTION 3 ======== -->
+      <section class="section js-section" data-heading="Section 3 Title">
+        <div class="section-card js-section-card">
+          <div class="section-heading-wrap">
+            <h2 class="section-heading">The condition expresses the certainty of the relationship.</h2>
+          </div>
+          <div class="section-text js-section-text">
+            <p>God ordains mortification as a necessary means in the sanctification of those who will inherit eternal life.</p>
+          </div>
+          <div class="rough-diagram js-rough-diagram" aria-label="Condition outcomes: Living in sin leads to Death; Mortifying your sin leads to Life"></div>
+          <div class="section-text js-section-text">
+            <p><!-- INSERT: your commentary / notes --></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======== SECTION 4 ======== -->
+      <section class="section js-section" data-heading="Mortification must be done by the Spirit">
+        <div class="section-card js-section-card">
+          <div class="section-heading-wrap">
+            <h2 class="section-heading">Mortification must be done by the Spirit</h2>
+          </div>
+          <div class="section-text js-section-text">
+            <p>Mortification using our own strength, or by any human means, to produce self-righteousness, is the core of every false religion in the world. Instead, we ought to rely on the Spirit who is always interceding for us according to verse 26.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======== SECTION 5 ======== -->
+      <section class="section js-section" data-heading="The body, the deeds, and mortification">
+        <div class="section-card js-section-card">
+          <div class="section-heading-wrap">
+            <h2 class="section-heading">The body, the deeds, and mortification</h2>
+          </div>
+          <div class="section-text js-section-text">
+            <p>The body is the same as the flesh. It is indwelling sin, the total depravity that defines our corrupted flesh. It can also refer to the "old man" in Romans 6:6.</p>
+            <p>The deeds are the outward expression of yielding to an inward lust. Indwelling lust and sin precede sinful action.</p>
+            <p>To "mortify" means to put any living thing to death, to take away all of its strength, vigour, and power, so that it cannot act, or exert, or put forth any proper acts of its own.</p>
+          </div>
+          <div class="rough-diagram js-rough-diagram-2" aria-label="Diagram: Indwelling sin leads to sinful desire and temptation, which leads to deeds of the flesh. Mortification breaks the chain."></div>
+          <div class="section-text js-section-text">
+            <blockquote>
+              <p>"We know that our old self was crucified with him in order that the body of sin might be brought to nothing, so that we would no longer be enslaved to sin."</p>
+              <cite>Romans 6:6</cite>
+            </blockquote>
+            <blockquote>
+              <p>"This old man, he says, is fastened to the cross of Christ, for by its power he is slain: and he expressly referred to the cross, that he might more distinctly show, that we cannot be otherwise put to death than by partaking of his death."</p>
+              <cite>John Calvin</cite>
+            </blockquote>
+            <p>We will spend the rest of our lives fighting sin, aiming to render a death blow to the deeds of the flesh.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======== SECTION 6 ======== -->
+      <section class="section js-section" data-heading="The promise at the end is eternal life.">
+        <div class="section-card js-section-card">
+          <div class="section-heading-wrap">
+            <h2 class="section-heading">The promise at the end is eternal life.</h2>
+          </div>
+          <div class="section-text js-section-text">
+            <p>Not just eternal life in heaven, but also the spiritual life we currently have in Christ which we have on this Earth.</p>
+          </div>
+        </div>
+      </section>
+
+      <!--
+        ======== ADD MORE SECTIONS ========
+        Copy any section block above and paste here.
+        Update data-heading, the heading text, verse chip, and content.
+      -->
+
+    </div>
+  </main>
+
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const config = {
+      hero: { duration: 1, delay: 0.25, stagger: 0.18, ease: "power2.out", parallaxAmount: 80 },
+      cards: { y: 28, duration: 0.65, stagger: 0.14, ease: "power2.out", start: "top 88%" },
+      summary: { y: 24, duration: 0.6, stagger: 0.12, ease: "power2.out", start: "top 88%" }
+    };
+
+    const nav = document.getElementById("readingNav");
+    const navTitle = document.getElementById("navTitle");
+    const navSection = document.getElementById("navSection");
+    const progressBar = document.getElementById("readingProgress");
+    const heroTitle = document.querySelector(".js-hero-title");
+    if (heroTitle) navTitle.textContent = heroTitle.textContent.trim();
+
+    ScrollTrigger.create({
+      trigger: "header.hero",
+      start: "bottom top",
+      end: "bottom top",
+      onUpdate: (self) => { nav.classList.toggle("is-visible", self.progress > 0.15); }
+    });
+
+    const sections = document.querySelectorAll(".js-section");
+    sections.forEach((sec) => {
+      const heading = sec.getAttribute("data-heading") || "Section";
+      ScrollTrigger.create({
+        trigger: sec,
+        start: "top 40%",
+        end: "bottom 50%",
+        onEnter: () => { navSection.textContent = heading; navSection.classList.add("is-active"); },
+        onEnterBack: () => { navSection.textContent = heading; navSection.classList.add("is-active"); },
+        onLeave: () => { navSection.classList.remove("is-active"); },
+        onLeaveBack: () => { navSection.classList.remove("is-active"); }
+      });
+    });
+
+    ScrollTrigger.create({
+      trigger: "header.hero",
+      start: "top bottom",
+      end: "bottom top",
+      onEnterBack: () => { navSection.textContent = "Introduction"; navSection.classList.remove("is-active"); }
+    });
+
+    ScrollTrigger.create({
+      trigger: "body",
+      start: "top top",
+      end: "bottom bottom",
+      onUpdate: (self) => {
+        progressBar.style.width = Math.round(self.progress * 100) + "%";
+        progressBar.setAttribute("aria-valuenow", Math.round(self.progress * 100));
+      }
+    });
+
+    const heroTitleEl = document.querySelector(".js-hero-title");
+    const heroSubtitleEl = document.querySelector(".js-hero-subtitle");
+    const heroBg = document.querySelector(".js-hero-bg");
+
+    if (heroTitleEl) {
+      var titleText = heroTitleEl.textContent.trim();
+      heroTitleEl.innerHTML = titleText.split(/\s+/).map(function(w) {
+        return '<span class="word">' + w + '</span>';
+      }).join(' ');
+
+      var words = heroTitleEl.querySelectorAll(".word");
+
+      if (!prefersReducedMotion) {
+        gsap.set(words, { y: 24, rotateX: -40, opacity: 0 });
+        if (heroSubtitleEl) gsap.set(heroSubtitleEl, { y: 12, opacity: 0 });
+
+        var heroTl = gsap.timeline({ delay: 0.3 });
+        heroTl.to(words, {
+          opacity: 1, y: 0, rotateX: 0,
+          duration: 0.7, stagger: 0.08, ease: "power3.out"
+        });
+        if (heroSubtitleEl) {
+          heroTl.to(heroSubtitleEl, {
+            opacity: 1, y: 0,
+            duration: 0.6, ease: "power2.out"
+          }, "-=0.2");
+        }
+        if (heroBg) {
+          gsap.to(heroBg, {
+            y: config.hero.parallaxAmount * 0.3,
+            ease: "none",
+            scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: 1.2 }
+          });
+        }
+      } else {
+        words.forEach(function(w) { w.style.opacity = 1; });
+        if (heroSubtitleEl) heroSubtitleEl.style.opacity = 1;
+      }
+    }
+
+    document.querySelectorAll(".js-section-card").forEach(function(card) {
+      var section = card.closest(".js-section");
+      var trigger = section || card;
+      var isVerseCard = card.classList.contains("verse-only-card");
+
+      if (prefersReducedMotion) {
+        card.style.opacity = 1;
+        card.querySelectorAll(".js-stagger-child").forEach(function(c) { c.style.opacity = 1; });
+        var headingEl = card.querySelector(".section-heading");
+        if (headingEl) headingEl.classList.add("js-underline-visible");
+        return;
+      }
+
+      var heading = card.querySelector(".section-heading");
+      var textBlocks = card.querySelectorAll(".section-text");
+      var children = [];
+      textBlocks.forEach(function(block) {
+        block.querySelectorAll("p, blockquote, ul").forEach(function(el) {
+          el.classList.add("js-stagger-child");
+          children.push(el);
+        });
+      });
+
+      var tl = gsap.timeline({
+        scrollTrigger: { trigger: trigger, start: "top 85%", toggleActions: "play none none none" }
+      });
+
+      if (isVerseCard) {
+        tl.from(card, { scale: 0.92, opacity: 0, duration: 0.9, ease: "power3.out" });
+      } else {
+        tl.from(card, { y: 32, opacity: 0, duration: 0.6, ease: "power2.out" });
+      }
+
+      if (heading) {
+        tl.from(heading, { x: -18, opacity: 0, duration: 0.5, ease: "power2.out" }, "-=0.3");
+        tl.call(function() { heading.classList.add("js-underline-visible"); });
+      }
+
+      children.forEach(function(child) {
+        var isBlockquote = child.tagName === "BLOCKQUOTE";
+        if (isBlockquote) {
+          gsap.set(child, { x: -24, opacity: 0 });
+        } else {
+          gsap.set(child, { y: 16, opacity: 0 });
+        }
+      });
+
+      children.forEach(function(child) {
+        var isBlockquote = child.tagName === "BLOCKQUOTE";
+        if (isBlockquote) {
+          tl.to(child, { opacity: 1, x: 0, duration: 0.55, ease: "back.out(1.4)" }, "-=0.15");
+        } else {
+          tl.to(child, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }, "-=0.18");
+        }
+      });
+    });
+
+    const RN = typeof RoughNotation !== "undefined" ? RoughNotation : typeof roughNotation !== "undefined" ? roughNotation : null;
+    if (RN) {
+      const accent = "#b54a4a";
+      const rnElements = document.querySelectorAll(".section-text .rn");
+      const annotations = [];
+      const typeConfig = {
+        underline:  { color: accent, strokeWidth: 1.5, padding: 2, multiline: true },
+        highlight:  { color: "rgba(181, 74, 74, 0.18)", strokeWidth: 1, padding: 3, multiline: true },
+        box:        { color: accent, strokeWidth: 1.2, padding: [4, 6], multiline: true }
+      };
+      rnElements.forEach((el) => {
+        const type = el.getAttribute("data-rn-type") || "underline";
+        const opts = typeConfig[type] || typeConfig.underline;
+        annotations.push(RN.annotate(el, {
+          type: type,
+          color: opts.color,
+          animationDuration: 800,
+          strokeWidth: opts.strokeWidth,
+          padding: opts.padding,
+          multiline: opts.multiline
+        }));
+      });
+      if (annotations.length > 0) {
+        ScrollTrigger.create({
+          trigger: ".content-wrap",
+          start: "top 75%",
+          once: true,
+          onEnter: () => {
+            if (RN.annotationGroup) {
+              RN.annotationGroup(annotations).show();
+            } else {
+              annotations.forEach((a, i) => setTimeout(() => a.show(), i * 260));
+            }
+          }
+        });
+      }
+    }
+
+    const diagramEl = document.querySelector(".js-rough-diagram");
+    if (diagramEl && typeof rough !== "undefined") {
+      const W = 620, H = 176;
+      const svgNS = "http://www.w3.org/2000/svg";
+      const svg = document.createElementNS(svgNS, "svg");
+      svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+      svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+      diagramEl.appendChild(svg);
+
+      const rc = rough.svg(svg);
+      const rowH = 56, gap = 20, padY = 12, padX = 14;
+      const leftW = 270, rightW = 120;
+      const arrowStart = padX + leftW + 16;
+      const arrowEnd = W - padX - rightW - 16;
+      const rightX = W - padX - rightW;
+
+      const rows = [
+        {
+          y: padY,
+          label: "Living in sin",
+          result: "Death",
+          stroke: "#b54a4a",
+          fill: "rgba(181, 74, 74, 0.07)",
+          resultFill: "rgba(181, 74, 74, 0.13)",
+          textColor: "#4a2020",
+          resultColor: "#991b1b"
+        },
+        {
+          y: padY + rowH + gap,
+          label: "Mortifying your sin",
+          result: "Life",
+          stroke: "#2f7d32",
+          fill: "rgba(47, 125, 50, 0.07)",
+          resultFill: "rgba(47, 125, 50, 0.13)",
+          textColor: "#1a3a1c",
+          resultColor: "#166534"
+        }
+      ];
+
+      rows.forEach(function(r) {
+        var leftBox = rc.rectangle(padX, r.y, leftW, rowH, {
+          stroke: r.stroke, strokeWidth: 1.6, roughness: 1.2,
+          fill: r.fill, fillStyle: "solid", bowing: 1.5
+        });
+        svg.appendChild(leftBox);
+
+        var rightBox = rc.rectangle(rightX, r.y, rightW, rowH, {
+          stroke: r.stroke, strokeWidth: 1.8, roughness: 1.2,
+          fill: r.resultFill, fillStyle: "solid", bowing: 1.5
+        });
+        svg.appendChild(rightBox);
+
+        var midY = r.y + rowH / 2;
+        var arrowLine = rc.line(arrowStart, midY, arrowEnd, midY, {
+          stroke: r.stroke, strokeWidth: 1.8, roughness: 1
+        });
+        svg.appendChild(arrowLine);
+
+        var headSize = 9;
+        var arrowHead = rc.polygon([
+          [arrowEnd, midY],
+          [arrowEnd - headSize, midY - headSize * 0.65],
+          [arrowEnd - headSize, midY + headSize * 0.65]
+        ], {
+          stroke: r.stroke, strokeWidth: 1.4, roughness: 0.6,
+          fill: r.stroke, fillStyle: "solid"
+        });
+        svg.appendChild(arrowHead);
+
+        var labelEl = document.createElementNS(svgNS, "text");
+        labelEl.setAttribute("x", padX + leftW / 2);
+        labelEl.setAttribute("y", midY);
+        labelEl.setAttribute("text-anchor", "middle");
+        labelEl.setAttribute("dominant-baseline", "central");
+        labelEl.setAttribute("fill", r.textColor);
+        labelEl.setAttribute("font-family", "Inter, system-ui, sans-serif");
+        labelEl.setAttribute("font-size", "15");
+        labelEl.setAttribute("font-weight", "500");
+        labelEl.textContent = r.label;
+        svg.appendChild(labelEl);
+
+        var resultEl = document.createElementNS(svgNS, "text");
+        resultEl.setAttribute("x", rightX + rightW / 2);
+        resultEl.setAttribute("y", midY);
+        resultEl.setAttribute("text-anchor", "middle");
+        resultEl.setAttribute("dominant-baseline", "central");
+        resultEl.setAttribute("fill", r.resultColor);
+        resultEl.setAttribute("font-family", "Inter, system-ui, sans-serif");
+        resultEl.setAttribute("font-size", "17");
+        resultEl.setAttribute("font-weight", "700");
+        resultEl.setAttribute("letter-spacing", "-0.02em");
+        resultEl.textContent = r.result;
+        svg.appendChild(resultEl);
+      });
+
+      if (!prefersReducedMotion) {
+        gsap.set(diagramEl, { clipPath: "inset(0 100% 0 0)" });
+        gsap.to(diagramEl, {
+          scrollTrigger: {
+            trigger: diagramEl.closest(".js-section") || diagramEl,
+            start: "top 85%",
+            toggleActions: "play none none none"
+          },
+          clipPath: "inset(0 0% 0 0)",
+          duration: 1,
+          ease: "power2.inOut"
+        });
+      }
+    }
+
+    const diagram2El = document.querySelector(".js-rough-diagram-2");
+    if (diagram2El && typeof rough !== "undefined") {
+      const W = 620, H = 220;
+      const svgNS = "http://www.w3.org/2000/svg";
+      const svg2 = document.createElementNS(svgNS, "svg");
+      svg2.setAttribute("viewBox", "0 0 " + W + " " + H);
+      svg2.setAttribute("preserveAspectRatio", "xMidYMid meet");
+      diagram2El.appendChild(svg2);
+
+      const rc2 = rough.svg(svg2);
+
+      var boxH = 50, boxGap = 12, arrowLen = 36;
+      var topY = 14;
+      var col1X = 10, col1W = 140;
+      var col2X = col1X + col1W + arrowLen + boxGap;
+      var col2W = 190;
+      var col3X = col2X + col2W + arrowLen + boxGap;
+      var col3W = 160;
+
+      var warmStroke = "#8b5c3e";
+      var warmFill = "rgba(139, 92, 62, 0.06)";
+      var warmText = "#5c3a24";
+      var hotStroke = "#b54a4a";
+      var hotFill = "rgba(181, 74, 74, 0.10)";
+      var hotText = "#7a2020";
+      var greenStroke = "#2f7d32";
+      var greenFill = "rgba(47, 125, 50, 0.08)";
+      var greenText = "#1a5c1e";
+
+      var midRow = topY + boxH / 2;
+
+      svg2.appendChild(rc2.rectangle(col1X, topY, col1W, boxH, {
+        stroke: warmStroke, strokeWidth: 1.6, roughness: 1.3,
+        fill: warmFill, fillStyle: "solid", bowing: 1.5
+      }));
+
+      svg2.appendChild(rc2.rectangle(col2X, topY, col2W, boxH, {
+        stroke: hotStroke, strokeWidth: 1.6, roughness: 1.3,
+        fill: hotFill, fillStyle: "solid", bowing: 1.5
+      }));
+
+      svg2.appendChild(rc2.rectangle(col3X, topY, col3W, boxH, {
+        stroke: hotStroke, strokeWidth: 1.8, roughness: 1.3,
+        fill: "rgba(181, 74, 74, 0.14)", fillStyle: "solid", bowing: 1.5
+      }));
+
+      function drawArrow2(x1, x2, y, color) {
+        svg2.appendChild(rc2.line(x1, y, x2, y, {
+          stroke: color, strokeWidth: 1.8, roughness: 1
+        }));
+        var hs = 8;
+        svg2.appendChild(rc2.polygon([
+          [x2, y], [x2 - hs, y - hs * 0.6], [x2 - hs, y + hs * 0.6]
+        ], {
+          stroke: color, strokeWidth: 1.4, roughness: 0.5,
+          fill: color, fillStyle: "solid"
+        }));
+      }
+
+      drawArrow2(col1X + col1W + 8, col2X - 8, midRow, warmStroke);
+      drawArrow2(col2X + col2W + 8, col3X - 8, midRow, hotStroke);
+
+      var mortY = topY + boxH + 40;
+      var mortW = 155;
+      var mortX = col2X + (col2W - mortW) / 2;
+
+      svg2.appendChild(rc2.rectangle(mortX, mortY, mortW, boxH, {
+        stroke: greenStroke, strokeWidth: 1.8, roughness: 1.2,
+        fill: greenFill, fillStyle: "solid", bowing: 1.5
+      }));
+
+      var dashFrom = col2X + col2W / 2;
+      var dashTop = topY + boxH + 4;
+      var dashBot = mortY - 4;
+      for (var dy = dashTop; dy < dashBot; dy += 8) {
+        svg2.appendChild(rc2.line(dashFrom, dy, dashFrom, Math.min(dy + 4, dashBot), {
+          stroke: greenStroke, strokeWidth: 1.6, roughness: 0.8
+        }));
+      }
+      var hs2 = 7;
+      svg2.appendChild(rc2.polygon([
+        [dashFrom, dashBot], [dashFrom - hs2 * 0.6, dashBot - hs2], [dashFrom + hs2 * 0.6, dashBot - hs2]
+      ], {
+        stroke: greenStroke, strokeWidth: 1.2, roughness: 0.5,
+        fill: greenStroke, fillStyle: "solid"
+      }));
+
+      var crossCx = (col2X + col2W + 8 + col3X - 8) / 2;
+      var crossSize = 10;
+      svg2.appendChild(rc2.line(crossCx - crossSize, midRow - crossSize, crossCx + crossSize, midRow + crossSize, {
+        stroke: greenStroke, strokeWidth: 2.5, roughness: 0.8
+      }));
+      svg2.appendChild(rc2.line(crossCx - crossSize, midRow + crossSize, crossCx + crossSize, midRow - crossSize, {
+        stroke: greenStroke, strokeWidth: 2.5, roughness: 0.8
+      }));
+
+      function addLabel2(x, y, text, color, size, weight) {
+        var el = document.createElementNS(svgNS, "text");
+        el.setAttribute("x", x);
+        el.setAttribute("y", y);
+        el.setAttribute("text-anchor", "middle");
+        el.setAttribute("dominant-baseline", "central");
+        el.setAttribute("fill", color);
+        el.setAttribute("font-family", "Inter, system-ui, sans-serif");
+        el.setAttribute("font-size", size);
+        el.setAttribute("font-weight", weight);
+        el.textContent = text;
+        svg2.appendChild(el);
+      }
+
+      addLabel2(col1X + col1W / 2, midRow, "Indwelling Sin", warmText, "14", "500");
+      addLabel2(col2X + col2W / 2, midRow, "Sinful Desire / Temptation", hotText, "14.5", "500");
+      addLabel2(col3X + col3W / 2, midRow, "Deeds of the Flesh", "#991b1b", "14.5", "700");
+      addLabel2(mortX + mortW / 2, mortY + boxH / 2, "Mortification", greenText, "14.5", "700");
+
+      var breakLabel = document.createElementNS(svgNS, "text");
+      breakLabel.setAttribute("x", mortX + mortW / 2);
+      breakLabel.setAttribute("y", mortY + boxH + 18);
+      breakLabel.setAttribute("text-anchor", "middle");
+      breakLabel.setAttribute("dominant-baseline", "central");
+      breakLabel.setAttribute("fill", greenStroke);
+      breakLabel.setAttribute("font-family", "Inter, system-ui, sans-serif");
+      breakLabel.setAttribute("font-size", "11");
+      breakLabel.setAttribute("font-weight", "500");
+      breakLabel.setAttribute("font-style", "italic");
+      breakLabel.textContent = "breaks the chain";
+      svg2.appendChild(breakLabel);
+
+      if (!prefersReducedMotion) {
+        gsap.set(diagram2El, { clipPath: "inset(0 100% 0 0)" });
+        gsap.to(diagram2El, {
+          scrollTrigger: {
+            trigger: diagram2El.closest(".js-section") || diagram2El,
+            start: "top 85%",
+            toggleActions: "play none none none"
+          },
+          clipPath: "inset(0 0% 0 0)",
+          duration: 1,
+          ease: "power2.inOut"
+        });
+      }
+    }
+  </script>
+</body>
+</html>
