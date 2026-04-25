@@ -1,0 +1,603 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>STAT 101B — Field Notes on Experimental Design & ANOVA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..900&family=IBM+Plex+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: { extend: {
+    colors: { ink:'#161513', ink2:'#2A2724', mute:'#6B655C', rule:'#D9D2C2',
+              cream:'#F4EFE6', cream2:'#EBE4D4', paper:'#FBF8F1',
+              accent:'#C8401F', accent2:'#7A5B2E', ok:'#3F6B3A', warn:'#A8761B' },
+    fontFamily: { display:['Fraunces','serif'], sans:['IBM Plex Sans','system-ui','sans-serif'], mono:['JetBrains Mono','ui-monospace','monospace'] },
+  } },
+};
+</script>
+<style>
+  html,body{background:#F4EFE6;color:#161513;font-family:'IBM Plex Sans',system-ui,sans-serif}
+  .font-display{font-family:'Fraunces',serif;font-optical-sizing:auto}
+  .display-tight{letter-spacing:-0.02em}
+  .small-caps{font-variant-caps:all-small-caps;letter-spacing:0.12em}
+  .hairline{box-shadow:inset 0 0 0 1px #D9D2C2}
+  .katex{font-size:1.05em}
+  section[id]{scroll-margin-top:80px}
+  .fade-in{animation:fi .6s cubic-bezier(.22,1,.36,1) both}
+  @keyframes fi{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  details>summary{list-style:none;cursor:pointer}
+  details>summary::-webkit-details-marker{display:none}
+</style>
+</head>
+<body>
+<div id="root">
+  <div class="max-w-3xl mx-auto py-20 px-6 font-display text-4xl text-ink">Loading…</div>
+</div>
+<script>
+window.addEventListener('error', (e) => {
+  const r = document.getElementById('root');
+  if (r) r.innerHTML = '<pre style="padding:20px;color:#C8401F;font-family:monospace;white-space:pre-wrap;font-size:12px;">ERROR: ' + (e.message||e.error||'unknown') + '\n' + (e.filename||'') + ':' + (e.lineno||'') + '</pre>';
+}, true);
+</script>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"></script>
+
+<script type="text/babel">
+const { useState, useEffect, useRef, useMemo } = React;
+
+function K({ tex, display = false }) {
+  const ref = useRef(null);
+  useEffect(() => {
+    if (!ref.current || !window.katex) return;
+    try { window.katex.render(tex, ref.current, { displayMode: display, throwOnError: false }); }
+    catch(e) { ref.current.textContent = tex; }
+  }, [tex, display]);
+  return React.createElement(display ? 'div' : 'span', { ref });
+}
+
+function Reveal({ children, delay = 0 }) {
+  const ref = useRef(null);
+  const [v, setV] = useState(false);
+  useEffect(() => {
+    if (!ref.current) return;
+    const o = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setV(true); o.disconnect(); } }, { threshold: 0.05 });
+    o.observe(ref.current); return () => o.disconnect();
+  }, []);
+  return <div ref={ref} style={{opacity:v?1:0,transform:`translateY(${v?0:10}px)`,transition:`opacity .55s cubic-bezier(.22,1,.36,1) ${delay}s,transform .55s cubic-bezier(.22,1,.36,1) ${delay}s`}}>{children}</div>;
+}
+
+function SectionHeading({ n, kicker, title, lede }) {
+  return (
+    <header className="mb-10">
+      <Reveal><div className="flex items-baseline gap-4 mb-3"><span className="font-mono text-xs small-caps text-mute">§ {n}</span><span className="font-mono text-xs small-caps text-accent">{kicker}</span></div></Reveal>
+      <Reveal delay={0.05}><h2 className="font-display display-tight text-5xl md:text-6xl font-light leading-[0.98] text-ink max-w-3xl">{title}</h2></Reveal>
+      {lede && <Reveal delay={0.1}><p className="mt-5 max-w-2xl text-ink2/80 text-[15.5px] leading-relaxed">{lede}</p></Reveal>}
+      <Reveal delay={0.15}><div className="mt-8 h-px bg-rule" /></Reveal>
+    </header>
+  );
+}
+
+// ---------- HERO ----------
+function Hero() {
+  return (
+    <section className="max-w-7xl mx-auto px-6 md:px-10 pt-16 pb-24">
+      <div className="flex items-baseline gap-3 mb-6 fade-in">
+        <span className="font-mono text-[11px] small-caps text-accent">A field reference</span>
+        <span className="h-px w-10 bg-rule inline-block" />
+        <span className="font-mono text-[11px] small-caps text-mute">Spring 2026 · Midterm prep</span>
+      </div>
+      <h1 className="font-display display-tight font-light leading-[0.92] text-ink fade-in" style={{fontSize:'clamp(48px,7.6vw,112px)',animationDelay:'.1s'}}>
+        Experimental design,<br/><em>analysed.</em>
+      </h1>
+      <p className="mt-8 max-w-2xl text-[16px] leading-relaxed text-ink2/85 fade-in" style={{animationDelay:'.2s'}}>
+        A working reference for the STAT&nbsp;101B midterm. Factor types, CRD vs RBD, the ANOVA table, F-tests, interactions, diagnostics, coefficients.
+      </p>
+    </section>
+  );
+}
+
+// ---------- NAV ----------
+const NAV = [
+  ['factors','01','Factors'],['designs','02','CRD vs RBD'],['models','03','Models'],
+  ['anova','04','ANOVA'],['ftest','05','F-test'],['interaction','06','Interaction'],
+  ['diag','07','Diagnostics'],['coef','08','Coefficients'],['gloss','09','Glossary'],
+];
+function TopNav() {
+  const jump = (id) => { const el = document.getElementById(id); if (el) window.scrollTo({top:el.offsetTop-70,behavior:'smooth'}); };
+  return (
+    <nav className="sticky top-0 z-40 bg-cream/85 backdrop-blur-md border-b border-rule">
+      <div className="max-w-7xl mx-auto px-6 md:px-10 h-14 flex items-center gap-6">
+        <div className="font-display text-xl tracking-tight">STAT&nbsp;101B</div>
+        <div className="hidden md:flex gap-1 ml-auto overflow-x-auto">
+          {NAV.map(([id,n,lbl]) => (
+            <button key={id} onClick={() => jump(id)} className="px-3 py-1.5 text-[12.5px] text-ink2 hover:text-accent transition">
+              <span className="font-mono text-[10px] text-mute mr-1.5">{n}</span>{lbl}
+            </button>
+          ))}
+        </div>
+      </div>
+    </nav>
+  );
+}
+
+// ---------- SECTION 1: FACTORS ----------
+const FACTORS = [
+  { name:'Design (treatment)', short:'Deliberately varied', color:'#C8401F',
+    def:'Levels set by the experimenter to study their effect on the response.',
+    ex:['Nutrient solution in an algae study','KeySize & KeyboardFeel in a typing study'] },
+  { name:'Held constant', short:'Frozen at one level', color:'#7A5B2E',
+    def:'Known to affect the response but fixed at a single level — limits inference scope.',
+    ex:['Water temperature pinned at 18°C','Only college-age volunteers tested'] },
+  { name:'Blocking', short:'Controlled, not studied', color:'#2E5E8A',
+    def:'Not of interest, but known to affect the response. Grouped into blocks before randomization.',
+    ex:['Trucks in the diesel oil RBD','Graduating year in the MBA study'] },
+  { name:'Uncontrollable', short:'Noise source', color:'#6B655C',
+    def:'Affects the response but cannot be set or held — ends up in the error term.',
+    ex:['Minute differences in sunlight on plots','Subject caffeine intake'] },
+  { name:'Response', short:'What you measure', color:'#161513',
+    def:'The measured outcome — the dependent variable.',
+    ex:['Algal biomass','Typing speed (wpm)'] },
+];
+function S1() {
+  return (
+    <section id="factors" className="max-w-7xl mx-auto px-6 md:px-10 py-20">
+      <SectionHeading n="01" kicker="Vocabulary" title="Five kinds of factor."
+        lede="Every variable in an experiment plays one of five roles. Misclassify it and the rest of your analysis tilts." />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+        {FACTORS.map((f,i) => (
+          <Reveal key={f.name} delay={i*0.06}>
+            <div className="bg-paper hairline rounded-sm p-5 h-full">
+              <div className="flex justify-between items-center"><span className="font-mono text-[10px] small-caps" style={{color:f.color}}>{f.short}</span><span className="w-2 h-2 rounded-full" style={{background:f.color}} /></div>
+              <h4 className="font-display text-[20px] leading-tight mt-3">{f.name}</h4>
+              <p className="mt-2 text-[13px] text-ink2/85">{f.def}</p>
+              <div className="mt-4 pt-3 border-t border-rule">
+                <div className="font-mono text-[10px] small-caps text-mute mb-1.5">Examples</div>
+                <ul className="space-y-1">{f.ex.map((e,j) => <li key={j} className="text-[12.5px] text-ink2/90 flex gap-1.5"><span style={{color:f.color}}>▸</span><span>{e}</span></li>)}</ul>
+              </div>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ---------- SECTION 2: CRD vs RBD ----------
+function S2() {
+  const [block, setBlock] = useState(false);
+  const N = 12, K = 3;
+  const subs = useMemo(() => Array.from({length:N},(_,i)=>({id:i,lbl:String.fromCharCode(65+i),g:i%2?'M':'F',tx:i%K})), []);
+  const TX = ['#C8401F','#2E5E8A','#7A5B2E'];
+  return (
+    <section id="designs" className="max-w-7xl mx-auto px-6 md:px-10 py-20 bg-cream2/40">
+      <SectionHeading n="02" kicker="Two designs" title="Completely randomized vs. randomized block."
+        lede="CRD assigns treatments with no structure. RBD groups subjects on a nuisance variable first, then randomizes within each block." />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div className="bg-paper hairline rounded-sm p-6">
+          <div className="font-display text-[24px]">Completely randomized (CRD)</div>
+          <p className="text-[13.5px] text-ink2/85 mt-2">Shuffle subjects; deal into K treatment piles.</p>
+          <div className="mt-4 pt-4 border-t border-rule font-mono text-[12px] grid grid-cols-2 gap-y-1">
+            <span>Treatment df</span><span className="text-mute text-right">k − 1</span>
+            <span>Error df</span><span className="text-mute text-right">N − k</span>
+            <span>Total df</span><span className="text-mute text-right">N − 1</span>
+          </div>
+        </div>
+        <div className="bg-paper hairline rounded-sm p-6">
+          <div className="font-display text-[24px]">Randomized block (RBD)</div>
+          <p className="text-[13.5px] text-ink2/85 mt-2">Group on a nuisance variable (block); run a CRD within each block.</p>
+          <div className="mt-4 pt-4 border-t border-rule font-mono text-[12px] grid grid-cols-2 gap-y-1">
+            <span>Treatment df</span><span className="text-mute text-right">a − 1</span>
+            <span>Block df</span><span className="text-mute text-right">b − 1</span>
+            <span>Error df</span><span className="text-mute text-right">(a−1)(b−1)</span>
+            <span>Total df</span><span className="text-mute text-right">ab − 1</span>
+          </div>
+        </div>
+      </div>
+      <div className="bg-paper hairline rounded-sm p-5">
+        <div className="flex items-center justify-between mb-4">
+          <div className="font-display text-[20px]">{block?'Randomized block assignment':'Completely randomized assignment'}</div>
+          <button onClick={()=>setBlock(b=>!b)} className="font-mono text-[11px] small-caps px-3 py-1.5 bg-ink text-cream rounded-sm">{block?'switch to CRD':'switch to RBD'}</button>
+        </div>
+        <div className="grid gap-2" style={{gridTemplateColumns:`repeat(${K},1fr)`}}>
+          {Array.from({length:K}).map((_,k) => (
+            <div key={k} className="space-y-2">
+              <div className="font-mono text-[10px] small-caps text-center" style={{color:TX[k]}}>Treatment {k+1}</div>
+              {subs.filter(s=>s.tx===k).sort((a,b)=>block?a.g.localeCompare(b.g):0).map(s=>(
+                <div key={s.id} className="bg-cream rounded-sm py-2 px-3 text-center" style={{boxShadow:`inset 0 0 0 1.5px ${TX[k]}`,color:TX[k],transition:'all .4s cubic-bezier(.22,1,.36,1)'}}>
+                  <div className="font-display text-lg leading-none">{s.lbl}</div>
+                  <div className="font-mono text-[9px] small-caps text-mute mt-0.5">{s.g}</div>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+        <div className="mt-5 pt-4 border-t border-rule">
+          <div className="flex justify-between text-[11px] font-mono text-mute mb-1"><span>Error variance</span><span>{block?'SSE = 58':'SSE = 100'}</span></div>
+          <div className="h-8 flex rounded-sm overflow-hidden bg-cream2">
+            <div className="h-full bg-ink" style={{width:block?'58%':'100%',transition:'width .7s cubic-bezier(.22,1,.36,1)'}} />
+            <div className="h-full flex items-center justify-center text-[10px] font-mono small-caps text-cream" style={{background:'#2E5E8A',width:block?'42%':'0%',transition:'width .7s cubic-bezier(.22,1,.36,1)'}}>{block&&'block'}</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ---------- SECTION 3: MODELS ----------
+const MODELS = [
+  { id:'oneway', name:'One-way', tex:'Y_{ij} = \\mu + \\alpha_i + \\varepsilon_{ij}', terms:[['μ','grand mean'],['αᵢ','treatment effect'],['εᵢⱼ','random error']] },
+  { id:'rbd', name:'RBD', tex:'Y_{ij} = \\mu + \\alpha_i + \\beta_j + \\varepsilon_{ij}', terms:[['μ','grand mean'],['αᵢ','treatment effect'],['βⱼ','block effect'],['εᵢⱼ','residual']] },
+  { id:'two', name:'Two-way w/ interaction', tex:'Y_{ijk} = \\mu + \\alpha_i + \\beta_j + (\\alpha\\beta)_{ij} + \\varepsilon_{ijk}', terms:[['μ','grand mean'],['αᵢ','main effect A'],['βⱼ','main effect B'],['(αβ)ᵢⱼ','interaction'],['εᵢⱼₖ','within-cell residual']] },
+];
+function S3() {
+  const [id, setId] = useState('two');
+  const m = MODELS.find(x=>x.id===id);
+  return (
+    <section id="models" className="max-w-7xl mx-auto px-6 md:px-10 py-20">
+      <SectionHeading n="03" kicker="The math" title="Mathematical models."
+        lede="Same skeleton, different organs. Each term carries a job; each model adds one." />
+      <div className="bg-paper hairline rounded-sm p-6">
+        <div className="flex gap-2 mb-6 flex-wrap">
+          {MODELS.map(x => (
+            <button key={x.id} onClick={()=>setId(x.id)} className={`font-mono text-[10.5px] small-caps px-3 py-1.5 rounded-sm border transition ${id===x.id?'bg-ink text-cream border-ink':'border-rule text-ink2 hover:border-ink'}`}>{x.name}</button>
+          ))}
+        </div>
+        <div className="font-display text-[28px] md:text-[32px] leading-tight mb-6"><K tex={m.tex} display /></div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2">
+          {m.terms.map((t,i) => (
+            <div key={i} className="flex items-baseline gap-3 py-2 border-b border-rule">
+              <span className="font-display text-lg text-accent w-20">{t[0]}</span>
+              <span className="text-[13px] text-ink2/85">{t[1]}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ---------- SECTION 4: ANOVA ----------
+function S4() {
+  const [a,setA] = useState(3), [b,setB] = useState(2), [n,setN] = useState(3);
+  const rows = [
+    ['A', a-1, '#C8401F'],['B', b-1, '#2E5E8A'],['A × B',(a-1)*(b-1),'#6B3A8A'],
+    ['Error', a*b*(n-1),'#6B655C'],['Total', a*b*n-1,'#161513']
+  ];
+  return (
+    <section id="anova" className="max-w-7xl mx-auto px-6 md:px-10 py-20 bg-cream2/40">
+      <SectionHeading n="04" kicker="The heart of the course" title="The ANOVA table."
+        lede="Treat the table as a system of equations. One identity per row, and every blank is a one-line calculation." />
+      <div className="grid grid-cols-12 gap-5">
+        <div className="col-span-12 md:col-span-5 bg-paper hairline rounded-sm p-5 space-y-4">
+          <div className="font-mono text-[10px] small-caps text-mute">Two-way factorial · a × b × n</div>
+          {[['a · levels of A',a,setA,2,6],['b · levels of B',b,setB,2,5],['n · replicates',n,setN,1,6]].map(([l,v,s,mn,mx]) => (
+            <div key={l}>
+              <div className="flex justify-between text-[12px] mb-1"><span>{l}</span><span className="font-mono text-accent">{v}</span></div>
+              <input type="range" min={mn} max={mx} value={v} onChange={e=>s(+e.target.value)} className="w-full accent-[#C8401F]" />
+            </div>
+          ))}
+          <div className="font-mono text-[12px] text-mute pt-2 border-t border-rule">N = a · b · n = <span className="text-accent">{a*b*n}</span></div>
+        </div>
+        <div className="col-span-12 md:col-span-7 bg-paper hairline rounded-sm p-5">
+          <table className="w-full font-mono text-[12.5px]">
+            <thead><tr className="text-[10px] small-caps text-mute border-b border-rule">
+              <th className="text-left py-2">Source</th><th className="text-left py-2">Formula</th><th className="text-right py-2">df</th>
+            </tr></thead>
+            <tbody>{rows.map(([src,df,c])=>(
+              <tr key={src} className="border-b border-rule">
+                <td className="py-2.5" style={{color:c}}>{src}</td>
+                <td className="py-2.5 text-mute text-[11px]">{src==='A'?'a − 1':src==='B'?'b − 1':src==='A × B'?'(a−1)(b−1)':src==='Error'?'ab(n − 1)':'abn − 1'}</td>
+                <td className="py-2.5 text-right text-accent">{df}</td>
+              </tr>))}</tbody>
+          </table>
+          <div className="mt-4 pt-3 border-t border-rule text-[12px] text-ink2/85">
+            <strong className="text-ink">Identities:</strong> MS = SS/df · F = MS<sub>effect</sub>/MSE · SSE = SST − Σ SS<sub>effects</sub>
+          </div>
+        </div>
+        <div className="col-span-12 bg-ink text-cream rounded-sm p-5">
+          <div className="font-mono text-[10px] small-caps text-accent mb-2">Worked example — Keyboard study (3×2, n=3)</div>
+          <table className="w-full font-mono text-[12.5px]">
+            <thead><tr className="text-[10px] small-caps text-cream/60 border-b border-cream/15">
+              <th className="text-left py-2">Source</th><th className="text-right py-2">df</th><th className="text-right py-2">SS</th><th className="text-right py-2">MS</th><th className="text-right py-2">F</th><th className="text-right py-2">p</th>
+            </tr></thead>
+            <tbody>
+              {[['Key.Size',2,27.78,13.89,6.25,'0.014'],['Keyboard.Feel',1,80.22,80.22,36.10,'<.001'],['Size × Feel',2,35.78,17.89,8.05,'0.006'],['Error',12,26.67,2.22,'—',''],['Total',17,170.45,'—','—','']].map(r=>(
+                <tr key={r[0]} className="border-b border-cream/10"><td className="py-2">{r[0]}</td><td className="py-2 text-right text-accent">{r[1]}</td><td className="py-2 text-right">{r[2]}</td><td className="py-2 text-right">{r[3]}</td><td className="py-2 text-right">{r[4]}</td><td className="py-2 text-right text-cream/60">{r[5]}</td></tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ---------- SECTION 5: F-TEST ----------
+function S5() {
+  const [d1,setD1] = useState(2), [d2,setD2] = useState(12), [f,setF] = useState(3.5);
+  // simple F critical lookup (α=.05) — approximate
+  const crits = { '2,12':3.89,'1,12':4.75,'3,12':3.49,'2,8':4.46,'2,24':3.40,'2,6':5.14,'4,12':3.26,'5,12':3.11 };
+  const crit = crits[`${d1},${d2}`] || 3.5;
+  const reject = f >= crit;
+  return (
+    <section id="ftest" className="max-w-7xl mx-auto px-6 md:px-10 py-20">
+      <SectionHeading n="05" kicker="The test" title="The F-test."
+        lede="Under H₀, F ≈ 1. Under Hₐ, MS_effect inflates while MSE doesn't. Large F ⇒ reject H₀." />
+      <div className="grid grid-cols-12 gap-5">
+        <div className="col-span-12 md:col-span-6 bg-ink text-cream rounded-sm p-6">
+          <div className="font-mono text-[10px] small-caps text-accent mb-2">Hypotheses</div>
+          <div className="mb-4"><K tex="H_0:\ \mu_1 = \mu_2 = \cdots = \mu_k" display /></div>
+          <div><K tex="H_A:\ \text{at least two } \mu_i \text{ differ}" display /></div>
+          <p className="mt-4 text-[13px] text-cream/70">Not "all different." Rejecting H₀ doesn't say which pairs differ — that's a follow-up test.</p>
+        </div>
+        <div className="col-span-12 md:col-span-6 bg-paper hairline rounded-sm p-6 space-y-3">
+          <div className="font-mono text-[10px] small-caps text-mute mb-1">Try an F</div>
+          <div>
+            <div className="flex justify-between text-[12px]"><span>df₁</span><span className="font-mono text-accent">{d1}</span></div>
+            <input type="range" min="1" max="5" value={d1} onChange={e=>setD1(+e.target.value)} className="w-full accent-[#C8401F]" />
+          </div>
+          <div>
+            <div className="flex justify-between text-[12px]"><span>df₂</span><span className="font-mono text-accent">{d2}</span></div>
+            <input type="range" min="6" max="24" step="2" value={d2} onChange={e=>setD2(+e.target.value)} className="w-full accent-[#C8401F]" />
+          </div>
+          <div>
+            <div className="flex justify-between text-[12px]"><span>F statistic</span><span className="font-mono text-accent">{f.toFixed(2)}</span></div>
+            <input type="range" min="0" max="8" step="0.1" value={f} onChange={e=>setF(+e.target.value)} className="w-full accent-[#C8401F]" />
+          </div>
+          <div className="font-mono text-[11px] text-mute">F_crit(α=.05) ≈ {crit}</div>
+          <div className={`mt-2 p-3 rounded-sm font-mono text-[12px] small-caps text-center ${reject?'bg-accent text-cream':'bg-cream2 text-ink'}`}>{reject?'Reject H₀':'Fail to reject H₀'}</div>
+        </div>
+        <div className="col-span-12 grid grid-cols-1 md:grid-cols-3 gap-4">
+          {[['F ≥ 0 always','It\'s a ratio of non-negative mean squares.'],['F ≈ 1 under H₀','Both MS estimate σ² when the null is true.'],['One-tailed test','We only reject in the right tail. Small F never rejects.']].map(([t,b])=>(
+            <div key={t} className="bg-paper hairline rounded-sm p-4"><div className="font-display text-[18px]">{t}</div><p className="mt-2 text-[13px] text-ink2/85">{b}</p></div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ---------- SECTION 6: INTERACTION ----------
+function Plot({ lines, w=260, h=160 }) {
+  const P = 28, xMin = -.3, xMax = 2.3;
+  const allY = lines.flatMap(l=>l.ys);
+  const yMin = Math.min(...allY) - 0.5, yMax = Math.max(...allY) + 0.5;
+  const xp = x => P + ((x-xMin)/(xMax-xMin))*(w-2*P);
+  const yp = y => h-P - ((y-yMin)/(yMax-yMin))*(h-2*P);
+  return (
+    <svg viewBox={`0 0 ${w} ${h}`} className="w-full">
+      <line x1={P} y1={h-P} x2={w-P} y2={h-P} stroke="#161513" strokeWidth="0.6" />
+      <line x1={P} y1={P} x2={P} y2={h-P} stroke="#161513" strokeWidth="0.6" />
+      {lines.map((ln,i)=>{
+        const d = [0,1,2].map((x,k)=>`${k?'L':'M'} ${xp(x)} ${yp(ln.ys[k])}`).join(' ');
+        return <g key={i}><path d={d} fill="none" stroke={ln.color} strokeWidth="1.8" />{[0,1,2].map(x=><circle key={x} cx={xp(x)} cy={yp(ln.ys[x])} r="2.5" fill={ln.color} />)}</g>;
+      })}
+    </svg>
+  );
+}
+function S6() {
+  const [k,setK] = useState(0);
+  const b1 = [4,5.2,6.4], b2 = [0,1,2].map((x,i)=>b1[i]-1.2+k*(i-1)*2.4);
+  return (
+    <section id="interaction" className="max-w-7xl mx-auto px-6 md:px-10 py-20 bg-cream2/40">
+      <SectionHeading n="06" kicker="The picture" title="Interaction plots."
+        lede="Parallel = no interaction. Non-parallel = interaction. Lines do not need to cross." />
+      <div className="grid grid-cols-12 gap-5">
+        <div className="col-span-12 md:col-span-5 bg-paper hairline rounded-sm p-6">
+          <div className="font-display text-[20px] mb-3">Slide from parallel to crossing</div>
+          <p className="text-[13.5px] text-ink2/85 mb-4">As one line's slope changes, the gap between lines depends on where you are on the x-axis. That dependence <em>is</em> the interaction.</p>
+          <div className="flex justify-between text-[12px] mb-1"><span>Interaction strength</span><span className="font-mono text-accent">{k.toFixed(2)}</span></div>
+          <input type="range" min="0" max="1" step="0.01" value={k} onChange={e=>setK(+e.target.value)} className="w-full accent-[#C8401F]" />
+        </div>
+        <div className="col-span-12 md:col-span-7 bg-paper hairline rounded-sm p-4">
+          <Plot w={420} h={220} lines={[{color:'#C8401F',ys:b1},{color:'#2E5E8A',ys:b2}]} />
+        </div>
+        <div className="col-span-12 grid grid-cols-1 md:grid-cols-4 gap-3">
+          {[
+            ['Parallel · none','#161513',[{color:'#C8401F',ys:[3,5,7]},{color:'#2E5E8A',ys:[4.5,6.5,8.5]}]],
+            ['Non-parallel','#C8401F',[{color:'#C8401F',ys:[3,5,7]},{color:'#2E5E8A',ys:[6,5.5,5]}]],
+            ['Crossing','#C8401F',[{color:'#C8401F',ys:[3,5.5,8]},{color:'#2E5E8A',ys:[8,5.5,3]}]],
+            ['Battery example','#2E5E8A',[{color:'#C8401F',ys:[134,78,50]},{color:'#2E5E8A',ys:[155,119,96]},{color:'#7A5B2E',ys:[144,146,86]}]],
+          ].map(([t,c,ls])=>(
+            <div key={t} className="bg-paper hairline rounded-sm p-3">
+              <div className="font-mono text-[10px] small-caps mb-1" style={{color:c}}>{t}</div>
+              <Plot lines={ls} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ---------- SECTION 7: DIAGNOSTICS ----------
+function S7() {
+  const rng = (seed) => { let s=seed; return () => (s=(s*9301+49297)%233280)/233280; };
+  const makePts = (kind, mode) => {
+    const r = rng(kind==='rvf'?7:kind==='qq'?11:17); const n=36; const pts=[];
+    for (let i=0;i<n;i++){
+      const x = kind==='qq' ? -2+(4*i/(n-1)) : i/(n-1);
+      let y;
+      if (kind==='rvf') y = mode==='good' ? (r()-.5)*.6 : (r()-.5)*(.3+x*1.4);
+      else if (kind==='qq') y = mode==='good' ? x+(r()-.5)*.25 : x+Math.sign(x)*Math.abs(x)*.5+(r()-.5)*.3;
+      else y = mode==='good' ? (r()-.5)*.6 : (r()-.5)*.4+Math.sin(x*6)*.8;
+      pts.push({x,y});
+    }
+    return pts;
+  };
+  const Plot2 = ({kind, mode}) => {
+    const pts = makePts(kind, mode);
+    const w=300,h=180,P=28;
+    const xMin = kind==='qq'?-2.5:0, xMax = kind==='qq'?2.5:1, yMin = kind==='qq'?-3:-1.4, yMax = kind==='qq'?3:1.4;
+    const xp = x => P+((x-xMin)/(xMax-xMin))*(w-2*P);
+    const yp = y => h-P-((y-yMin)/(yMax-yMin))*(h-2*P);
+    return (<svg viewBox={`0 0 ${w} ${h}`} className="w-full">
+      <line x1={P} y1={h-P} x2={w-P} y2={h-P} stroke="#161513" strokeWidth=".6" />
+      <line x1={P} y1={P} x2={P} y2={h-P} stroke="#161513" strokeWidth=".6" />
+      {kind==='qq'
+        ? <line x1={xp(-2.5)} y1={yp(-2.5)} x2={xp(2.5)} y2={yp(2.5)} stroke="#C8401F" strokeDasharray="3 3" />
+        : <line x1={xp(xMin)} y1={yp(0)} x2={xp(xMax)} y2={yp(0)} stroke="#C8401F" strokeDasharray="3 3" />}
+      {pts.map((p,i)=><circle key={i} cx={xp(p.x)} cy={yp(p.y)} r="2.4" fill="#161513" fillOpacity=".8" />)}
+    </svg>);
+  };
+  const Card = ({title, checks, kind, bad}) => {
+    const [mode, setMode] = useState('good');
+    return (
+      <div className="bg-paper hairline rounded-sm p-5">
+        <div className="flex justify-between items-baseline mb-2">
+          <div><div className="font-mono text-[10px] small-caps text-mute">{checks}</div><div className="font-display text-[18px]">{title}</div></div>
+          <div className="flex border border-rule rounded-sm overflow-hidden">
+            {['good','bad'].map(m=><button key={m} onClick={()=>setMode(m)} className={`font-mono text-[10px] small-caps px-2.5 py-1 ${mode===m?(m==='good'?'bg-ok text-cream':'bg-accent text-cream'):'text-ink2 hover:bg-cream2'}`}>{m}</button>)}
+          </div>
+        </div>
+        <Plot2 kind={kind} mode={mode} />
+        <div className="mt-2 text-[12px] text-ink2/85 min-h-[2.5em]">{mode==='good' ? '✓ Looks fine — residuals scatter randomly.' : `✗ ${bad}`}</div>
+      </div>
+    );
+  };
+  return (
+    <section id="diag" className="max-w-7xl mx-auto px-6 md:px-10 py-20">
+      <SectionHeading n="07" kicker="Trust, but verify" title="Assumptions & diagnostic plots."
+        lede="Errors: independent, normal, constant variance. Plus random assignment and a correct model." />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Card title="Residuals vs. Fitted" checks="Variance · structure" kind="rvf" bad="Funnel shape — variance grows with the fit. Try log or √y." />
+        <Card title="Normal Q-Q" checks="Normality" kind="qq" bad="Heavy tails — residuals deviate from Normal." />
+        <Card title="Residuals vs. Order" checks="Independence" kind="order" bad="Cyclical pattern — observations aren't independent." />
+      </div>
+    </section>
+  );
+}
+
+// ---------- SECTION 8: COEFFICIENTS ----------
+const COEFS = [
+  ['Intercept', 37.7, '#161513', 'Reference: Large × Crisp'],
+  ['Key.SizeMedium', 3.33, '#C8401F', 'Large → Medium, Feel=Crisp'],
+  ['Key.SizeSmall', 1.33, '#C8401F', 'Large → Small, Feel=Crisp'],
+  ['Keyboard.FeelMushy', -3.00, '#2E5E8A', 'Crisp → Mushy, Size=Large'],
+  ['SizeMedium : FeelMushy', -3.33, '#6B3A8A', 'Extra adjustment when Medium AND Mushy'],
+  ['SizeSmall : FeelMushy', -3.00, '#6B3A8A', 'Extra adjustment when Small AND Mushy'],
+];
+function fit(size, feel) {
+  let v = COEFS[0][1];
+  if (size==='Medium') v += COEFS[1][1];
+  if (size==='Small') v += COEFS[2][1];
+  if (feel==='Mushy') v += COEFS[3][1];
+  if (size==='Medium' && feel==='Mushy') v += COEFS[4][1];
+  if (size==='Small' && feel==='Mushy') v += COEFS[5][1];
+  return v;
+}
+function active(size, feel) {
+  const a = [0]; if (size==='Medium') a.push(1); if (size==='Small') a.push(2);
+  if (feel==='Mushy') a.push(3); if (size==='Medium'&&feel==='Mushy') a.push(4);
+  if (size==='Small'&&feel==='Mushy') a.push(5); return a;
+}
+function S8() {
+  const [sel, setSel] = useState({size:'Medium', feel:'Mushy'});
+  const act = active(sel.size, sel.feel);
+  return (
+    <section id="coef" className="max-w-7xl mx-auto px-6 md:px-10 py-20 bg-cream2/40">
+      <SectionHeading n="08" kicker="Reading the model" title="Coefficient interpretation."
+        lede="R uses treatment contrasts. First alphabetical level is the reference. Every coefficient is a shift from there." />
+      <div className="grid grid-cols-12 gap-5">
+        <div className="col-span-12 md:col-span-6 bg-paper hairline rounded-sm p-5">
+          <div className="font-mono text-[10px] small-caps text-mute mb-3">R coefficients</div>
+          {COEFS.map((c,i)=>(
+            <div key={c[0]} className="grid grid-cols-12 py-1.5 px-2 rounded-sm font-mono text-[12.5px]" style={{background:act.includes(i)?'#FFE9C2':'transparent',opacity:act.length===0||act.includes(i)?1:0.4,transition:'all .3s'}}>
+              <span className="col-span-9 truncate" style={{color:c[2]}}>{c[0]}</span>
+              <span className="col-span-3 text-right">{c[1].toFixed(2)}</span>
+            </div>
+          ))}
+        </div>
+        <div className="col-span-12 md:col-span-6 bg-paper hairline rounded-sm p-5">
+          <div className="font-mono text-[10px] small-caps text-mute mb-3">Click a cell</div>
+          <div className="grid grid-cols-[auto_1fr_1fr] gap-2">
+            <div></div>{['Crisp','Mushy'].map(f=><div key={f} className="font-mono text-[10px] small-caps text-mute text-center">{f}</div>)}
+            {['Large','Medium','Small'].map(s=>(
+              <React.Fragment key={s}>
+                <div className="font-mono text-[10px] small-caps text-mute self-center text-right pr-2">{s}</div>
+                {['Crisp','Mushy'].map(f=>{
+                  const isSel = sel.size===s && sel.feel===f;
+                  return <button key={s+f} onClick={()=>setSel({size:s,feel:f})} className={`aspect-[3/2] rounded-sm border flex items-center justify-center transition ${isSel?'bg-ink text-cream border-ink':'border-rule hover:border-ink bg-cream'}`}><span className="font-display text-[22px]">{fit(s,f).toFixed(2)}</span></button>;
+                })}
+              </React.Fragment>
+            ))}
+          </div>
+          <div className="mt-5 pt-4 border-t border-rule">
+            <div className="font-mono text-[10px] small-caps text-mute mb-2">{sel.size} × {sel.feel}</div>
+            {act.map(i=>(
+              <div key={i} className="flex justify-between font-mono text-[12px] py-1 border-b border-rule">
+                <span style={{color:COEFS[i][2]}}>{i===0?'':'+ '}{COEFS[i][0]}</span>
+                <span>{COEFS[i][1].toFixed(2)}</span>
+              </div>
+            ))}
+            <div className="flex justify-between pt-2 mt-1">
+              <span className="font-mono text-[11px] small-caps text-accent">fitted ŷ</span>
+              <span className="font-display text-[26px] text-accent">{fit(sel.size, sel.feel).toFixed(2)}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ---------- SECTION 9: GLOSSARY ----------
+const GLOSS = [
+  ['Double-blind trial','Neither subjects nor experimenters know which treatment a subject received until after the data are recorded.'],
+  ['Confounding factor','A variable that influences the response and is correlated with treatment, making their effects inseparable.'],
+  ['Nuisance factor','A variable that affects the response but is not of scientific interest. You manage it to prevent muddle.'],
+  ['Blocking factor','A nuisance factor handled by grouping experimental units into homogeneous blocks before randomization.'],
+  ['Crossed treatments','Every level of A appears with every level of B — the basis for factorial designs.'],
+  ['Replication','Multiple independent observations under the same treatment combination. Needed to estimate σ².'],
+  ['Randomization','Assigning treatments to units by chance — the procedural defense against confounding.'],
+  ['Type I error · α','Rejecting H₀ when H₀ is true. Conventionally set at 0.05.'],
+  ['Type II error · β','Failing to reject H₀ when Hₐ is true.'],
+  ['Power · 1 − β','Probability of correctly rejecting H₀ when Hₐ is true.'],
+  ['α/β/power relations','Decreasing α raises β and lowers power. More data is the only honest escape.'],
+];
+function S9() {
+  return (
+    <section id="gloss" className="max-w-7xl mx-auto px-6 md:px-10 py-20">
+      <SectionHeading n="09" kicker="Reference" title="Terminology."
+        lede="The vocabulary you'll be expected to use precisely." />
+      <div className="bg-paper hairline rounded-sm p-3">
+        {GLOSS.map((g,i)=>(
+          <details key={g[0]} className="group border-b border-rule py-3 px-2">
+            <summary className="grid grid-cols-12 gap-4 items-baseline">
+              <div className="col-span-12 md:col-span-4 font-display text-[18px]">{g[0]}</div>
+              <div className="col-span-12 md:col-span-7 text-[13.5px] text-ink2/85">{g[1]}</div>
+              <div className="col-span-12 md:col-span-1 md:text-right font-mono text-[11px] text-accent">+</div>
+            </summary>
+          </details>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ---------- APP ----------
+function App() {
+  return (<div>
+    <TopNav /><Hero />
+    <div className="border-t border-rule"></div>
+    <S1 /><S2 /><S3 /><S4 /><S5 /><S6 /><S7 /><S8 /><S9 />
+    <footer className="border-t border-rule py-10 mt-8">
+      <div className="max-w-7xl mx-auto px-6 md:px-10 flex flex-wrap justify-between items-baseline gap-4">
+        <div className="font-display text-xl">STAT 101B — Field Notes</div>
+        <div className="font-mono text-[11px] small-caps text-mute">Midterm reference · spring 2026</div>
+      </div>
+    </footer>
+  </div>);
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+</script>
+</body></html>
