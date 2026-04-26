@@ -600,6 +600,664 @@
     0%   { transform: scale(0.7) translateY(60px); opacity: 0; }
     100% { transform: scale(1) translateY(0); opacity: 1; }
   }
+
+  /* ============================================
+     PILGRIMAGE / ROGUELIKE — TITLE & MODE SELECT
+     ============================================ */
+
+  .t-anim { opacity: 0; animation: titleRise 0.8s cubic-bezier(0.25, 1, 0.5, 1) both; }
+  .t-anim-1 { animation-delay: 0.05s; }
+  .t-anim-2 { animation-delay: 0.20s; }
+  .t-anim-3 { animation-delay: 0.40s; }
+  .t-anim-4 { animation-delay: 0.55s; }
+  .t-anim-5 { animation-delay: 0.75s; }
+  .t-anim-6 { animation-delay: 0.90s; }
+  @keyframes titleRise {
+    from { opacity: 0; transform: translateY(18px) scale(0.96); letter-spacing: 0.7em; }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  h1.title {
+    animation: titleShimmer 4s ease-in-out infinite alternate;
+  }
+  @keyframes titleShimmer {
+    from { text-shadow: 2px 2px 0 var(--gold), 4px 4px 0 var(--oxblood); }
+    to   { text-shadow: 2px 2px 0 var(--gold-bright), 4px 4px 0 var(--oxblood), 0 0 30px rgba(212, 160, 23, 0.45); }
+  }
+
+  .mode-select {
+    display: flex; gap: 18px; flex-wrap: wrap; justify-content: center;
+  }
+
+  .mode-btn {
+    position: relative; min-width: 200px;
+    padding: 14px 28px;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .mode-btn .mode-name { font-size: 14px; letter-spacing: 0.3em; }
+  .mode-btn .mode-sub { font-size: 9px; letter-spacing: 0.2em; opacity: 0.6; font-weight: 400; }
+  .mode-btn:hover .mode-sub { opacity: 0.95; color: var(--gold-bright); }
+
+  .pilgrimage-btn {
+    background: var(--ink);
+    box-shadow: 0 4px 0 var(--oxblood), 0 0 20px rgba(212, 160, 23, 0.25);
+    animation: titleRise 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.75s both, pilgrimGlow 3s ease-in-out 1.6s infinite alternate;
+  }
+  @keyframes pilgrimGlow {
+    from { box-shadow: 0 4px 0 var(--oxblood), 0 0 20px rgba(212, 160, 23, 0.25); }
+    to   { box-shadow: 0 4px 0 var(--oxblood), 0 0 35px rgba(212, 160, 23, 0.7); }
+  }
+  .pilgrimage-btn:hover { background: var(--gold-bright); color: var(--ink); border-color: var(--ink); transform: translateY(-3px); }
+
+  .versus-btn {
+    animation: titleRise 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.90s both, versusPulse 3s ease-in-out 1.6s infinite alternate;
+  }
+  @keyframes versusPulse {
+    from { box-shadow: 0 4px 0 var(--oxblood); }
+    to   { box-shadow: 0 4px 0 var(--oxblood), 0 0 24px rgba(138, 37, 34, 0.55); }
+  }
+
+  /* ============================================
+     RUN HUD (Pilgrimage)
+     ============================================ */
+  .run-hud {
+    display: none;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: -2px;
+    padding: 4px 0;
+  }
+  body.in-pilgrimage .run-hud { display: grid; }
+  body.in-pilgrimage #chapter-label { display: none; }
+
+  .trial-pips {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.3em;
+    color: var(--oxblood); text-transform: uppercase;
+  }
+  .trial-pip {
+    width: 14px; height: 14px;
+    border: 2px solid var(--oxblood);
+    background: transparent;
+    transform: rotate(45deg);
+    transition: all 0.3s ease;
+  }
+  .trial-pip.done { background: var(--gold); border-color: var(--ink); animation: pipFill 0.6s cubic-bezier(0.25, 1, 0.5, 1) both; }
+  .trial-pip.current { background: var(--oxblood); border-color: var(--ink); animation: pipCurrent 1.2s ease-in-out infinite alternate; }
+  .trial-pip.boss { animation: pipBossOmen 1.2s ease-in-out infinite alternate; border-color: #8a2522; }
+  @keyframes pipFill {
+    0%   { transform: rotate(45deg) scale(0); background: var(--gold-bright); box-shadow: 0 0 0 6px rgba(212, 160, 23, 0.6); }
+    60%  { transform: rotate(45deg) scale(1.4); }
+    100% { transform: rotate(45deg) scale(1); box-shadow: 0 0 0 0 transparent; }
+  }
+  @keyframes pipCurrent {
+    from { box-shadow: 0 0 0 0 rgba(107, 26, 24, 0.6); }
+    to   { box-shadow: 0 0 0 6px rgba(107, 26, 24, 0); }
+  }
+  @keyframes pipBossOmen {
+    from { background: #1a0a08; box-shadow: 0 0 0 0 rgba(138, 37, 34, 0); }
+    to   { background: #6b1a18; box-shadow: 0 0 12px rgba(255, 60, 60, 0.7); }
+  }
+
+  .blessing-pips {
+    display: flex; gap: 4px;
+  }
+  .blessing-pip {
+    width: 22px; height: 22px;
+    background: var(--parchment);
+    border: 2px solid var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; line-height: 1;
+    animation: pipStamp 0.5s cubic-bezier(0.25, 1.5, 0.5, 1) both;
+  }
+  @keyframes pipStamp {
+    0%   { opacity: 0; transform: scale(0) rotate(-15deg); }
+    60%  { opacity: 1; transform: scale(1.3) rotate(5deg); }
+    100% { opacity: 1; transform: scale(1) rotate(0); }
+  }
+
+  /* ============================================
+     BLESSING PICK SCREEN
+     ============================================ */
+  #blessing-screen { padding: 28px 36px; }
+  #blessing-screen .greek-tag {
+    animation: titleShimmer 3s ease-in-out infinite alternate;
+  }
+
+  .blessing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    flex: 1;
+    align-content: center;
+    perspective: 1200px;
+  }
+
+  .blessing-card {
+    background: var(--parchment);
+    border: 2px solid var(--ink);
+    padding: 16px 14px;
+    cursor: pointer;
+    display: flex; flex-direction: column;
+    align-items: center; text-align: center;
+    transform-origin: center;
+    transform-style: preserve-3d;
+    animation: cardFlipIn 0.7s cubic-bezier(0.25, 1, 0.5, 1) both;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    position: relative; overflow: hidden;
+  }
+  .blessing-card:nth-child(1) { animation-delay: 0.15s; }
+  .blessing-card:nth-child(2) { animation-delay: 0.30s; }
+  .blessing-card:nth-child(3) { animation-delay: 0.45s; }
+  @keyframes cardFlipIn {
+    0%   { opacity: 0; transform: rotateY(-180deg) translateY(20px); }
+    50%  { opacity: 1; }
+    100% { opacity: 1; transform: rotateY(0) translateY(0); }
+  }
+
+  .blessing-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(120deg, transparent 30%, rgba(255, 248, 220, 0.5) 50%, transparent 70%);
+    transform: translateX(-100%);
+    transition: transform 0.5s ease;
+    pointer-events: none;
+  }
+  .blessing-card:hover {
+    background: var(--ink); color: var(--parchment);
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: 0 12px 0 var(--oxblood), 0 0 30px rgba(212, 160, 23, 0.4);
+  }
+  .blessing-card:hover::before { transform: translateX(100%); }
+  .blessing-card:hover .b-flavor { color: var(--gold-bright); }
+  .blessing-card:hover .b-effect { color: var(--gold-bright); border-color: var(--gold); }
+  .blessing-card.selecting {
+    animation: cardSelect 0.5s cubic-bezier(0.25, 1.5, 0.5, 1) both;
+  }
+  @keyframes cardSelect {
+    0%   { transform: scale(1); }
+    100% { transform: scale(1.18); box-shadow: 0 0 60px rgba(212, 160, 23, 0.9); }
+  }
+  .blessing-card.fading { animation: cardFade 0.4s ease-out both; }
+  @keyframes cardFade {
+    to { opacity: 0; transform: scale(0.8) translateY(20px); }
+  }
+
+  .b-icon { font-size: 44px; margin: 4px 0 8px; text-shadow: 2px 2px 0 var(--gold); animation: bIcon 2.5s ease-in-out infinite alternate; }
+  @keyframes bIcon {
+    from { transform: translateY(0); }
+    to   { transform: translateY(-4px); }
+  }
+  .b-name { font-family: 'Cinzel', serif; font-weight: 700; font-size: 14px; letter-spacing: 0.12em; }
+  .b-flavor { font-family: 'IM Fell English', serif; font-style: italic; font-size: 11px; color: var(--oxblood); margin: 6px 0 8px; min-height: 32px; line-height: 1.3; }
+  .b-effect { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 0.1em; color: var(--ink); border-top: 1px solid var(--oxblood); padding-top: 6px; width: 100%; }
+
+  /* ============================================
+     BATTLE SCREEN POLISH
+     ============================================ */
+  .sprite { animation: spriteBreathe 3.2s ease-in-out infinite alternate; }
+  @keyframes spriteBreathe {
+    from { transform: translateY(0); }
+    to   { transform: translateY(-3px); }
+  }
+  .sprite.hit, .sprite.attack, .sprite.attack-left, .sprite.defeated { animation: none; }
+
+  .ai-thinking { animation: aiPulse 0.5s ease-in-out 2 alternate; }
+  @keyframes aiPulse {
+    from { filter: drop-shadow(0 0 0 transparent); }
+    to   { filter: drop-shadow(0 0 14px #ff4040) brightness(1.2); }
+  }
+
+  .stat-bar.critical .stat-bar-fill { animation: criticalPulse 0.7s ease-in-out infinite alternate; }
+  .stat-bar.critical { box-shadow: 0 0 0 1px var(--gold), 0 0 14px rgba(255, 60, 60, 0.6); }
+  @keyframes criticalPulse {
+    from { filter: brightness(1); }
+    to   { filter: brightness(1.5) saturate(1.4); }
+  }
+
+  .round-sweep {
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold-bright), #fff, var(--gold-bright), transparent);
+    box-shadow: 0 0 20px var(--gold-bright);
+    z-index: 90; pointer-events: none;
+    animation: roundSweep 0.7s ease-out forwards;
+  }
+  @keyframes roundSweep {
+    0%   { transform: translateY(0); opacity: 0; }
+    20%  { opacity: 1; }
+    100% { transform: translateY(540px); opacity: 0; }
+  }
+
+  .damage-popup.big { font-size: 44px; animation: dmgPopBig 1.1s ease-out forwards; }
+  @keyframes dmgPopBig {
+    0%   { opacity: 0; transform: translate(-50%, 0) scale(0.4); }
+    25%  { opacity: 1; transform: translate(-50%, -20px) scale(1.4); text-shadow: 4px 4px 0 var(--ink), 0 0 30px var(--oxblood-bright); }
+    100% { opacity: 0; transform: translate(-50%, -90px) scale(1); }
+  }
+
+  .combatant.entrance { animation: enemyCardArrive 0.8s cubic-bezier(0.25, 1, 0.5, 1) both; }
+  @keyframes enemyCardArrive {
+    0%   { opacity: 0; transform: translateX(140%) rotateY(45deg); }
+    100% { opacity: 1; transform: translateX(0) rotateY(0); }
+  }
+
+  /* ============================================
+     PILGRIMAGE DEFEAT SCREEN
+     ============================================ */
+  #pilgrim-defeat-screen {
+    align-items: center; justify-content: center; text-align: center;
+    background: radial-gradient(ellipse at center, #2a0a08 0%, #050200 100%);
+  }
+  .defeat-overlay {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.7) 100%);
+    pointer-events: none;
+    animation: defeatFade 1.2s ease-out both;
+  }
+  @keyframes defeatFade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .defeat-content {
+    z-index: 5; position: relative;
+    animation: defeatRise 1.4s cubic-bezier(0.25, 1, 0.5, 1) 0.5s both;
+  }
+  @keyframes defeatRise {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .defeat-content .end-title {
+    color: var(--parchment) !important;
+    text-shadow: 0 0 20px var(--oxblood-bright), 4px 4px 0 #000;
+    animation: defeatTitle 1.6s ease-out 0.6s both;
+  }
+  @keyframes defeatTitle {
+    0%   { opacity: 0; letter-spacing: 1em; transform: scale(1.2); }
+    100% { opacity: 1; letter-spacing: 0.05em; transform: scale(1); }
+  }
+  .defeat-content .greek-tag { color: var(--oxblood-bright); }
+  .defeat-content .end-verse, .defeat-trial { color: var(--parchment); }
+  .defeat-trial { font-family: 'Cinzel', serif; font-size: 13px; letter-spacing: 0.4em; margin-bottom: 10px; }
+
+  .defeat-shake { animation: defeatToll 0.4s ease-in-out; }
+  @keyframes defeatToll {
+    0%, 100% { transform: translate(0, 0); }
+    25% { transform: translate(-3px, 1px); }
+    75% { transform: translate(3px, -1px); }
+  }
+
+  /* ============================================
+     PILGRIMAGE VICTORY SCREEN
+     ============================================ */
+  #pilgrim-victory-screen {
+    align-items: center; justify-content: center; text-align: center;
+    overflow: hidden;
+  }
+  .triumph-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center, #fff8dc 0%, #d4a017 30%, #8a4020 70%, #2a1008 100%);
+    animation: defeatFade 0.8s ease-out both;
+  }
+  .triumph-rays {
+    position: absolute; inset: 0;
+    background: conic-gradient(from 0deg, transparent 0deg, rgba(255, 255, 255, 0.3) 30deg, transparent 60deg, rgba(255, 248, 220, 0.2) 90deg, transparent 120deg, rgba(255, 255, 255, 0.3) 150deg, transparent 180deg, rgba(255, 248, 220, 0.2) 210deg, transparent 240deg, rgba(255, 255, 255, 0.3) 270deg, transparent 300deg, rgba(255, 248, 220, 0.2) 330deg, transparent 360deg);
+    animation: triumphRays 14s linear infinite;
+    transform-origin: center;
+  }
+  @keyframes triumphRays { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+
+  .triumph-crown {
+    position: absolute;
+    top: 50px; left: 50%;
+    width: 150px; height: 90px;
+    transform: translateX(-50%);
+    animation: crownRise 1.4s cubic-bezier(0.25, 1.3, 0.5, 1) 0.4s both, crownGlow 2.5s ease-in-out 1.8s infinite alternate;
+    filter: drop-shadow(0 0 20px rgba(212, 160, 23, 0.9));
+    z-index: 6;
+  }
+  @keyframes crownRise {
+    0%   { opacity: 0; transform: translateX(-50%) translateY(40px) scale(0.6); }
+    100% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+  }
+  @keyframes crownGlow {
+    from { filter: drop-shadow(0 0 18px rgba(212, 160, 23, 0.7)); }
+    to   { filter: drop-shadow(0 0 36px rgba(255, 248, 100, 1)); }
+  }
+
+  .triumph-palm {
+    position: absolute;
+    bottom: 0; width: 130px; height: 280px;
+    z-index: 4;
+    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5));
+  }
+  .triumph-palm-l {
+    left: 5%;
+    transform-origin: bottom right;
+    animation: palmFanL 1.2s cubic-bezier(0.25, 1.2, 0.5, 1) 0.6s both;
+  }
+  .triumph-palm-r {
+    right: 5%;
+    transform-origin: bottom left;
+    animation: palmFanR 1.2s cubic-bezier(0.25, 1.2, 0.5, 1) 0.6s both;
+  }
+  @keyframes palmFanL {
+    0%   { opacity: 0; transform: rotate(40deg) translateY(50px); }
+    100% { opacity: 1; transform: rotate(-8deg) translateY(0); }
+  }
+  @keyframes palmFanR {
+    0%   { opacity: 0; transform: rotate(-40deg) translateY(50px); }
+    100% { opacity: 1; transform: rotate(8deg) translateY(0); }
+  }
+
+  .confetti-burst {
+    position: absolute; inset: 0;
+    pointer-events: none; z-index: 5;
+  }
+  .confetti {
+    position: absolute;
+    width: 8px; height: 14px;
+    top: 45%; left: 50%;
+    animation: confettiFly 2.5s cubic-bezier(0.25, 0.5, 0.6, 1) both;
+  }
+  @keyframes confettiFly {
+    0%   { opacity: 1; transform: translate(0, 0) rotate(0); }
+    100% { opacity: 0; transform: translate(var(--cx), var(--cy)) rotate(var(--cr)); }
+  }
+
+  .triumph-content {
+    z-index: 7; position: relative; padding-top: 70px;
+    animation: defeatRise 1.4s cubic-bezier(0.25, 1, 0.5, 1) 1.0s both;
+  }
+  .triumph-greek {
+    color: var(--ink); font-size: 16px; font-weight: 700;
+    text-shadow: 2px 2px 0 var(--gold-bright);
+    margin-bottom: 8px; opacity: 1;
+  }
+  .triumph-title {
+    animation: triumphSlam 0.7s cubic-bezier(0.25, 1.5, 0.5, 1) 1.4s both;
+    color: var(--ink) !important;
+    text-shadow: 3px 3px 0 var(--gold-bright), 6px 6px 0 var(--oxblood);
+  }
+  @keyframes triumphSlam {
+    0%   { opacity: 0; transform: scale(2.5); letter-spacing: 0.8em; }
+    60%  { opacity: 1; transform: scale(0.92); }
+    100% { opacity: 1; transform: scale(1); letter-spacing: 0.05em; }
+  }
+  .triumph-verse { color: var(--ink); border-color: var(--ink); }
+  .triumph-verse .ref { color: var(--oxblood); }
+  .triumph-btn { animation: defeatRise 0.8s ease-out 2.0s both; }
+
+  /* ============================================
+     TRIAL INTRO CINEMATIC
+     ============================================ */
+  .cs-trial-intro {
+    position: absolute; inset: 0;
+    z-index: 105;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    color: #fff8dc;
+    text-align: center;
+  }
+  .cs-trial-numeral {
+    font-family: 'Cinzel', serif; font-weight: 900;
+    font-size: clamp(60px, 9vw, 110px);
+    letter-spacing: 0.15em;
+    color: #fff8dc;
+    text-shadow: 0 0 30px var(--gold-bright), 4px 4px 0 #000;
+    animation: trialNumSlam 0.7s cubic-bezier(0.25, 1.5, 0.5, 1) 0.3s both;
+  }
+  @keyframes trialNumSlam {
+    0%   { opacity: 0; transform: scale(3) rotate(-3deg); letter-spacing: 1em; filter: blur(4px); }
+    60%  { opacity: 1; transform: scale(0.9) rotate(0); filter: blur(0); }
+    100% { opacity: 1; transform: scale(1); letter-spacing: 0.15em; }
+  }
+  .cs-trial-divider {
+    width: 0; height: 2px; background: var(--gold-bright);
+    margin: 14px 0;
+    box-shadow: 0 0 12px var(--gold-bright);
+    animation: trialDivider 0.6s ease-out 0.9s forwards;
+  }
+  @keyframes trialDivider {
+    to { width: 280px; }
+  }
+  .cs-trial-name {
+    font-family: 'Cinzel', serif; font-weight: 700;
+    font-size: clamp(28px, 4vw, 42px);
+    letter-spacing: 0.4em;
+    margin-bottom: 6px;
+    overflow: hidden;
+    animation: trialNameReveal 0.7s cubic-bezier(0.25, 1, 0.5, 1) 1.2s both;
+  }
+  @keyframes trialNameReveal {
+    from { opacity: 0; clip-path: inset(0 100% 0 0); transform: translateY(8px); }
+    to   { opacity: 1; clip-path: inset(0 0 0 0); transform: translateY(0); }
+  }
+  .cs-trial-title {
+    font-family: 'IM Fell English', serif; font-style: italic;
+    font-size: clamp(14px, 1.6vw, 18px);
+    color: #ffd27a;
+    animation: trialNameReveal 0.7s cubic-bezier(0.25, 1, 0.5, 1) 1.5s both;
+  }
+  .cs-trial-sprite {
+    font-size: 88px; margin-top: 18px;
+    text-shadow: 3px 3px 0 var(--gold), 6px 6px 0 var(--oxblood);
+    animation: trialSpriteOrbit 1.4s cubic-bezier(0.25, 1, 0.5, 1) 1.7s both, trialSpriteFloat 3s ease-in-out 3.1s infinite alternate;
+  }
+  @keyframes trialSpriteOrbit {
+    0%   { opacity: 0; transform: rotate(180deg) scale(0.3); }
+    100% { opacity: 1; transform: rotate(0) scale(1); }
+  }
+  @keyframes trialSpriteFloat {
+    from { transform: translateY(0); }
+    to   { transform: translateY(-6px); }
+  }
+
+  /* ============================================
+     AMBIENT LAYERS
+     ============================================ */
+  #game::before { animation: bgCandle 7s ease-in-out infinite alternate; }
+  @keyframes bgCandle {
+    from { filter: brightness(1); }
+    to   { filter: brightness(1.08); }
+  }
+  #game { animation: vignetteBreathe 9s ease-in-out infinite alternate; }
+  @keyframes vignetteBreathe {
+    from { box-shadow: 0 0 0 1px var(--gold), 0 0 0 6px var(--ink), 0 0 0 7px var(--gold), 0 30px 80px rgba(0,0,0,0.7), inset 0 0 100px rgba(107, 26, 24, 0.15); }
+    to   { box-shadow: 0 0 0 1px var(--gold), 0 0 0 6px var(--ink), 0 0 0 7px var(--gold), 0 30px 80px rgba(0,0,0,0.7), inset 0 0 140px rgba(107, 26, 24, 0.25); }
+  }
+
+  /* ============================================
+     BLESSING MICRO-CUTSCENE ANIMATIONS
+     ============================================ */
+  /* chalice_overflow */
+  .s-chalice-fill { transform-origin: center bottom; animation: chaliceFill 1.2s ease-out 0.3s both; }
+  @keyframes chaliceFill { from { transform: scaleY(0); opacity: 0; } 30% { opacity: 1; } to { transform: scaleY(1); opacity: 1; } }
+  .s-droplet { animation: dropletFall 1.4s ease-in 0.9s infinite; }
+  .s-droplet-2 { animation-delay: 1.05s; }
+  .s-droplet-3 { animation-delay: 1.2s; }
+  @keyframes dropletFall {
+    0%   { opacity: 0; transform: translate(0,0); }
+    20%  { opacity: 1; }
+    100% { opacity: 0; transform: translate(var(--dx, 0), 100px); }
+  }
+  .s-chalice-glow { animation: chaliceGlow 1.5s ease-out 0.4s infinite alternate; transform-origin: center; }
+  @keyframes chaliceGlow {
+    from { opacity: 0.3; transform: scale(0.85); }
+    to   { opacity: 0.85; transform: scale(1.15); }
+  }
+
+  /* dove_descent */
+  .s-dove-fall { animation: doveFall 1.4s cubic-bezier(0.25, 1, 0.5, 1) 0.3s both; }
+  @keyframes doveFall {
+    0%   { opacity: 0; transform: translateY(-160px) scale(0.6); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .s-dove-wing-l, .s-dove-wing-r { transform-origin: center; animation: doveWing 0.45s ease-in-out 0.4s infinite alternate; }
+  @keyframes doveWing {
+    from { transform: scaleY(1); }
+    to   { transform: scaleY(0.6); }
+  }
+
+  /* pentecost_flames */
+  .s-tongue-flicker { transform-origin: center bottom; animation: tongueFlicker 0.4s ease-in-out infinite alternate; }
+  .s-tongue-1 { animation-delay: 0s; }
+  .s-tongue-2 { animation-delay: 0.15s; }
+  .s-tongue-3 { animation-delay: 0.3s; }
+  @keyframes tongueFlicker {
+    from { transform: scaleY(1) scaleX(1); }
+    to   { transform: scaleY(1.25) scaleX(0.85); }
+  }
+  .s-tongue-rise { animation: tongueRise 0.7s ease-out 0.4s both; transform-origin: center bottom; }
+  @keyframes tongueRise {
+    from { opacity: 0; transform: scaleY(0); }
+    to   { opacity: 1; transform: scaleY(1); }
+  }
+
+  /* sword_anvil */
+  .s-hammer { animation: hammerStrike 0.8s ease-in 0.6s infinite; transform-origin: 200px 200px; }
+  @keyframes hammerStrike {
+    0%   { transform: rotate(-50deg); }
+    50%  { transform: rotate(20deg); }
+    100% { transform: rotate(-50deg); }
+  }
+  .s-spark { opacity: 0; animation: sparkBurst 0.8s ease-out 1.0s infinite; }
+  .s-spark-2 { animation-delay: 1.1s; }
+  .s-spark-3 { animation-delay: 1.05s; }
+  @keyframes sparkBurst {
+    0%   { opacity: 1; transform: translate(0,0) scale(1); }
+    100% { opacity: 0; transform: translate(var(--sx, 30px), var(--sy, -20px)) scale(0.2); }
+  }
+  .s-blade-glow { animation: bladeGlow 1.6s ease-in-out 0.4s infinite alternate; transform-origin: center; }
+  @keyframes bladeGlow {
+    from { filter: brightness(1); }
+    to   { filter: brightness(1.6) drop-shadow(0 0 12px #fff8dc); }
+  }
+
+  /* burning_scroll */
+  .s-flame-grow { transform-origin: center bottom; animation: flameGrow 1.4s ease-out 0.3s both; }
+  @keyframes flameGrow {
+    0%   { transform: scale(0.3); opacity: 0; }
+    50%  { opacity: 1; }
+    100% { transform: scale(1.2); opacity: 1; }
+  }
+  .s-flame-flicker { animation: flameFlick 0.25s ease-in-out infinite alternate; transform-origin: center bottom; }
+  @keyframes flameFlick {
+    from { transform: scaleY(1) scaleX(1); }
+    to   { transform: scaleY(1.1) scaleX(0.92); }
+  }
+  .s-scroll-burn { animation: scrollBurn 1.2s ease-in 0.7s both; }
+  @keyframes scrollBurn {
+    0%   { filter: hue-rotate(0); }
+    100% { filter: hue-rotate(-30deg) brightness(0.6); }
+  }
+
+  /* glowing_scroll */
+  .s-scroll-unfurl { transform-origin: left center; animation: scrollUnfurl 1.0s cubic-bezier(0.25, 1, 0.5, 1) 0.4s both; }
+  @keyframes scrollUnfurl {
+    0%   { transform: scaleX(0.1); opacity: 0; }
+    100% { transform: scaleX(1); opacity: 1; }
+  }
+  .s-text-glow {
+    animation: textSweep 1.6s ease-out 1.2s both;
+    background: linear-gradient(90deg, transparent 0%, transparent 30%, var(--gold-bright) 50%, transparent 70%, transparent 100%);
+    background-size: 300% 100%;
+    background-clip: text;
+    -webkit-background-clip: text;
+  }
+  @keyframes textSweep {
+    from { background-position: -100% 0; }
+    to { background-position: 100% 0; }
+  }
+
+  /* anointing_oil */
+  .s-jar-tip { transform-origin: bottom center; animation: jarTip 1.0s cubic-bezier(0.25, 1, 0.5, 1) 0.3s both; }
+  @keyframes jarTip {
+    0%   { transform: rotate(0); }
+    100% { transform: rotate(-35deg); }
+  }
+  .s-stream { animation: streamFlow 1.0s ease-out 1.0s both; transform-origin: top center; }
+  @keyframes streamFlow {
+    0%   { transform: scaleY(0); opacity: 0; }
+    100% { transform: scaleY(1); opacity: 1; }
+  }
+  .s-pool-spread { transform-origin: center; animation: poolSpread 0.9s ease-out 1.5s both; }
+  @keyframes poolSpread {
+    0%   { transform: scaleX(0); opacity: 0; }
+    100% { transform: scaleX(1); opacity: 1; }
+  }
+
+  /* light_armor */
+  .s-armor-piece { opacity: 0; animation: armorAttach 0.5s cubic-bezier(0.25, 1.5, 0.5, 1) both; }
+  .s-armor-helm { animation-delay: 0.3s; }
+  .s-armor-chest { animation-delay: 0.55s; }
+  .s-armor-greaves { animation-delay: 0.8s; }
+  .s-armor-shield { animation-delay: 1.05s; }
+  @keyframes armorAttach {
+    0%   { opacity: 0; transform: scale(1.6); filter: drop-shadow(0 0 12px #fff); }
+    100% { opacity: 1; transform: scale(1); filter: drop-shadow(0 0 6px #fff8dc); }
+  }
+  .s-armor-glow { animation: armorBreath 2s ease-in-out 1.3s infinite alternate; }
+  @keyframes armorBreath {
+    from { opacity: 0.4; }
+    to   { opacity: 0.9; }
+  }
+
+  /* lamp_steady */
+  .s-lamp-flame { transform-origin: center bottom; animation: lampLight 0.8s ease-out 0.4s both, lampSteady 0.4s ease-in-out 1.2s infinite alternate; }
+  @keyframes lampLight {
+    0%   { transform: scaleY(0); opacity: 0; }
+    50%  { transform: scaleY(1.4); opacity: 1; }
+    100% { transform: scaleY(1); opacity: 1; }
+  }
+  @keyframes lampSteady {
+    from { transform: scaleY(1); }
+    to   { transform: scaleY(1.06); }
+  }
+  .s-lamp-glow { transform-origin: center; animation: lampGlow 1.2s ease-out 0.6s infinite alternate; }
+  @keyframes lampGlow {
+    from { opacity: 0.3; transform: scale(0.9); }
+    to   { opacity: 0.85; transform: scale(1.25); }
+  }
+
+  /* manna_fall */
+  .s-manna { opacity: 0; animation: mannaFall 2s ease-in infinite; }
+  .s-manna-1 { animation-delay: 0.2s; }
+  .s-manna-2 { animation-delay: 0.5s; }
+  .s-manna-3 { animation-delay: 0.8s; }
+  .s-manna-4 { animation-delay: 1.1s; }
+  .s-manna-5 { animation-delay: 1.4s; }
+  .s-manna-6 { animation-delay: 0.05s; }
+  @keyframes mannaFall {
+    0%   { opacity: 0; transform: translateY(-40px) rotate(0); }
+    20%  { opacity: 1; }
+    80%  { opacity: 1; }
+    100% { opacity: 0; transform: translateY(360px) rotate(180deg); }
+  }
+  .s-manna-glow { animation: mannaGlow 2s ease-in-out 0.4s infinite alternate; }
+  @keyframes mannaGlow {
+    from { opacity: 0.3; }
+    to   { opacity: 0.7; }
+  }
+
+  /* ============================================
+     CUTSCENE BACKGROUND CLASSES (NEW)
+     ============================================ */
+  .cs-bg-blessing { background: radial-gradient(ellipse at center, #fff8dc 0%, #d4a017 40%, #8a4020 90%); }
+  .cs-bg-anvil { background: radial-gradient(ellipse at center, #ff6600 0%, #6b1a18 40%, #1a0a05 100%); }
+  .cs-bg-pentecost { background: radial-gradient(ellipse at top, #ffaa00 0%, #ff6600 30%, #4a2008 80%); animation: csBgIn 0.3s forwards, csPentecostFlicker 0.4s infinite alternate; }
+  @keyframes csPentecostFlicker { from { filter: brightness(1); } to { filter: brightness(1.2); } }
+
+  /* ============================================
+     REDUCED MOTION FALLBACK
+     ============================================ */
+  @media (prefers-reduced-motion: reduce) {
+    .sprite, #game, #game::before, h1.title, .pilgrimage-btn, .versus-btn,
+    .b-icon, .triumph-rays, .blessing-pip, .trial-pip,
+    .triumph-crown, .triumph-palm, .confetti,
+    .blessing-card, .stat-bar.critical .stat-bar-fill {
+      animation: none !important;
+    }
+  }
 </style>
 </head>
 <body>
@@ -610,14 +1268,23 @@
   <svg class="corner br" viewBox="0 0 60 60" fill="currentColor"><path d="M0 0 L60 0 L60 4 L4 4 L4 60 L0 60 Z M10 10 Q30 10 30 30 M10 10 L20 20 M30 30 Q30 10 50 10"/><circle cx="30" cy="30" r="2"/></svg>
 
   <div id="title-screen" class="scene active">
-    <div class="greek-tag">ΑΠΟΣΤΟΛΟΣ · ΑΓΩΝ</div>
-    <h1 class="title">APOSTOLOS</h1>
-    <div class="subtitle">Two-Player Contest for the Truth</div>
-    <div class="scripture-tag">
+    <div class="greek-tag t-anim t-anim-1">ΑΠΟΣΤΟΛΟΣ · ΑΓΩΝ</div>
+    <h1 class="title t-anim t-anim-2">APOSTOLOS</h1>
+    <div class="subtitle t-anim t-anim-3">Contest for the Truth</div>
+    <div class="scripture-tag t-anim t-anim-4">
       "Beloved, when I gave all diligence to write unto you of the common salvation, it was needful for me to write unto you, and exhort you that ye should earnestly contend for the faith…"
       <span class="ref">Jude 1:3 (KJV)</span>
     </div>
-    <button class="btn" onclick="goToSelect()">Begin the Contest</button>
+    <div class="mode-select">
+      <button class="btn mode-btn pilgrimage-btn t-anim t-anim-5" onclick="startPilgrimage()">
+        <span class="mode-name">Pilgrimage</span>
+        <span class="mode-sub">Solo run · 5 trials · permadeath</span>
+      </button>
+      <button class="btn mode-btn versus-btn t-anim t-anim-6" onclick="startVersus()">
+        <span class="mode-name">Versus</span>
+        <span class="mode-sub">2-player duel</span>
+      </button>
+    </div>
   </div>
 
   <div id="select-screen" class="scene">
@@ -629,6 +1296,13 @@
   </div>
 
   <div id="battle-screen" class="scene">
+    <div class="run-hud" id="run-hud">
+      <div class="trial-pips">
+        <span>TRIAL</span>
+        <span id="trial-pips-row"></span>
+      </div>
+      <div class="blessing-pips" id="blessing-pips-row"></div>
+    </div>
     <div class="battle-header">
       <div class="chapter" id="chapter-label">—</div>
       <div class="chapter" id="round-label">Round 1</div>
@@ -664,6 +1338,64 @@
     <div class="end-title" id="end-title">—</div>
     <div class="end-verse" id="end-verse">—</div>
     <button class="btn" onclick="restart()">Run the Race Again</button>
+  </div>
+
+  <div id="blessing-screen" class="scene">
+    <div class="select-header">
+      <div class="greek-tag">ΕΥΛΟΓΙΑ</div>
+      <div class="select-title">A BLESSING UPON THEE</div>
+      <div class="select-sub" id="blessing-progress">Choose thy gift before the next trial.</div>
+    </div>
+    <div class="blessing-grid" id="blessing-grid"></div>
+  </div>
+
+  <div id="pilgrim-defeat-screen" class="scene">
+    <div class="defeat-overlay" id="defeat-overlay"></div>
+    <div class="defeat-content">
+      <div class="greek-tag" id="defeat-tag">ΑΠΩΛΕΙΑ</div>
+      <div class="end-title p2-win">FALLEN</div>
+      <div class="defeat-trial" id="defeat-trial">at Trial —</div>
+      <div class="end-verse" id="defeat-verse">—</div>
+      <button class="btn" onclick="restart()">Begin Anew</button>
+    </div>
+  </div>
+
+  <div id="pilgrim-victory-screen" class="scene">
+    <div class="triumph-bg"></div>
+    <div class="triumph-rays"></div>
+    <div class="confetti-burst" id="confetti-burst"></div>
+    <svg class="triumph-crown" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20 100 L40 30 L70 70 L100 20 L130 70 L160 30 L180 100 Z" fill="#d4a017" stroke="#1a0a08" stroke-width="3"/>
+      <circle cx="40" cy="30" r="6" fill="#fff" stroke="#1a0a08" stroke-width="2"/>
+      <circle cx="100" cy="20" r="7" fill="#fff" stroke="#1a0a08" stroke-width="2"/>
+      <circle cx="160" cy="30" r="6" fill="#fff" stroke="#1a0a08" stroke-width="2"/>
+      <rect x="10" y="100" width="180" height="14" fill="#b8860b" stroke="#1a0a08" stroke-width="2"/>
+    </svg>
+    <svg class="triumph-palm triumph-palm-l" viewBox="0 0 200 400" xmlns="http://www.w3.org/2000/svg">
+      <path d="M100 380 L100 200" stroke="#3a5a1a" stroke-width="6"/>
+      <path d="M100 200 Q 60 160 30 130 Q 50 165 100 200 Z" fill="#4a7028"/>
+      <path d="M100 220 Q 50 200 20 180 Q 50 215 100 230 Z" fill="#4a7028"/>
+      <path d="M100 240 Q 60 240 30 230 Q 60 250 100 250 Z" fill="#4a7028"/>
+      <path d="M100 200 Q 80 150 70 110 Q 90 160 105 200 Z" fill="#5a8030"/>
+      <path d="M100 200 Q 110 150 95 100 Q 105 160 100 200 Z" fill="#5a8030"/>
+    </svg>
+    <svg class="triumph-palm triumph-palm-r" viewBox="0 0 200 400" xmlns="http://www.w3.org/2000/svg">
+      <path d="M100 380 L100 200" stroke="#3a5a1a" stroke-width="6"/>
+      <path d="M100 200 Q140 160 170 130 Q150 165 100 200 Z" fill="#4a7028"/>
+      <path d="M100 220 Q150 200 180 180 Q150 215 100 230 Z" fill="#4a7028"/>
+      <path d="M100 240 Q140 240 170 230 Q140 250 100 250 Z" fill="#4a7028"/>
+      <path d="M100 200 Q120 150 130 110 Q110 160 95 200 Z" fill="#5a8030"/>
+      <path d="M100 200 Q90 150 105 100 Q95 160 100 200 Z" fill="#5a8030"/>
+    </svg>
+    <div class="triumph-content">
+      <div class="greek-tag triumph-greek">ΘΡΙΑΜΒΟΣ</div>
+      <h1 class="title triumph-title">THE GOSPEL TRIUMPHS</h1>
+      <div class="end-verse triumph-verse">
+        "I have fought a good fight, I have finished my course, I have kept the faith."
+        <span class="ref">2 Timothy 4:7</span>
+      </div>
+      <button class="btn triumph-btn" onclick="restart()">Run the Race Again</button>
+    </div>
   </div>
 
   <div id="cutscene-overlay"></div>
@@ -1190,6 +1922,267 @@
         </g>
       </svg>`,
 
+    // ===== BLESSING TABLEAUS =====
+
+    // Cup of Blessing — Psalm 23:5. Chalice fills with light.
+    chalice_overflow: `
+      <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+        <ellipse class="s-chalice-glow" cx="400" cy="250" rx="180" ry="160" fill="#fff8dc" opacity="0.4"/>
+        <!-- Chalice -->
+        <g>
+          <path d="M310 230 L490 230 L470 320 L330 320 Z" fill="#d4a017" stroke="#1a0a08" stroke-width="3"/>
+          <rect x="380" y="320" width="40" height="60" fill="#d4a017" stroke="#1a0a08" stroke-width="3"/>
+          <ellipse cx="400" cy="380" rx="60" ry="14" fill="#d4a017" stroke="#1a0a08" stroke-width="3"/>
+          <ellipse cx="400" cy="230" rx="90" ry="16" fill="#1a0a08"/>
+          <!-- Liquid filling -->
+          <g class="s-chalice-fill">
+            <ellipse cx="400" cy="230" rx="86" ry="13" fill="#fff8dc"/>
+            <path d="M314 230 L486 230 L468 318 L332 318 Z" fill="#fff8dc"/>
+          </g>
+        </g>
+        <!-- Overflow droplets -->
+        <circle class="s-droplet" cx="320" cy="245" r="5" fill="#fff8dc" style="--dx: -30px;"/>
+        <circle class="s-droplet s-droplet-2" cx="480" cy="245" r="5" fill="#fff8dc" style="--dx: 30px;"/>
+        <circle class="s-droplet s-droplet-3" cx="400" cy="225" r="4" fill="#ffd700" style="--dx: 0;"/>
+      </svg>`,
+
+    // Refreshing Spirit — Matt 3:16. Dove descending with light rays.
+    dove_descent: `
+      <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+        <!-- Sun glow -->
+        <circle cx="400" cy="80" r="60" fill="#fff8dc" opacity="0.7"/>
+        <circle cx="400" cy="80" r="35" fill="#fff" opacity="0.95"/>
+        <!-- Light rays -->
+        <g class="s-prayer-rays">
+          <polygon points="400,80 80,500 720,500" fill="#fff8dc" opacity="0.18"/>
+          <polygon points="400,80 240,500 560,500" fill="#ffd700" opacity="0.25"/>
+        </g>
+        <!-- Dove -->
+        <g class="s-dove-fall">
+          <ellipse cx="400" cy="280" rx="20" ry="14" fill="#fff" stroke="#1a0a08" stroke-width="2"/>
+          <circle cx="420" cy="270" r="10" fill="#fff" stroke="#1a0a08" stroke-width="2"/>
+          <polygon points="430,270 442,272 430,276" fill="#d4a017"/>
+          <path class="s-dove-wing-l" d="M380 280 Q330 250 290 270 Q340 282 380 285 Z" fill="#fff" stroke="#1a0a08" stroke-width="2" style="transform-origin: 380px 280px;"/>
+          <path class="s-dove-wing-r" d="M380 280 Q340 305 300 320 Q345 305 380 290 Z" fill="#f0f0f0" stroke="#1a0a08" stroke-width="2" style="transform-origin: 380px 280px;"/>
+          <path d="M395 290 L390 310 L405 310 Z" fill="#fff" stroke="#1a0a08" stroke-width="2"/>
+        </g>
+      </svg>`,
+
+    // Gifted Tongues — Acts 2:3. Pentecost flames above figures.
+    pentecost_flames: `
+      <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+        <rect width="800" height="500" fill="#3a0a08" opacity="0.3"/>
+        <!-- Three figures -->
+        <g>
+          <circle cx="280" cy="320" r="13" fill="#1a0a08"/>
+          <path d="M260 335 L300 335 L306 460 L254 460 Z" fill="#1a0a08"/>
+          <circle cx="400" cy="310" r="14" fill="#1a0a08"/>
+          <path d="M378 326 L422 326 L428 460 L372 460 Z" fill="#1a0a08"/>
+          <circle cx="520" cy="320" r="13" fill="#1a0a08"/>
+          <path d="M500 335 L540 335 L546 460 L494 460 Z" fill="#1a0a08"/>
+        </g>
+        <!-- Tongues of fire -->
+        <g class="s-tongue-rise">
+          <path class="s-tongue-flicker s-tongue-1" d="M280 290 Q270 240 280 220 Q290 240 280 290 Z" fill="#ffaa00" style="transform-origin: 280px 290px;"/>
+          <path class="s-tongue-flicker s-tongue-2" d="M400 280 Q386 220 400 195 Q414 220 400 280 Z" fill="#ffd700" style="transform-origin: 400px 280px;"/>
+          <path class="s-tongue-flicker s-tongue-3" d="M520 290 Q510 240 520 220 Q530 240 520 290 Z" fill="#ffaa00" style="transform-origin: 520px 290px;"/>
+          <!-- Inner flames -->
+          <path class="s-tongue-flicker s-tongue-1" d="M280 290 Q275 250 280 235 Q285 250 280 290 Z" fill="#ffeeaa" style="transform-origin: 280px 290px;"/>
+          <path class="s-tongue-flicker s-tongue-2" d="M400 280 Q393 240 400 215 Q407 240 400 280 Z" fill="#ffeeaa" style="transform-origin: 400px 280px;"/>
+          <path class="s-tongue-flicker s-tongue-3" d="M520 290 Q515 250 520 235 Q525 250 520 290 Z" fill="#ffeeaa" style="transform-origin: 520px 290px;"/>
+        </g>
+      </svg>`,
+
+    // Sharpened Sword — Heb 4:12. Sword on anvil with hammer + sparks.
+    sword_anvil: `
+      <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+        <rect width="800" height="500" fill="#2a0a08" opacity="0.4"/>
+        <!-- Anvil -->
+        <g>
+          <path d="M250 280 L550 280 L530 320 L270 320 Z" fill="#3a3a3a" stroke="#1a0a08" stroke-width="3"/>
+          <rect x="320" y="320" width="160" height="100" fill="#2a2a2a" stroke="#1a0a08" stroke-width="3"/>
+          <rect x="290" y="420" width="220" height="20" fill="#1a0a08"/>
+        </g>
+        <!-- Sword on anvil -->
+        <g class="s-blade-glow">
+          <rect x="320" y="270" width="160" height="14" fill="#fff8dc" stroke="#1a0a08" stroke-width="2"/>
+          <rect x="320" y="270" width="160" height="6" fill="#fff" opacity="0.7"/>
+          <rect x="296" y="265" width="28" height="22" fill="#d4a017" stroke="#1a0a08" stroke-width="2"/>
+          <rect x="284" y="270" width="14" height="12" fill="#8a5a20" stroke="#1a0a08" stroke-width="2"/>
+        </g>
+        <!-- Hammer -->
+        <g class="s-hammer">
+          <rect x="170" y="180" width="80" height="40" fill="#3a3a3a" stroke="#1a0a08" stroke-width="3"/>
+          <rect x="240" y="190" width="120" height="20" fill="#5a3a1a" stroke="#1a0a08" stroke-width="2"/>
+        </g>
+        <!-- Sparks -->
+        <g>
+          <polygon class="s-spark" points="400,270 408,250 412,272 410,255 416,275" fill="#ffd700" style="--sx: 60px; --sy: -50px;"/>
+          <polygon class="s-spark s-spark-2" points="400,270 392,255 388,278 390,260 384,280" fill="#ffaa00" style="--sx: -60px; --sy: -40px;"/>
+          <polygon class="s-spark s-spark-3" points="400,270 405,260 410,280" fill="#ffeeaa" style="--sx: 30px; --sy: -70px;"/>
+        </g>
+      </svg>`,
+
+    // Burning Anathema — Gal 1:8. Scroll consumed by fire.
+    burning_scroll: `
+      <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+        <rect width="800" height="500" fill="#3a0a08" opacity="0.4"/>
+        <!-- Brazier -->
+        <g>
+          <path d="M280 340 L520 340 L500 400 L300 400 Z" fill="#3a2008" stroke="#1a0a08" stroke-width="3"/>
+          <rect x="350" y="400" width="100" height="40" fill="#1a0a08"/>
+          <ellipse cx="400" cy="340" rx="120" ry="16" fill="#1a0a08"/>
+        </g>
+        <!-- Scroll being consumed -->
+        <g class="s-scroll-burn">
+          <rect x="350" y="270" width="100" height="80" rx="6" fill="#d4c08a" stroke="#1a0a08" stroke-width="2"/>
+          <line x1="360" y1="285" x2="440" y2="285" stroke="#1a0a08" stroke-width="1.5"/>
+          <line x1="360" y1="298" x2="440" y2="298" stroke="#1a0a08" stroke-width="1.5"/>
+          <line x1="360" y1="311" x2="440" y2="311" stroke="#1a0a08" stroke-width="1.5"/>
+        </g>
+        <!-- Flames -->
+        <g class="s-flame-grow">
+          <path class="s-flame-flicker" d="M300 340 Q310 220 340 280 Q360 200 380 270 Q400 180 420 270 Q440 200 460 280 Q490 220 500 340 Z" fill="#ff6600" style="transform-origin: 400px 340px;"/>
+          <path class="s-flame-flicker" d="M320 340 Q330 250 360 290 Q380 230 400 280 Q420 230 440 290 Q470 250 480 340 Z" fill="#ffaa00" style="transform-origin: 400px 340px;"/>
+          <path class="s-flame-flicker" d="M340 340 Q360 280 380 300 Q400 260 420 300 Q440 280 460 340 Z" fill="#ffd700" style="transform-origin: 400px 340px;"/>
+          <path class="s-flame-flicker" d="M370 340 Q390 300 400 310 Q410 300 430 340 Z" fill="#fff8dc" style="transform-origin: 400px 340px;"/>
+        </g>
+      </svg>`,
+
+    // Honed Doctrine — 2 Tim 3:16. Scroll unfurls with golden text.
+    glowing_scroll: `
+      <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+        <rect width="800" height="500" fill="#1a0a08" opacity="0.3"/>
+        <!-- Background light glow -->
+        <ellipse cx="400" cy="250" rx="280" ry="120" fill="#fff8dc" opacity="0.2"/>
+        <!-- Scroll rolls -->
+        <g>
+          <ellipse cx="180" cy="250" rx="22" ry="80" fill="#5a3a1a" stroke="#1a0a08" stroke-width="3"/>
+          <ellipse cx="620" cy="250" rx="22" ry="80" fill="#5a3a1a" stroke="#1a0a08" stroke-width="3"/>
+        </g>
+        <!-- Unfurling scroll body -->
+        <g class="s-scroll-unfurl">
+          <rect x="180" y="180" width="440" height="140" fill="#f0e3c4" stroke="#1a0a08" stroke-width="2"/>
+          <line x1="220" y1="210" x2="580" y2="210" stroke="#1a0a08" stroke-width="2"/>
+          <line x1="220" y1="230" x2="580" y2="230" stroke="#1a0a08" stroke-width="2"/>
+          <line x1="220" y1="250" x2="580" y2="250" stroke="#1a0a08" stroke-width="2"/>
+          <line x1="220" y1="270" x2="580" y2="270" stroke="#1a0a08" stroke-width="2"/>
+          <line x1="220" y1="290" x2="540" y2="290" stroke="#1a0a08" stroke-width="2"/>
+          <!-- Gold sweep overlay -->
+          <rect class="s-text-glow" x="180" y="180" width="440" height="140" fill="#ffd700" opacity="0.5"/>
+        </g>
+      </svg>`,
+
+    // Abundant Grace — Eph 2:8. Oil pouring from a jar.
+    anointing_oil: `
+      <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+        <rect width="800" height="500" fill="#2a1808" opacity="0.3"/>
+        <!-- Pool below -->
+        <ellipse class="s-pool-spread" cx="400" cy="430" rx="200" ry="20" fill="#d4a017" stroke="#1a0a08" stroke-width="2" style="transform-origin: 400px 430px;"/>
+        <!-- Stream -->
+        <path class="s-stream" d="M380 230 L400 410 L420 230 Z" fill="#d4a017" style="transform-origin: 400px 230px;"/>
+        <path class="s-stream" d="M390 230 L400 410 L410 230 Z" fill="#fff8dc" opacity="0.6" style="transform-origin: 400px 230px;"/>
+        <!-- Jar -->
+        <g class="s-jar-tip" style="transform-origin: 350px 250px;">
+          <path d="M280 130 L420 130 L430 230 L270 230 Z" fill="#8a5a20" stroke="#1a0a08" stroke-width="3"/>
+          <ellipse cx="350" cy="130" rx="70" ry="14" fill="#5a3a1a" stroke="#1a0a08" stroke-width="3"/>
+          <rect x="320" y="110" width="60" height="22" fill="#5a3a1a" stroke="#1a0a08" stroke-width="3"/>
+          <!-- Handle -->
+          <path d="M420 150 Q470 150 470 200 Q470 220 430 220" fill="none" stroke="#5a3a1a" stroke-width="8"/>
+        </g>
+      </svg>`,
+
+    // Armor of Light — Eph 6:11. Silhouette gains light-armor pieces.
+    light_armor: `
+      <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+        <rect width="800" height="500" fill="#1a0a08" opacity="0.3"/>
+        <ellipse class="s-armor-glow" cx="400" cy="280" rx="160" ry="200" fill="#fff8dc" opacity="0.4"/>
+        <!-- Figure silhouette -->
+        <g>
+          <circle cx="400" cy="200" r="22" fill="#1a0a08"/>
+          <path d="M370 220 L430 220 L440 380 L360 380 Z" fill="#1a0a08"/>
+          <line x1="370" y1="240" x2="320" y2="320" stroke="#1a0a08" stroke-width="14" stroke-linecap="round"/>
+          <line x1="430" y1="240" x2="480" y2="320" stroke="#1a0a08" stroke-width="14" stroke-linecap="round"/>
+          <rect x="370" y="380" width="20" height="80" fill="#1a0a08"/>
+          <rect x="410" y="380" width="20" height="80" fill="#1a0a08"/>
+        </g>
+        <!-- Armor pieces (animated) -->
+        <g class="s-armor-piece s-armor-helm">
+          <path d="M375 175 Q400 158 425 175 L430 200 L370 200 Z" fill="#fff8dc" stroke="#d4a017" stroke-width="2.5"/>
+          <line x1="400" y1="175" x2="400" y2="195" stroke="#d4a017" stroke-width="2"/>
+        </g>
+        <g class="s-armor-piece s-armor-chest">
+          <path d="M364 222 L436 222 L444 320 L356 320 Z" fill="none" stroke="#fff8dc" stroke-width="3"/>
+          <line x1="400" y1="222" x2="400" y2="320" stroke="#d4a017" stroke-width="2"/>
+          <line x1="370" y1="270" x2="430" y2="270" stroke="#d4a017" stroke-width="2"/>
+        </g>
+        <g class="s-armor-piece s-armor-greaves">
+          <rect x="368" y="380" width="24" height="80" fill="none" stroke="#fff8dc" stroke-width="3"/>
+          <rect x="408" y="380" width="24" height="80" fill="none" stroke="#fff8dc" stroke-width="3"/>
+        </g>
+        <g class="s-armor-piece s-armor-shield">
+          <ellipse cx="320" cy="320" rx="34" ry="50" fill="#fff8dc" stroke="#d4a017" stroke-width="3" opacity="0.85"/>
+          <circle cx="320" cy="320" r="10" fill="#d4a017"/>
+        </g>
+      </svg>`,
+
+    // Watchful Prayer — Matt 25:4. Lamp lit in darkness.
+    lamp_steady: `
+      <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+        <rect width="800" height="500" fill="#000" opacity="0.5"/>
+        <!-- Lamp glow halo -->
+        <circle class="s-lamp-glow" cx="400" cy="240" r="120" fill="#fff8dc" opacity="0.5"/>
+        <circle class="s-lamp-glow" cx="400" cy="240" r="80" fill="#ffd700" opacity="0.6"/>
+        <!-- Lamp body -->
+        <g>
+          <ellipse cx="400" cy="320" rx="80" ry="20" fill="#5a3a1a" stroke="#1a0a08" stroke-width="3"/>
+          <path d="M340 320 Q340 290 360 280 L440 280 Q460 290 460 320" fill="#8a5a20" stroke="#1a0a08" stroke-width="3"/>
+          <ellipse cx="400" cy="280" rx="40" ry="8" fill="#3a2008" stroke="#1a0a08" stroke-width="2"/>
+          <!-- Spout -->
+          <path d="M340 305 L300 295 L340 285 Z" fill="#8a5a20" stroke="#1a0a08" stroke-width="2"/>
+        </g>
+        <!-- Wick / flame -->
+        <rect x="396" y="270" width="8" height="14" fill="#1a0a08"/>
+        <g class="s-lamp-flame" style="transform-origin: 400px 270px;">
+          <path d="M400 270 Q380 230 400 200 Q420 230 400 270 Z" fill="#ff6600"/>
+          <path d="M400 270 Q390 240 400 215 Q410 240 400 270 Z" fill="#ffaa00"/>
+          <path d="M400 270 Q395 245 400 230 Q405 245 400 270 Z" fill="#ffeeaa"/>
+        </g>
+      </svg>`,
+
+    // Bread of Heaven — John 6:51. Manna falling.
+    manna_fall: `
+      <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+        <!-- Sky glow -->
+        <rect width="800" height="500" fill="url(#mannaSky)" opacity="0.4"/>
+        <defs>
+          <linearGradient id="mannaSky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#fff8dc"/>
+            <stop offset="1" stop-color="#d4a017" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <!-- Wilderness ground -->
+        <path d="M0 420 L800 420 L800 500 L0 500 Z" fill="#3a2608"/>
+        <ellipse class="s-manna-glow" cx="400" cy="400" rx="280" ry="40" fill="#fff8dc" opacity="0.5"/>
+        <!-- Manna flakes -->
+        <g>
+          <circle class="s-manna s-manna-1" cx="180" cy="80" r="6" fill="#fff8dc"/>
+          <circle class="s-manna s-manna-2" cx="280" cy="60" r="7" fill="#ffd700"/>
+          <circle class="s-manna s-manna-3" cx="380" cy="80" r="6" fill="#fff8dc"/>
+          <circle class="s-manna s-manna-4" cx="480" cy="60" r="8" fill="#fff"/>
+          <circle class="s-manna s-manna-5" cx="580" cy="80" r="6" fill="#ffd700"/>
+          <circle class="s-manna s-manna-6" cx="680" cy="60" r="7" fill="#fff8dc"/>
+          <circle class="s-manna s-manna-1" cx="220" cy="100" r="5" fill="#fff8dc"/>
+          <circle class="s-manna s-manna-3" cx="420" cy="100" r="5" fill="#ffd700"/>
+          <circle class="s-manna s-manna-5" cx="620" cy="100" r="5" fill="#fff8dc"/>
+        </g>
+        <!-- Resting figure -->
+        <g>
+          <circle cx="400" cy="380" r="14" fill="#1a0a08"/>
+          <path d="M380 395 L420 395 L426 420 L374 420 Z" fill="#1a0a08"/>
+        </g>
+      </svg>`,
+
     // Brood in Darkness — Proverbs 4:16. Hooded figure, glowing eyes, swirling shadow.
     brooding_shadow: `
       <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
@@ -1288,7 +2281,19 @@
     'Brood in Darkness': {
       scene: 'brooding_shadow', bg: 'cs-bg-void',
       side: 'p2', flash: 'dark', duration: 3000
-    }
+    },
+
+    // BLESSINGS — short, snappy, all p1-side
+    'Cup of Blessing':    { scene: 'chalice_overflow',  bg: 'cs-bg-blessing',   side: 'p1', flash: 'gold', duration: 2000 },
+    'Refreshing Spirit':  { scene: 'dove_descent',      bg: 'cs-bg-dawn',       side: 'p1', flash: 'gold', duration: 2000 },
+    'Gifted Tongues':     { scene: 'pentecost_flames',  bg: 'cs-bg-pentecost',  side: 'p1', flash: 'red',  duration: 2000 },
+    'Sharpened Sword':    { scene: 'sword_anvil',       bg: 'cs-bg-anvil',      side: 'p1', flash: 'gold', duration: 2000 },
+    'Burning Anathema':   { scene: 'burning_scroll',    bg: 'cs-bg-mtcarmel',   side: 'p1', flash: 'red',  duration: 2000 },
+    'Honed Doctrine':     { scene: 'glowing_scroll',    bg: 'cs-bg-sinai',      side: 'p1', flash: 'gold', duration: 2000 },
+    'Abundant Grace':     { scene: 'anointing_oil',     bg: 'cs-bg-blessing',   side: 'p1', flash: 'gold', duration: 2000 },
+    'Armor of Light':     { scene: 'light_armor',       bg: 'cs-bg-dawn',       side: 'p1', flash: 'gold', duration: 2200 },
+    'Watchful Prayer':    { scene: 'lamp_steady',       bg: 'cs-bg-void',       side: 'p1', flash: '',     duration: 2200 },
+    'Bread of Heaven':    { scene: 'manna_fall',        bg: 'cs-bg-dawn',       side: 'p1', flash: '',     duration: 2400 }
   };
 
   // Grace Alone rotates through three miracles of divine provision/grace
@@ -1349,12 +2354,99 @@
       action: () => ({ dmg: randInt(20, 30), log: { v: '"…with all power and signs and lying wonders."', r: '2 Thessalonians 2:9' } }) }
   ];
 
+  // ============ BLESSINGS REGISTRY ============
+  const BLESSINGS = {
+    cup_blessing: {
+      name: 'Cup of Blessing', icon: '🍷',
+      flavor: '"My cup runneth over."',
+      verse: { v: '"Thou preparest a table before me… my cup runneth over."', r: 'Psalm 23:5' },
+      effect: 'Full heal · Max HP +15',
+      apply: (run) => { paul.maxHp += 15; paul.hp = paul.maxHp; }
+    },
+    refreshing_spirit: {
+      name: 'Refreshing Spirit', icon: '🕊',
+      flavor: 'The Spirit descends like a dove.',
+      verse: { v: '"…the Spirit of God descending like a dove, and lighting upon him."', r: 'Matthew 3:16' },
+      effect: 'Faith refill · Max Faith +10',
+      apply: (run) => { paul.maxFaith += 10; paul.faith = paul.maxFaith; }
+    },
+    gifted_tongue: {
+      name: 'Gifted Tongues', icon: '🔥',
+      flavor: 'Tongues like as of fire.',
+      verse: { v: '"And there appeared unto them cloven tongues like as of fire…"', r: 'Acts 2:3' },
+      effect: 'All faith costs −1 (min 1)',
+      apply: (run) => { run.mods.costReduction += 1; }
+    },
+    sharpened_sword: {
+      name: 'Sharpened Sword', icon: '⚔',
+      flavor: 'Quick, powerful, two-edged.',
+      verse: { v: '"For the word of God is quick, and powerful, and sharper than any twoedged sword…"', r: 'Hebrews 4:12' },
+      effect: 'Sword of the Spirit +6 dmg',
+      apply: (run) => { run.mods.dmgBonus['Sword of the Spirit'] = (run.mods.dmgBonus['Sword of the Spirit']||0) + 6; }
+    },
+    burning_anathema: {
+      name: 'Burning Anathema', icon: '🔥',
+      flavor: 'Let him be accursed.',
+      verse: { v: '"…let him be accursed."', r: 'Galatians 1:9' },
+      effect: 'Anathema +10 dmg',
+      apply: (run) => { run.mods.dmgBonus['Anathema'] = (run.mods.dmgBonus['Anathema']||0) + 10; }
+    },
+    honed_doctrine: {
+      name: 'Honed Doctrine', icon: '📜',
+      flavor: 'All scripture is profitable.',
+      verse: { v: '"All scripture is given by inspiration of God, and is profitable for doctrine…"', r: '2 Timothy 3:16' },
+      effect: 'Sound Doctrine +6 dmg',
+      apply: (run) => { run.mods.dmgBonus['Sound Doctrine'] = (run.mods.dmgBonus['Sound Doctrine']||0) + 6; }
+    },
+    abundant_grace: {
+      name: 'Abundant Grace', icon: '💧',
+      flavor: 'By grace are ye saved.',
+      verse: { v: '"For by grace are ye saved through faith… it is the gift of God."', r: 'Ephesians 2:8' },
+      effect: 'Grace Alone heals +10',
+      apply: (run) => { run.mods.dmgBonus['Grace Alone'] = (run.mods.dmgBonus['Grace Alone']||0) + 10; }
+    },
+    armor_of_light: {
+      name: 'Armor of Light', icon: '🛡',
+      flavor: 'The whole armour of God.',
+      verse: { v: '"Put on the whole armour of God, that ye may be able to stand…"', r: 'Ephesians 6:11' },
+      effect: 'Take −2 from every enemy hit',
+      apply: (run) => { run.mods.dmgReduction += 2; }
+    },
+    watchful_prayer: {
+      name: 'Watchful Prayer', icon: '🪔',
+      flavor: 'The wise took oil in their vessels.',
+      verse: { v: '"But the wise took oil in their vessels with their lamps."', r: 'Matthew 25:4' },
+      effect: 'Pass restores +6 more faith',
+      apply: (run) => { run.mods.passRestore += 6; }
+    },
+    bread_of_heaven: {
+      name: 'Bread of Heaven', icon: '🍞',
+      flavor: 'The bread which cometh down from heaven.',
+      verse: { v: '"I am the living bread which came down from heaven…"', r: 'John 6:51' },
+      effect: 'Heal +4 HP each round',
+      apply: (run) => { run.mods.healPerRound += 4; }
+    }
+  };
+
   // ============ STATE ============
   const paul = { hp: 100, maxHp: 100, faith: 50, maxFaith: 50, locked: -1 };
   let enemy = null;
   let currentTurn = 'paul';
   let round = 1;
   let busy = false;
+  let run = null; // pilgrimage run state
+  const DIFFICULTY = [0.9, 1.05, 1.2, 1.35, 1.5];
+
+  // ============ MODIFIER HELPERS ============
+  function effectiveCost(atk) {
+    return Math.max(1, atk.cost - (run ? run.mods.costReduction : 0));
+  }
+  function damageBonus(atkName) {
+    return run ? (run.mods.dmgBonus[atkName] || 0) : 0;
+  }
+  function incomingDamage(raw) {
+    return Math.max(1, raw - (run ? run.mods.dmgReduction : 0));
+  }
 
   // ============ UTIL ============
   const $ = id => document.getElementById(id);
@@ -1378,27 +2470,47 @@
   }
 
   function updateBars() {
-    $('paul-hp-bar').style.width = Math.max(0, paul.hp / paul.maxHp * 100) + '%';
+    const paulHpPct = Math.max(0, paul.hp / paul.maxHp);
+    $('paul-hp-bar').style.width = paulHpPct * 100 + '%';
     $('paul-hp-text').textContent = `${Math.max(0, paul.hp)}/${paul.maxHp}`;
     $('paul-faith-bar').style.width = paul.faith / paul.maxFaith * 100 + '%';
     $('paul-faith-text').textContent = `${paul.faith}/${paul.maxFaith}`;
+    // Critical HP pulse
+    const paulHpBar = $('paul-hp-bar').parentElement;
+    if (paulHpPct < 0.25 && paul.hp > 0) paulHpBar.classList.add('critical');
+    else paulHpBar.classList.remove('critical');
     if (enemy) {
-      $('enemy-hp-bar').style.width = Math.max(0, enemy.hp / enemy.maxHp * 100) + '%';
+      const enemyHpPct = Math.max(0, enemy.hp / enemy.maxHp);
+      $('enemy-hp-bar').style.width = enemyHpPct * 100 + '%';
       $('enemy-hp-text').textContent = `${Math.max(0, enemy.hp)}/${enemy.maxHp}`;
       $('enemy-malice-bar').style.width = enemy.malice / enemy.maxMalice * 100 + '%';
       $('enemy-malice-text').textContent = `${enemy.malice}/${enemy.maxMalice}`;
+      const enemyHpBar = $('enemy-hp-bar').parentElement;
+      if (enemyHpPct < 0.25 && enemy.hp > 0) enemyHpBar.classList.add('critical');
+      else enemyHpBar.classList.remove('critical');
     }
   }
 
-  function popup(spriteId, text, kind) {
+  function popup(spriteId, text, kind, big = false) {
     const sprite = $(spriteId);
     if (!sprite) return;
     const wrap = sprite.parentElement;
     const pop = document.createElement('div');
-    pop.className = 'damage-popup ' + kind;
+    pop.className = 'damage-popup ' + kind + (big ? ' big' : '');
     pop.textContent = (kind === 'heal' ? '+' : '−') + text;
     wrap.appendChild(pop);
-    setTimeout(() => pop.remove(), 1000);
+    if (big) {
+      $('game').classList.add('shake');
+      setTimeout(() => $('game').classList.remove('shake'), 500);
+    }
+    setTimeout(() => pop.remove(), 1100);
+  }
+
+  function fireRoundSweep() {
+    const sweep = document.createElement('div');
+    sweep.className = 'round-sweep';
+    $('game').appendChild(sweep);
+    setTimeout(() => sweep.remove(), 800);
   }
 
   function spriteAnim(target, animClass) {
@@ -1472,6 +2584,212 @@
     buildCharGrid();
     showScene('select-screen');
   }
+  function startVersus() {
+    run = null;
+    document.body.classList.remove('in-pilgrimage');
+    paul.maxHp = 100; paul.hp = 100;
+    paul.maxFaith = 50; paul.faith = 50;
+    paul.locked = -1;
+    goToSelect();
+  }
+
+  // ============ PILGRIMAGE FLOW ============
+  function startPilgrimage() {
+    const middle = ['HYMENAEUS', 'ALEXANDER', 'JUDAIZER'];
+    for (let i = middle.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [middle[i], middle[j]] = [middle[j], middle[i]];
+    }
+    run = {
+      mode: 'pilgrimage',
+      fightNum: 1,
+      queue: ['ELYMAS', ...middle, 'FALSE APOSTLE'],
+      blessings: [],
+      mods: { hpBonus: 0, faithBonus: 0, dmgBonus: {}, costReduction: 0,
+              dmgReduction: 0, passRestore: 14, faithRegen: 4, healPerRound: 0,
+              startFaithBonus: 0 }
+    };
+    paul.maxHp = 100; paul.hp = 100;
+    paul.maxFaith = 50; paul.faith = 50;
+    paul.locked = -1;
+    document.body.classList.add('in-pilgrimage');
+    renderTrialPips();
+    renderBlessingPips();
+    startNextPilgrimageFight();
+  }
+
+  async function startNextPilgrimageFight() {
+    const enemyName = run.queue[run.fightNum - 1];
+    const charData = characters.find(c => c.name === enemyName);
+    const mult = DIFFICULTY[run.fightNum - 1];
+    const scaled = {
+      ...charData,
+      hp: Math.round(charData.hp * mult),
+      atk: [Math.round(charData.atk[0] * mult), Math.round(charData.atk[1] * mult)]
+    };
+    paul.faith = Math.min(paul.maxFaith, paul.faith + run.mods.startFaithBonus);
+    await playTrialIntro(run.fightNum, scaled);
+    startBattle(scaled, true);
+    renderTrialPips();
+    // Enemy combatant card flash entrance
+    const ec = $('enemy-card');
+    ec.classList.remove('entrance');
+    void ec.offsetWidth;
+    ec.classList.add('entrance');
+    setTimeout(() => ec.classList.remove('entrance'), 900);
+  }
+
+  // Trial intro cinematic — uses cutscene-overlay infrastructure
+  async function playTrialIntro(num, charData) {
+    const overlay = $('cutscene-overlay');
+    const roman = ['I', 'II', 'III', 'IV', 'V'][num - 1] || String(num);
+    const isBoss = num === run.queue.length;
+    const bgClass = isBoss ? 'cs-bg-heaven-fall' : 'cs-bg-corrupt';
+
+    overlay.innerHTML = `
+      <div class="cs-bg ${bgClass}"></div>
+      <div class="cs-vignette"></div>
+      <div class="cs-trial-intro">
+        <div class="cs-trial-numeral">${isBoss ? 'FINAL TRIAL' : 'TRIAL ' + roman}</div>
+        <div class="cs-trial-divider"></div>
+        <div class="cs-trial-name">${charData.name}</div>
+        <div class="cs-trial-title">${charData.title}</div>
+        <div class="cs-trial-sprite">${charData.sprite}</div>
+      </div>
+      <div class="cs-bar cs-bar-top"></div>
+      <div class="cs-bar cs-bar-bot"></div>
+      <div class="cs-skip">Click to skip</div>
+    `;
+    overlay.classList.add('active');
+
+    return new Promise(resolve => {
+      let done = false;
+      const finish = () => {
+        if (done) return;
+        done = true;
+        overlay.classList.add('fading');
+        setTimeout(() => {
+          overlay.classList.remove('active', 'fading');
+          overlay.innerHTML = '';
+          overlay.onclick = null;
+          resolve();
+        }, 300);
+      };
+      overlay.onclick = finish;
+      setTimeout(finish, 3200);
+    });
+  }
+
+  // ============ HUD ============
+  function renderTrialPips() {
+    if (!run) return;
+    const row = $('trial-pips-row');
+    row.innerHTML = '';
+    for (let i = 0; i < run.queue.length; i++) {
+      const pip = document.createElement('span');
+      pip.className = 'trial-pip';
+      if (i + 1 < run.fightNum) pip.classList.add('done');
+      else if (i + 1 === run.fightNum) pip.classList.add('current');
+      if (i === run.queue.length - 1 && i + 1 > run.fightNum) pip.classList.add('boss');
+      row.appendChild(pip);
+    }
+  }
+  function renderBlessingPips() {
+    if (!run) return;
+    const row = $('blessing-pips-row');
+    row.innerHTML = '';
+    for (const id of run.blessings) {
+      const pip = document.createElement('span');
+      pip.className = 'blessing-pip';
+      pip.textContent = BLESSINGS[id].icon;
+      pip.title = BLESSINGS[id].name;
+      row.appendChild(pip);
+    }
+  }
+
+  // ============ BLESSING PICK ============
+  function showBlessingPick() {
+    const taken = new Set(run.blessings);
+    const available = Object.keys(BLESSINGS).filter(id => !taken.has(id));
+    const pool = available.length >= 3 ? available : Object.keys(BLESSINGS);
+    const picks = [];
+    const poolCopy = [...pool];
+    while (picks.length < 3 && poolCopy.length) {
+      const idx = Math.floor(Math.random() * poolCopy.length);
+      picks.push(poolCopy.splice(idx, 1)[0]);
+    }
+    const grid = $('blessing-grid');
+    grid.innerHTML = '';
+    $('blessing-progress').textContent = `After Trial ${run.fightNum} of ${run.queue.length} · Choose thy gift before the next trial.`;
+    picks.forEach(id => {
+      const b = BLESSINGS[id];
+      const card = document.createElement('div');
+      card.className = 'blessing-card';
+      card.innerHTML = `
+        <div class="b-icon">${b.icon}</div>
+        <div class="b-name">${b.name}</div>
+        <div class="b-flavor">${b.flavor}</div>
+        <div class="b-effect">${b.effect}</div>
+      `;
+      card.onclick = () => pickBlessing(id, card, grid);
+      grid.appendChild(card);
+    });
+    showScene('blessing-screen');
+  }
+
+  async function pickBlessing(id, cardEl, gridEl) {
+    if (cardEl.dataset.picked) return;
+    cardEl.dataset.picked = '1';
+    cardEl.classList.add('selecting');
+    Array.from(gridEl.children).forEach(c => { if (c !== cardEl) c.classList.add('fading'); });
+    await sleep(450);
+    const b = BLESSINGS[id];
+    b.apply(run);
+    run.blessings.push(id);
+    renderBlessingPips();
+    await playCutscene(b.name, b.verse);
+    log({ v: b.verse.v, r: b.verse.r });
+    log(`Blessing received: ${b.name}.`, 'system');
+    updateBars();
+    run.fightNum++;
+    startNextPilgrimageFight();
+  }
+
+  // ============ AI ============
+  async function aiThinkingTell() {
+    const sp = $('enemy-sprite');
+    sp.classList.add('ai-thinking');
+    await sleep(550);
+    sp.classList.remove('ai-thinking');
+  }
+
+  async function enemyAITurn() {
+    if (busy || currentTurn !== 'enemy') return;
+    await aiThinkingTell();
+    const sigIdx = enemy.attacks.length - 1;
+    const sig = enemy.attacks[sigIdx];
+    let pick = null;
+    if (enemy.malice >= sig.cost && Math.random() < 0.55) {
+      pick = sigIdx;
+    } else {
+      const affordable = enemy.attacks
+        .map((a, i) => ({ a, i }))
+        .filter(x => enemy.malice >= x.a.cost);
+      if (affordable.length) {
+        const total = affordable.reduce((s, x) => s + x.a.cost, 0);
+        let r = Math.random() * total;
+        for (const x of affordable) { r -= x.a.cost; if (r <= 0) { pick = x.i; break; } }
+      }
+    }
+    if (pick === null) doEnemyPass();
+    else doEnemyAction(pick);
+  }
+
+  function scheduleAITurnIfNeeded() {
+    if (run && run.mode === 'pilgrimage' && currentTurn === 'enemy') {
+      setTimeout(enemyAITurn, 700);
+    }
+  }
 
   function buildCharGrid() {
     const grid = $('char-grid');
@@ -1491,7 +2809,7 @@
     });
   }
 
-  function startBattle(charData) {
+  function startBattle(charData, fromPilgrimage = false) {
     enemy = {
       name: charData.name, title: charData.title, sprite: charData.sprite,
       hp: charData.hp, maxHp: charData.hp,
@@ -1513,16 +2831,21 @@
       ]
     };
 
-    paul.hp = paul.maxHp; paul.faith = paul.maxFaith; paul.locked = -1;
+    if (!fromPilgrimage) {
+      paul.hp = paul.maxHp; paul.faith = paul.maxFaith;
+    }
+    paul.locked = -1; // always reset yoke between fights
 
-    $('chapter-label').textContent = `Paul vs. ${enemy.name}`;
+    $('chapter-label').textContent = fromPilgrimage
+      ? `Trial ${run.fightNum} — ${enemy.name}`
+      : `Paul vs. ${enemy.name}`;
     $('round-label').textContent = 'Round 1';
     $('enemy-name').textContent = enemy.name;
     $('enemy-title').textContent = enemy.title;
     $('enemy-sprite').textContent = enemy.sprite;
     $('enemy-sprite').classList.remove('defeated');
     $('paul-sprite').classList.remove('defeated');
-    $('log-panel').innerHTML = '';
+    if (!fromPilgrimage) $('log-panel').innerHTML = '';
     log(`Paul confronts ${enemy.name}, ${enemy.title}.`, 'system');
 
     round = 1; busy = false; currentTurn = 'paul';
@@ -1558,10 +2881,11 @@
       const btn = document.createElement('button');
       btn.className = 'action-btn p1-style';
       const isLocked = paul.locked === i;
+      const cost = effectiveCost(atk);
       btn.innerHTML = `
         <span class="action-name">${atk.name}${isLocked ? ' (yoked)' : ''}</span>
-        <span class="action-cost">— ${atk.cost} faith</span>`;
-      btn.disabled = busy || paul.faith < atk.cost || isLocked;
+        <span class="action-cost">— ${cost} faith</span>`;
+      btn.disabled = busy || paul.faith < cost || isLocked;
       btn.onclick = () => doPaulAction(i);
       panel.appendChild(btn);
     });
@@ -1569,9 +2893,10 @@
     const pass = document.createElement('button');
     pass.className = 'action-btn p1-style pass-btn';
     pass.disabled = busy;
+    const passRestore = run ? run.mods.passRestore : 14;
     pass.innerHTML = `
       <span class="action-name">Wait on the Lord</span>
-      <span class="action-cost">— pass turn, restore 14 faith</span>`;
+      <span class="action-cost">— pass turn, restore ${passRestore} faith</span>`;
     pass.onclick = () => doPaulPass();
     panel.appendChild(pass);
   }
@@ -1612,16 +2937,18 @@
     setBusy(true);
     const verse = { v: '"But they that wait upon the Lord shall renew their strength; they shall mount up with wings as eagles…"', r: 'Isaiah 40:31' };
     await playCutscene('Wait on the Lord', verse);
-    paul.faith = Math.min(paul.maxFaith, paul.faith + 14);
+    const restore = run ? run.mods.passRestore : 14;
+    paul.faith = Math.min(paul.maxFaith, paul.faith + restore);
     log(verse);
-    log('Paul waits on the Lord. Faith renewed by 14.', 'system');
-    popup('paul-sprite', 14, 'heal');
+    log(`Paul waits on the Lord. Faith renewed by ${restore}.`, 'system');
+    popup('paul-sprite', restore, 'heal');
     paul.locked = -1;
     updateBars();
     await sleep(700);
     currentTurn = 'enemy';
     setBusy(false);
     renderTurn();
+    scheduleAITurnIfNeeded();
   }
 
   async function doEnemyPass() {
@@ -1638,8 +2965,14 @@
     // Mirror the round-end regen that doEnemyAction normally fires
     round++;
     $('round-label').textContent = 'Round ' + round;
-    paul.faith = Math.min(paul.maxFaith, paul.faith + 4);
+    fireRoundSweep();
+    const fr = run ? run.mods.faithRegen : 4;
+    paul.faith = Math.min(paul.maxFaith, paul.faith + fr);
     enemy.malice = Math.min(enemy.maxMalice, enemy.malice + 4);
+    if (run && run.mods.healPerRound > 0) {
+      paul.hp = Math.min(paul.maxHp, paul.hp + run.mods.healPerRound);
+      popup('paul-sprite', run.mods.healPerRound, 'heal');
+    }
     log('A new round dawns. Faith and malice both renew.', 'system');
     currentTurn = 'paul';
     updateBars();
@@ -1650,11 +2983,12 @@
   async function doPaulAction(i) {
     if (busy || currentTurn !== 'paul') return;
     const atk = paulAttacks[i];
-    if (paul.faith < atk.cost) return;
+    const cost = effectiveCost(atk);
+    if (paul.faith < cost) return;
     if (paul.locked === i) return;
     setBusy(true);
 
-    paul.faith -= atk.cost;
+    paul.faith -= cost;
     const r = atk.action();
 
     await playCutscene(atk.name, r.log);
@@ -1662,14 +2996,17 @@
     log(r.log);
 
     if (r.dmg !== undefined) {
+      r.dmg += damageBonus(atk.name);
       spriteAnim('paul', 'attack');
       await sleep(220);
       enemy.hp -= r.dmg;
       spriteAnim('enemy', 'hit');
-      popup('enemy-sprite', r.dmg + (r.bonus ? '!' : ''), 'dmg');
+      const big = r.dmg > 25;
+      popup('enemy-sprite', r.dmg + (r.bonus ? '!' : ''), 'dmg', big);
       log(`${enemy.name} takes ${r.dmg}${r.bonus ? ' (heresy exposed!)' : ''} damage.`, 'dmg-p1');
     }
     if (r.heal !== undefined) {
+      r.heal += damageBonus(atk.name); // Grace Alone uses its own bonus key
       paul.hp = Math.min(paul.maxHp, paul.hp + r.heal);
       popup('paul-sprite', r.heal, 'heal');
       log(`Paul is restored ${r.heal} HP.`, 'heal');
@@ -1689,6 +3026,7 @@
     currentTurn = 'enemy';
     setBusy(false);
     renderTurn();
+    scheduleAITurnIfNeeded();
   }
 
   async function doEnemyAction(i) {
@@ -1705,12 +3043,14 @@
     log(r.log);
 
     if (r.dmg !== undefined) {
+      const dmg = incomingDamage(r.dmg);
       spriteAnim('enemy', 'attack-left');
       await sleep(220);
-      paul.hp -= r.dmg;
+      paul.hp -= dmg;
       spriteAnim('paul', 'hit');
-      popup('paul-sprite', r.dmg, 'dmg');
-      log(`Paul takes ${r.dmg} damage.`, 'dmg-p2');
+      const big = dmg > 25;
+      popup('paul-sprite', dmg, 'dmg', big);
+      log(`Paul takes ${dmg} damage${dmg < r.dmg ? ' (armour absorbed ' + (r.dmg - dmg) + ')' : ''}.`, 'dmg-p2');
     }
     if (r.heal !== undefined) {
       enemy.hp = Math.min(enemy.maxHp, enemy.hp + r.heal);
@@ -1723,7 +3063,7 @@
       if (drain > 0) log(`Paul's faith is drained by ${drain}.`, 'dmg-p2');
     }
     if (r.lockMove) {
-      const candidates = paulAttacks.map((a, idx) => ({ a, idx })).filter(x => paul.faith >= x.a.cost);
+      const candidates = paulAttacks.map((a, idx) => ({ a, idx })).filter(x => paul.faith >= effectiveCost(x.a));
       if (candidates.length) {
         const pick = candidates[randInt(0, candidates.length - 1)];
         paul.locked = pick.idx;
@@ -1743,8 +3083,15 @@
 
     round++;
     $('round-label').textContent = 'Round ' + round;
-    paul.faith = Math.min(paul.maxFaith, paul.faith + 4);
+    fireRoundSweep();
+    const fr = run ? run.mods.faithRegen : 4;
+    paul.faith = Math.min(paul.maxFaith, paul.faith + fr);
     enemy.malice = Math.min(enemy.maxMalice, enemy.malice + 4);
+    if (run && run.mods.healPerRound > 0) {
+      paul.hp = Math.min(paul.maxHp, paul.hp + run.mods.healPerRound);
+      popup('paul-sprite', run.mods.healPerRound, 'heal');
+      log(`Bread of Heaven sustains Paul (+${run.mods.healPerRound} HP).`, 'heal');
+    }
     log('A new round dawns. Faith and malice both renew.', 'system');
 
     currentTurn = 'paul';
@@ -1754,6 +3101,21 @@
   }
 
   function endGame(winner) {
+    // PILGRIMAGE branches
+    if (run && run.mode === 'pilgrimage') {
+      if (winner === 'p1') {
+        if (run.fightNum >= run.queue.length) {
+          showPilgrimageVictory();
+        } else {
+          // After-trial blessing
+          showBlessingPick();
+        }
+      } else {
+        showPilgrimageDefeat();
+      }
+      return;
+    }
+    // VERSUS (existing)
     if (winner === 'p1') {
       $('end-tag').textContent = 'ΝΙΚΗ · PLAYER ONE PREVAILS';
       $('end-title').textContent = 'The Faith Defended';
@@ -1768,7 +3130,54 @@
     showScene('end-screen');
   }
 
-  function restart() { showScene('title-screen'); }
+  // ============ PILGRIMAGE END SCREENS ============
+  async function showPilgrimageDefeat() {
+    const trial = run.fightNum;
+    $('defeat-trial').textContent = `at Trial ${trial} — ${enemy.name}`;
+    $('defeat-verse').innerHTML = `${enemy.defeatVerse.v}<span class="ref">${enemy.defeatVerse.r}</span>`;
+    showScene('pilgrim-defeat-screen');
+    // Three bell-tolls
+    const game = $('game');
+    for (let i = 0; i < 3; i++) {
+      await sleep(700);
+      game.classList.add('defeat-shake');
+      setTimeout(() => game.classList.remove('defeat-shake'), 400);
+    }
+  }
+
+  function showPilgrimageVictory() {
+    showScene('pilgrim-victory-screen');
+    // Spawn confetti particles
+    const burst = $('confetti-burst');
+    burst.innerHTML = '';
+    const colors = ['#d4a017', '#ffd700', '#fff8dc', '#b8860b', '#8a2522', '#f0e3c4'];
+    for (let i = 0; i < 50; i++) {
+      const c = document.createElement('div');
+      c.className = 'confetti';
+      const angle = Math.random() * Math.PI * 2;
+      const dist = 220 + Math.random() * 320;
+      const cx = Math.cos(angle) * dist;
+      const cy = Math.sin(angle) * dist - 60;
+      const cr = (Math.random() - 0.5) * 1080;
+      c.style.setProperty('--cx', cx + 'px');
+      c.style.setProperty('--cy', cy + 'px');
+      c.style.setProperty('--cr', cr + 'deg');
+      c.style.background = colors[Math.floor(Math.random() * colors.length)];
+      c.style.animationDelay = (Math.random() * 0.6 + 0.4) + 's';
+      c.style.width = (5 + Math.random() * 6) + 'px';
+      c.style.height = (10 + Math.random() * 10) + 'px';
+      burst.appendChild(c);
+    }
+  }
+
+  function restart() {
+    run = null;
+    document.body.classList.remove('in-pilgrimage');
+    paul.maxHp = 100; paul.hp = 100;
+    paul.maxFaith = 50; paul.faith = 50;
+    paul.locked = -1;
+    showScene('title-screen');
+  }
 </script>
 </body>
 </html>
