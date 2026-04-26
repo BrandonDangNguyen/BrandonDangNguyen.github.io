@@ -181,7 +181,7 @@
   .vs-mark { align-self: center; text-align: center; font-family: 'Cinzel', serif; font-weight: 900; font-size: 28px; color: var(--oxblood); text-shadow: 2px 2px 0 var(--gold); margin-top: 60px; }
 
   .battle-controls { display: grid; grid-template-columns: 2fr 1fr; gap: 10px; height: 160px; }
-  .actions-panel { border: 2px solid var(--ink); background: rgba(255,255,255,0.3); padding: 8px; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 6px; transition: all 0.3s ease; }
+  .actions-panel { border: 2px solid var(--ink); background: rgba(255,255,255,0.3); padding: 8px; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr auto; gap: 6px; transition: all 0.3s ease; }
   .actions-panel.locked { opacity: 0.35; pointer-events: none; }
 
   .action-btn { font-family: 'Cinzel', serif; font-weight: 600; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; padding: 6px 10px; background: var(--parchment); color: var(--ink); border: 2px solid var(--ink); cursor: pointer; transition: all 0.2s ease; text-align: left; display: flex; flex-direction: column; justify-content: space-between; }
@@ -198,15 +198,16 @@
 
   .action-btn.pass-btn {
     grid-column: 1 / -1;
-    grid-row: 1 / -1;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
     text-align: center;
-    font-size: 14px;
+    padding: 5px 10px;
     letter-spacing: 0.15em;
+    gap: 10px;
   }
-  .action-btn.pass-btn .action-name { font-size: 16px; }
-  .action-btn.pass-btn .action-cost { margin-top: 4px; }
+  .action-btn.pass-btn .action-name { font-size: 11px; }
+  .action-btn.pass-btn .action-cost { font-size: 10px; margin-top: 0; }
 
   .log-panel { border: 2px solid var(--ink); background: rgba(0,0,0,0.05); padding: 10px; overflow-y: auto; font-family: 'IM Fell English', serif; font-size: 12px; line-height: 1.45; color: var(--ink); }
   .log-panel::-webkit-scrollbar { width: 4px; }
@@ -1553,7 +1554,6 @@
     const panel = $('actions-panel');
     panel.innerHTML = '';
     panel.classList.remove('locked');
-    let anyAffordable = false;
     paulAttacks.forEach((atk, i) => {
       const btn = document.createElement('button');
       btn.className = 'action-btn p1-style';
@@ -1561,51 +1561,44 @@
       btn.innerHTML = `
         <span class="action-name">${atk.name}${isLocked ? ' (yoked)' : ''}</span>
         <span class="action-cost">— ${atk.cost} faith</span>`;
-      const disabled = busy || paul.faith < atk.cost || isLocked;
-      btn.disabled = disabled;
-      if (!disabled) anyAffordable = true;
+      btn.disabled = busy || paul.faith < atk.cost || isLocked;
       btn.onclick = () => doPaulAction(i);
       panel.appendChild(btn);
     });
-    if (!anyAffordable && !busy) {
-      panel.innerHTML = '';
-      const pass = document.createElement('button');
-      pass.className = 'action-btn p1-style pass-btn';
-      pass.innerHTML = `
-        <span class="action-name">Wait on the Lord</span>
-        <span class="action-cost">Pass turn — restore 14 faith</span>`;
-      pass.onclick = () => doPaulPass();
-      panel.appendChild(pass);
-    }
+    // Always-available pass option
+    const pass = document.createElement('button');
+    pass.className = 'action-btn p1-style pass-btn';
+    pass.disabled = busy;
+    pass.innerHTML = `
+      <span class="action-name">Wait on the Lord</span>
+      <span class="action-cost">— pass turn, restore 14 faith</span>`;
+    pass.onclick = () => doPaulPass();
+    panel.appendChild(pass);
   }
 
   function buildEnemyPanel() {
     const panel = $('actions-panel');
     panel.innerHTML = '';
     panel.classList.remove('locked');
-    let anyAffordable = false;
     enemy.attacks.forEach((atk, i) => {
       const btn = document.createElement('button');
       btn.className = 'action-btn p2-style';
       btn.innerHTML = `
         <span class="action-name">${atk.name}</span>
         <span class="action-cost">— ${atk.cost} malice</span>`;
-      const disabled = busy || enemy.malice < atk.cost;
-      btn.disabled = disabled;
-      if (!disabled) anyAffordable = true;
+      btn.disabled = busy || enemy.malice < atk.cost;
       btn.onclick = () => doEnemyAction(i);
       panel.appendChild(btn);
     });
-    if (!anyAffordable && !busy) {
-      panel.innerHTML = '';
-      const pass = document.createElement('button');
-      pass.className = 'action-btn p2-style pass-btn';
-      pass.innerHTML = `
-        <span class="action-name">Brood in Darkness</span>
-        <span class="action-cost">Pass turn — restore 14 malice</span>`;
-      pass.onclick = () => doEnemyPass();
-      panel.appendChild(pass);
-    }
+    // Always-available pass option
+    const pass = document.createElement('button');
+    pass.className = 'action-btn p2-style pass-btn';
+    pass.disabled = busy;
+    pass.innerHTML = `
+      <span class="action-name">Brood in Darkness</span>
+      <span class="action-cost">— pass turn, restore 14 malice</span>`;
+    pass.onclick = () => doEnemyPass();
+    panel.appendChild(pass);
   }
 
   function setBusy(v) {
