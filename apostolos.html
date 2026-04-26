@@ -196,6 +196,18 @@
   .action-cost { font-family: 'IM Fell English', serif; font-style: italic; font-size: 10px; color: var(--oxblood); text-transform: none; letter-spacing: 0; }
   .action-btn:hover:not(:disabled) .action-cost { color: var(--gold-bright); }
 
+  .action-btn.pass-btn {
+    grid-column: 1 / -1;
+    grid-row: 1 / -1;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 14px;
+    letter-spacing: 0.15em;
+  }
+  .action-btn.pass-btn .action-name { font-size: 16px; }
+  .action-btn.pass-btn .action-cost { margin-top: 4px; }
+
   .log-panel { border: 2px solid var(--ink); background: rgba(0,0,0,0.05); padding: 10px; overflow-y: auto; font-family: 'IM Fell English', serif; font-size: 12px; line-height: 1.45; color: var(--ink); }
   .log-panel::-webkit-scrollbar { width: 4px; }
   .log-panel::-webkit-scrollbar-thumb { background: var(--oxblood); }
@@ -499,6 +511,93 @@
   @keyframes falseHalo {
     from { opacity: 0.9; transform: scale(1); }
     to { opacity: 0.5; transform: scale(1.1); filter: hue-rotate(40deg); }
+  }
+
+  /* ==== Wait on the Lord — eagle ascending, light rays, prayer glow ==== */
+  .s-eagle-rise {
+    transform-origin: 400px 290px;
+    animation: eagleRise 2.2s cubic-bezier(0.25, 1, 0.5, 1) 0.4s both;
+  }
+  @keyframes eagleRise {
+    0%   { transform: translateY(140px) scale(0.55); opacity: 0; }
+    25%  { opacity: 1; }
+    100% { transform: translateY(-50px) scale(1.15); opacity: 0.95; }
+  }
+  .s-wing {
+    transform-origin: 400px 285px;
+    animation: wingFlap 0.55s ease-in-out 0.5s infinite alternate;
+  }
+  .s-wing-l { animation-delay: 0.5s; }
+  .s-wing-r { animation-delay: 0.5s; }
+  @keyframes wingFlap {
+    from { transform: scaleY(1) translateY(0); }
+    to   { transform: scaleY(0.78) translateY(-3px); }
+  }
+  .s-prayer-rays {
+    transform-origin: 400px 120px;
+    animation: prayerRays 2.4s ease-in-out 0.2s infinite alternate;
+  }
+  @keyframes prayerRays {
+    from { opacity: 0.4; transform: scale(0.9) rotate(-2deg); }
+    to   { opacity: 1;   transform: scale(1.12) rotate(2deg); }
+  }
+  .s-prayer-sun {
+    animation: prayerSun 2.4s ease-in-out 0.2s infinite alternate;
+    transform-origin: 400px 120px;
+  }
+  @keyframes prayerSun {
+    from { filter: brightness(0.95); transform: scale(0.96); }
+    to   { filter: brightness(1.4) drop-shadow(0 0 24px #fff8dc); transform: scale(1.06); }
+  }
+  .s-prayer-glow {
+    animation: prayerGlow 2.4s ease-out 0.7s both;
+    transform-origin: 400px 420px;
+  }
+  @keyframes prayerGlow {
+    0%   { opacity: 0; transform: scale(0.4); }
+    50%  { opacity: 0.55; transform: scale(1.1); }
+    100% { opacity: 0.25; transform: scale(1.4); }
+  }
+
+  /* ==== Brood in Darkness — pulsing eyes, swirling mist, curling tendrils ==== */
+  .s-brood-mist {
+    animation: broodMist 3s ease-in-out infinite alternate;
+    transform-origin: 400px 350px;
+  }
+  @keyframes broodMist {
+    from { transform: scale(0.92) rotate(-1.5deg); opacity: 0.75; }
+    to   { transform: scale(1.08) rotate(1.5deg);  opacity: 1; }
+  }
+  .s-evil-eye {
+    animation: evilPulse 0.55s ease-in-out 0.4s infinite alternate;
+  }
+  @keyframes evilPulse {
+    from { fill: #aa0000; }
+    to   { fill: #ff4a4a; filter: drop-shadow(0 0 6px #ff2a2a); }
+  }
+  .s-eye-glow {
+    transform-origin: center;
+    animation: eyeGlow 0.55s ease-in-out 0.4s infinite alternate;
+  }
+  @keyframes eyeGlow {
+    from { opacity: 0.25; transform: scale(0.8); }
+    to   { opacity: 0.85; transform: scale(1.55); }
+  }
+  .s-brood-tendril {
+    transform-origin: 400px 480px;
+    animation: tendrilRise 2.6s ease-out 0.3s infinite alternate;
+  }
+  @keyframes tendrilRise {
+    from { opacity: 0.35; transform: scaleY(0.85); }
+    to   { opacity: 0.95; transform: scaleY(1.1); }
+  }
+  .s-brood-figure {
+    transform-origin: 400px 480px;
+    animation: broodLoom 1.4s cubic-bezier(0.25, 1, 0.5, 1) 0.3s both;
+  }
+  @keyframes broodLoom {
+    0%   { transform: scale(0.7) translateY(60px); opacity: 0; }
+    100% { transform: scale(1) translateY(0); opacity: 1; }
   }
 </style>
 </head>
@@ -1046,6 +1145,79 @@
           <line x1="424" y1="276" x2="445" y2="300" stroke="#1a0a08" stroke-width="4" stroke-linecap="round"/>
         </g>
       </svg>`,
+
+    // Wait on the Lord — Isaiah 40:31. Kneeling figure, light rays, eagle ascending.
+    prayer_eagle: `
+      <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="dawnGlow" cx="50%" cy="20%">
+            <stop offset="0" stop-color="#fff8dc" stop-opacity="0.55"/>
+            <stop offset="1" stop-color="#fff8dc" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <rect width="800" height="500" fill="url(#dawnGlow)"/>
+        <!-- Distant mountains -->
+        <path d="M0 380 L150 320 L280 360 L420 300 L560 350 L700 310 L800 360 L800 500 L0 500 Z" fill="#6b4a1a" opacity="0.5"/>
+        <path d="M0 430 L800 430 L800 500 L0 500 Z" fill="#3a2608"/>
+        <!-- Sun -->
+        <circle class="s-prayer-sun" cx="400" cy="120" r="60" fill="#fff8dc" opacity="0.7"/>
+        <circle class="s-prayer-sun" cx="400" cy="120" r="38" fill="#ffffff" opacity="0.95"/>
+        <!-- Light rays -->
+        <g class="s-prayer-rays">
+          <polygon points="400,120 60,500 740,500" fill="#fff8dc" opacity="0.18"/>
+          <polygon points="400,120 220,500 580,500" fill="#ffd700" opacity="0.22"/>
+          <polygon points="400,120 340,500 460,500" fill="#ffffff" opacity="0.28"/>
+        </g>
+        <!-- Eagle ascending -->
+        <g class="s-eagle-rise">
+          <path class="s-wing s-wing-l" d="M380 280 Q310 240 230 280 Q290 270 360 290 Z" fill="#1a0a08"/>
+          <path class="s-wing s-wing-r" d="M420 280 Q490 240 570 280 Q510 270 440 290 Z" fill="#1a0a08"/>
+          <ellipse cx="400" cy="290" rx="12" ry="22" fill="#1a0a08"/>
+          <circle cx="400" cy="270" r="8" fill="#1a0a08"/>
+          <polygon points="400,272 408,272 404,278" fill="#d4a017"/>
+          <path d="M392 308 L400 326 L408 308 Z" fill="#1a0a08"/>
+        </g>
+        <!-- Halo glow around praying figure -->
+        <ellipse class="s-prayer-glow" cx="400" cy="420" rx="100" ry="40" fill="#fff8dc" opacity="0"/>
+        <!-- Kneeling figure praying -->
+        <g>
+          <circle cx="400" cy="395" r="11" fill="#1a0a08"/>
+          <path d="M386 408 L414 408 L422 460 L378 460 Z" fill="#1a0a08"/>
+          <path d="M388 415 Q393 380 400 374" stroke="#1a0a08" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <path d="M412 415 Q407 380 400 374" stroke="#1a0a08" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <circle cx="400" cy="372" r="4" fill="#1a0a08"/>
+        </g>
+      </svg>`,
+
+    // Brood in Darkness — Proverbs 4:16. Hooded figure, glowing eyes, swirling shadow.
+    brooding_shadow: `
+      <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+        <rect width="800" height="500" fill="#000" opacity="0.35"/>
+        <!-- Swirling dark mist -->
+        <g class="s-brood-mist">
+          <ellipse cx="400" cy="350" rx="320" ry="140" fill="#1a0033" opacity="0.7"/>
+          <ellipse cx="350" cy="320" rx="220" ry="100" fill="#000" opacity="0.6"/>
+          <ellipse cx="450" cy="380" rx="200" ry="90" fill="#1a0033" opacity="0.55"/>
+        </g>
+        <!-- Curling tendrils rising -->
+        <g class="s-brood-tendril" stroke="#6a1a8a" stroke-width="3.5" fill="none" opacity="0.7" stroke-linecap="round">
+          <path d="M180 460 Q220 400 200 350 Q170 290 220 230"/>
+          <path d="M620 460 Q580 400 600 350 Q630 290 580 230"/>
+          <path d="M120 480 Q150 430 130 380"/>
+          <path d="M680 480 Q650 430 670 380"/>
+        </g>
+        <!-- Hooded figure silhouette -->
+        <g class="s-brood-figure">
+          <path d="M340 220 Q320 260 320 340 L290 480 L510 480 L480 340 Q480 260 460 220 Q420 195 340 220 Z" fill="#0a0a0a"/>
+          <ellipse cx="400" cy="250" rx="42" ry="55" fill="#000"/>
+          <!-- Eye glow halos -->
+          <circle class="s-eye-glow" cx="385" cy="248" r="10" fill="#ff2a2a" opacity="0.4"/>
+          <circle class="s-eye-glow" cx="415" cy="248" r="10" fill="#ff2a2a" opacity="0.4"/>
+          <!-- Eye cores -->
+          <circle class="s-evil-eye" cx="385" cy="248" r="3.5" fill="#ff4040"/>
+          <circle class="s-evil-eye" cx="415" cy="248" r="3.5" fill="#ff4040"/>
+        </g>
+      </svg>`,
   };
 
   // ============ CUTSCENE CONFIGS ============
@@ -1105,6 +1277,16 @@
     'Angel of Light': {
       scene: 'satan_fall', bg: 'cs-bg-heaven-fall',
       side: 'p2', flash: 'purple', duration: 2700
+    },
+
+    // PASS / REST MOVES — atmospheric, no flash
+    'Wait on the Lord': {
+      scene: 'prayer_eagle', bg: 'cs-bg-dawn',
+      side: 'p1', flash: 'gold', duration: 3000
+    },
+    'Brood in Darkness': {
+      scene: 'brooding_shadow', bg: 'cs-bg-void',
+      side: 'p2', flash: 'dark', duration: 3000
     }
   };
 
@@ -1371,6 +1553,7 @@
     const panel = $('actions-panel');
     panel.innerHTML = '';
     panel.classList.remove('locked');
+    let anyAffordable = false;
     paulAttacks.forEach((atk, i) => {
       const btn = document.createElement('button');
       btn.className = 'action-btn p1-style';
@@ -1378,32 +1561,97 @@
       btn.innerHTML = `
         <span class="action-name">${atk.name}${isLocked ? ' (yoked)' : ''}</span>
         <span class="action-cost">— ${atk.cost} faith</span>`;
-      btn.disabled = busy || paul.faith < atk.cost || isLocked;
+      const disabled = busy || paul.faith < atk.cost || isLocked;
+      btn.disabled = disabled;
+      if (!disabled) anyAffordable = true;
       btn.onclick = () => doPaulAction(i);
       panel.appendChild(btn);
     });
+    if (!anyAffordable && !busy) {
+      panel.innerHTML = '';
+      const pass = document.createElement('button');
+      pass.className = 'action-btn p1-style pass-btn';
+      pass.innerHTML = `
+        <span class="action-name">Wait on the Lord</span>
+        <span class="action-cost">Pass turn — restore 14 faith</span>`;
+      pass.onclick = () => doPaulPass();
+      panel.appendChild(pass);
+    }
   }
 
   function buildEnemyPanel() {
     const panel = $('actions-panel');
     panel.innerHTML = '';
     panel.classList.remove('locked');
+    let anyAffordable = false;
     enemy.attacks.forEach((atk, i) => {
       const btn = document.createElement('button');
       btn.className = 'action-btn p2-style';
       btn.innerHTML = `
         <span class="action-name">${atk.name}</span>
         <span class="action-cost">— ${atk.cost} malice</span>`;
-      btn.disabled = busy || enemy.malice < atk.cost;
+      const disabled = busy || enemy.malice < atk.cost;
+      btn.disabled = disabled;
+      if (!disabled) anyAffordable = true;
       btn.onclick = () => doEnemyAction(i);
       panel.appendChild(btn);
     });
+    if (!anyAffordable && !busy) {
+      panel.innerHTML = '';
+      const pass = document.createElement('button');
+      pass.className = 'action-btn p2-style pass-btn';
+      pass.innerHTML = `
+        <span class="action-name">Brood in Darkness</span>
+        <span class="action-cost">Pass turn — restore 14 malice</span>`;
+      pass.onclick = () => doEnemyPass();
+      panel.appendChild(pass);
+    }
   }
 
   function setBusy(v) {
     busy = v;
     if (v) $('actions-panel').classList.add('locked');
     else $('actions-panel').classList.remove('locked');
+  }
+
+  async function doPaulPass() {
+    if (busy || currentTurn !== 'paul') return;
+    setBusy(true);
+    const verse = { v: '"But they that wait upon the Lord shall renew their strength; they shall mount up with wings as eagles…"', r: 'Isaiah 40:31' };
+    await playCutscene('Wait on the Lord', verse);
+    paul.faith = Math.min(paul.maxFaith, paul.faith + 14);
+    log(verse);
+    log('Paul waits on the Lord. Faith renewed by 14.', 'system');
+    popup('paul-sprite', 14, 'heal');
+    paul.locked = -1;
+    updateBars();
+    await sleep(700);
+    currentTurn = 'enemy';
+    setBusy(false);
+    renderTurn();
+  }
+
+  async function doEnemyPass() {
+    if (busy || currentTurn !== 'enemy') return;
+    setBusy(true);
+    const verse = { v: '"For they sleep not, except they have done mischief; and their sleep is taken away, unless they cause some to fall."', r: 'Proverbs 4:16' };
+    await playCutscene('Brood in Darkness', verse);
+    enemy.malice = Math.min(enemy.maxMalice, enemy.malice + 14);
+    log(verse);
+    log(`${enemy.name} broods in darkness. Malice festers by 14.`, 'system');
+    popup('enemy-sprite', 14, 'heal');
+    updateBars();
+    await sleep(700);
+    // Mirror the round-end regen that doEnemyAction normally fires
+    round++;
+    $('round-label').textContent = 'Round ' + round;
+    paul.faith = Math.min(paul.maxFaith, paul.faith + 4);
+    enemy.malice = Math.min(enemy.maxMalice, enemy.malice + 4);
+    log('A new round dawns. Faith and malice both renew.', 'system');
+    currentTurn = 'paul';
+    updateBars();
+    setBusy(false);
+    renderTurn();
   }
 
   async function doPaulAction(i) {
