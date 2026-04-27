@@ -1,0 +1,1763 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="An interactive guide to the four flavors of t-test — one-mean, paired, pooled, and Welch — with live calculators, an animated t-distribution, and a decision guide." />
+  <meta name="author" content="Brandon Nguyen" />
+  <title>T-Tests — Field Notes on Hypothesis Testing</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+
+  <script>
+    // Set theme before paint to avoid FOUC
+    (function () {
+      try {
+        var t = localStorage.getItem('ttests-theme');
+        if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+      } catch (e) {}
+    })();
+  </script>
+
+  <style>
+    :root {
+      --bg: #0B0D14;
+      --bg-deep: #07080E;
+      --panel: #11141F;
+      --card: #1A1E2C;
+      --card-hover: #1F243A;
+      --ink: #F1ECE0;
+      --ink-strong: #FFFFFF;
+      --mute: #8A8FA3;
+      --mute-soft: #6B6F82;
+      --rule: rgba(255, 255, 255, 0.08);
+      --rule-strong: rgba(255, 255, 255, 0.16);
+      --accent: #7C5CFF;
+      --accent2: #FF7A59;
+      --glow: #A88BFF;
+      --ok: #5BD4A0;
+      --warn: #F2B23C;
+      --danger: #FF6B6B;
+      --grad: linear-gradient(135deg, #7C5CFF 0%, #FF7A59 100%);
+      --grad-soft: linear-gradient(135deg, rgba(124, 92, 255, 0.18) 0%, rgba(255, 122, 89, 0.14) 100%);
+    }
+
+    [data-theme="light"] {
+      --bg: #F8F4EC;
+      --bg-deep: #F0EBE0;
+      --panel: #FFFFFF;
+      --card: #FBF7EE;
+      --card-hover: #F4EFE2;
+      --ink: #15131A;
+      --ink-strong: #07060A;
+      --mute: #6B655C;
+      --mute-soft: #8A8579;
+      --rule: rgba(0, 0, 0, 0.10);
+      --rule-strong: rgba(0, 0, 0, 0.18);
+      --accent: #5B3FE0;
+      --accent2: #E15A35;
+      --glow: #7C5CFF;
+    }
+
+    * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    html, body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      transition: background-color .35s ease, color .35s ease;
+    }
+    html { scroll-behavior: smooth; }
+    body { overflow-x: hidden; }
+
+    .font-display { font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; letter-spacing: -0.01em; }
+    .font-mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+    .small-caps { font-feature-settings: "smcp" 1, "c2sc" 1; letter-spacing: 0.08em; text-transform: lowercase; }
+
+    .grad-text {
+      background: var(--grad);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .grad-bg { background: var(--grad); }
+    .grad-soft-bg { background: var(--grad-soft); }
+
+    .glass {
+      background: color-mix(in oklab, var(--panel) 72%, transparent);
+      backdrop-filter: blur(14px) saturate(140%);
+      -webkit-backdrop-filter: blur(14px) saturate(140%);
+      border: 1px solid var(--rule);
+    }
+    [data-theme="light"] .glass { background: color-mix(in oklab, var(--panel) 84%, transparent); }
+
+    .hairline { border: 1px solid var(--rule); }
+    .hairline-strong { border: 1px solid var(--rule-strong); }
+
+    .card-surface {
+      background: var(--card);
+      border: 1px solid var(--rule);
+      border-radius: 18px;
+      transition: transform .35s cubic-bezier(.22,1,.36,1), background-color .35s ease, border-color .35s ease, box-shadow .35s ease;
+    }
+    .card-surface:hover {
+      background: var(--card-hover);
+      border-color: var(--rule-strong);
+      transform: translateY(-2px);
+      box-shadow: 0 18px 48px -24px rgba(124, 92, 255, 0.35);
+    }
+
+    .btn-ghost {
+      border: 1px solid var(--rule);
+      background: transparent;
+      color: var(--ink);
+      transition: background-color .25s ease, border-color .25s ease, transform .25s ease;
+    }
+    .btn-ghost:hover { background: var(--card); border-color: var(--rule-strong); }
+
+    .btn-grad {
+      background: var(--grad);
+      color: white;
+      border: none;
+      box-shadow: 0 8px 28px -10px rgba(124, 92, 255, 0.55);
+      transition: transform .25s ease, box-shadow .25s ease, filter .25s ease;
+    }
+    .btn-grad:hover { transform: translateY(-1px); box-shadow: 0 14px 40px -10px rgba(124, 92, 255, 0.75); filter: brightness(1.05); }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1);
+      will-change: opacity, transform;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    .formula-sweep {
+      mask-image: linear-gradient(90deg, #000 0%, #000 var(--sweep, 0%), transparent var(--sweep, 0%));
+      -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 var(--sweep, 0%), transparent var(--sweep, 0%));
+      transition: mask-image 1.2s cubic-bezier(.22,1,.36,1), -webkit-mask-image 1.2s cubic-bezier(.22,1,.36,1);
+    }
+    .formula-sweep.swept { --sweep: 100%; }
+
+    .progress-bar { background: var(--grad); transform-origin: left; }
+
+    .nav-link { position: relative; }
+    .nav-link::after {
+      content: ""; position: absolute; left: 0; bottom: -4px;
+      width: 100%; height: 1.5px;
+      background: var(--grad);
+      transform: scaleX(0); transform-origin: right;
+      transition: transform .35s cubic-bezier(.22,1,.36,1);
+    }
+    .nav-link:hover::after, .nav-link.active::after { transform: scaleX(1); transform-origin: left; }
+
+    .verse-aside {
+      border-top: 1px solid var(--rule);
+      padding-top: 18px;
+      color: var(--mute);
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-size: 17px;
+      line-height: 1.55;
+    }
+    .verse-cite {
+      display: block;
+      margin-top: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-style: normal;
+      font-size: 11px;
+      color: var(--mute-soft);
+    }
+
+    .marker-line { stroke: var(--accent2); stroke-width: 2; filter: drop-shadow(0 0 6px rgba(255,122,89,0.55)); }
+    .curve-fill { fill: url(#tDistGrad); opacity: 0.20; }
+    .curve-stroke { stroke: var(--ink); stroke-width: 1.4; fill: none; opacity: 0.85; }
+    .reject-fill { fill: url(#rejectGrad); opacity: 0.62; }
+    .grid-line { stroke: var(--rule); stroke-width: 1; }
+    .axis-text { fill: var(--mute); font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+
+    .seg {
+      display: inline-flex; padding: 4px;
+      border: 1px solid var(--rule);
+      border-radius: 999px;
+      background: var(--card);
+      gap: 2px;
+    }
+    .seg button {
+      padding: 6px 14px; border-radius: 999px; font-size: 13px;
+      color: var(--mute); border: none; background: transparent;
+      transition: background-color .25s ease, color .25s ease;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .seg button.active {
+      color: var(--ink-strong);
+      background: var(--grad);
+    }
+    .seg button:hover:not(.active) { color: var(--ink); }
+
+    input[type="range"] {
+      -webkit-appearance: none; appearance: none;
+      width: 100%; height: 4px; background: var(--rule-strong);
+      border-radius: 999px; outline: none;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 18px; height: 18px;
+      background: var(--accent); border: 2px solid var(--bg);
+      border-radius: 50%; cursor: pointer;
+      box-shadow: 0 0 0 0 rgba(124, 92, 255, 0.5);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); box-shadow: 0 0 0 8px rgba(124, 92, 255, 0.18); }
+    input[type="range"]::-moz-range-thumb {
+      width: 18px; height: 18px; background: var(--accent);
+      border: 2px solid var(--bg); border-radius: 50%; cursor: pointer;
+    }
+
+    input[type="number"] {
+      background: var(--bg-deep); border: 1px solid var(--rule);
+      border-radius: 8px; padding: 8px 10px; color: var(--ink);
+      font-family: 'JetBrains Mono', monospace; font-size: 14px;
+      width: 100%; transition: border-color .25s ease, background-color .25s ease;
+      -moz-appearance: textfield;
+      appearance: textfield;
+    }
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type="number"]:focus { outline: none; border-color: var(--accent); }
+
+    .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+
+    .chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 10px; border-radius: 999px;
+      font-family: 'JetBrains Mono', monospace; font-size: 11px;
+      border: 1px solid var(--rule);
+      color: var(--mute);
+    }
+    .chip.ok { color: var(--ok); border-color: color-mix(in oklab, var(--ok) 35%, var(--rule)); }
+    .chip.warn { color: var(--warn); border-color: color-mix(in oklab, var(--warn) 35%, var(--rule)); }
+
+    .hero-curve { position: absolute; inset: 0; pointer-events: none; opacity: 0.55; mask-image: radial-gradient(ellipse 70% 60% at 50% 60%, #000 0%, transparent 100%); }
+    [data-theme="light"] .hero-curve { opacity: 0.35; }
+
+    .section-anchor { scroll-margin-top: 100px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1 !important; transform: none !important; }
+      .formula-sweep { --sweep: 100% !important; }
+      html { scroll-behavior: auto; }
+      * { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+    }
+
+    /* KaTeX color/sizing tweaks */
+    .katex { color: var(--ink); }
+    .katex-display { margin: 0 !important; }
+    .tex-large .katex { font-size: 1.4em; }
+    .tex-xl .katex { font-size: 1.85em; }
+
+    /* Decision guide active card */
+    .dg-card { transition: border-color .3s ease, transform .3s ease, box-shadow .3s ease, background-color .3s ease; }
+    .dg-card.active {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent), 0 22px 60px -28px rgba(124, 92, 255, 0.55);
+      transform: translateY(-3px);
+    }
+  </style>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            base: 'var(--bg)',
+            'base-deep': 'var(--bg-deep)',
+            panel: 'var(--panel)',
+            card: 'var(--card)',
+            ink: 'var(--ink)',
+            'ink-strong': 'var(--ink-strong)',
+            mute: 'var(--mute)',
+            'mute-soft': 'var(--mute-soft)',
+            rule: 'var(--rule)',
+            'rule-strong': 'var(--rule-strong)',
+            accent: 'var(--accent)',
+            accent2: 'var(--accent2)',
+            glow: 'var(--glow)',
+            ok: 'var(--ok)',
+            warn: 'var(--warn)',
+            danger: 'var(--danger)'
+          },
+          fontFamily: {
+            display: ['"Instrument Serif"', 'Georgia', 'serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace']
+          }
+        }
+      }
+    };
+  </script>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+</head>
+<body class="bg-base text-ink">
+
+  <div id="root"></div>
+
+  <script type="text/babel" data-presets="react">
+    const { useState, useEffect, useRef, useMemo, useCallback, useLayoutEffect, Fragment } = React;
+
+    /* ============================================================
+       MATH UTILITIES
+       ============================================================ */
+
+    // Lanczos approximation for log-gamma
+    function lgamma(x) {
+      const g = 7;
+      const c = [
+        0.99999999999980993, 676.5203681218851, -1259.1392167224028,
+        771.32342877765313, -176.61502916214059, 12.507343278686905,
+        -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7
+      ];
+      if (x < 0.5) {
+        return Math.log(Math.PI / Math.sin(Math.PI * x)) - lgamma(1 - x);
+      }
+      x -= 1;
+      let a = c[0];
+      const t = x + g + 0.5;
+      for (let i = 1; i < 9; i++) a += c[i] / (x + i);
+      return 0.5 * Math.log(2 * Math.PI) + (x + 0.5) * Math.log(t) - t + Math.log(a);
+    }
+
+    // Continued fraction for incomplete beta (Numerical Recipes)
+    function betacf(a, b, x) {
+      const MAX_IT = 200, EPS = 3e-7, FPMIN = 1e-30;
+      const qab = a + b, qap = a + 1, qam = a - 1;
+      let c = 1, d = 1 - qab * x / qap;
+      if (Math.abs(d) < FPMIN) d = FPMIN;
+      d = 1 / d;
+      let h = d;
+      for (let m = 1; m <= MAX_IT; m++) {
+        const m2 = 2 * m;
+        let aa = m * (b - m) * x / ((qam + m2) * (a + m2));
+        d = 1 + aa * d; if (Math.abs(d) < FPMIN) d = FPMIN;
+        c = 1 + aa / c; if (Math.abs(c) < FPMIN) c = FPMIN;
+        d = 1 / d; h *= d * c;
+        aa = -(a + m) * (qab + m) * x / ((a + m2) * (qap + m2));
+        d = 1 + aa * d; if (Math.abs(d) < FPMIN) d = FPMIN;
+        c = 1 + aa / c; if (Math.abs(c) < FPMIN) c = FPMIN;
+        d = 1 / d;
+        const del = d * c; h *= del;
+        if (Math.abs(del - 1) < EPS) break;
+      }
+      return h;
+    }
+
+    // Regularized incomplete beta I_x(a, b)
+    function incompleteBeta(a, b, x) {
+      if (x <= 0) return 0;
+      if (x >= 1) return 1;
+      const lbeta = lgamma(a + b) - lgamma(a) - lgamma(b);
+      const front = Math.exp(Math.log(x) * a + Math.log(1 - x) * b + lbeta) / a;
+      if (x < (a + 1) / (a + b + 2)) {
+        return front * betacf(a, b, x);
+      }
+      return 1 - Math.exp(Math.log(1 - x) * b + Math.log(x) * a + lbeta - Math.log(b)) * betacf(b, a, 1 - x);
+    }
+
+    // CDF of t-distribution
+    function tCdf(t, df) {
+      if (!isFinite(t) || !isFinite(df) || df <= 0) return NaN;
+      const x = df / (df + t * t);
+      const ib = incompleteBeta(df / 2, 0.5, x);
+      return t >= 0 ? 1 - 0.5 * ib : 0.5 * ib;
+    }
+
+    // PDF of t-distribution (normalized)
+    function tPdf(t, df) {
+      const lp = lgamma((df + 1) / 2) - lgamma(df / 2) - 0.5 * Math.log(Math.PI * df)
+        - ((df + 1) / 2) * Math.log(1 + (t * t) / df);
+      return Math.exp(lp);
+    }
+
+    function pValue(t, df, sided) {
+      if (!isFinite(t) || !isFinite(df) || df <= 0) return NaN;
+      const tail = 1 - tCdf(Math.abs(t), df);
+      if (sided === 'two') return 2 * tail;
+      if (sided === 'right') return t >= 0 ? tail : 1 - tail;
+      // left
+      return t <= 0 ? tail : 1 - tail;
+    }
+
+    function critical(alpha, df, sided) {
+      // bisection: find t such that P(T > t) == alpha (right) or alpha/2 (two-sided)
+      const target = sided === 'two' ? alpha / 2 : alpha;
+      let lo = 0, hi = 50;
+      for (let i = 0; i < 80; i++) {
+        const mid = (lo + hi) / 2;
+        const p = 1 - tCdf(mid, df);
+        if (p > target) lo = mid; else hi = mid;
+      }
+      return (lo + hi) / 2;
+    }
+
+    // Test statistic helpers
+    function oneMeanStats({ xbar, mu0, s, n }) {
+      const df = n - 1;
+      const se = s / Math.sqrt(n);
+      const t = (xbar - mu0) / se;
+      return { t, df, se };
+    }
+    function pooledStats({ xbar1, s1, n1, xbar2, s2, n2 }) {
+      const df = n1 + n2 - 2;
+      const sp2 = ((n1 - 1) * s1 * s1 + (n2 - 1) * s2 * s2) / df;
+      const sp = Math.sqrt(sp2);
+      const se = sp * Math.sqrt(1 / n1 + 1 / n2);
+      const t = (xbar1 - xbar2) / se;
+      return { t, df, se, sp };
+    }
+    function welchStats({ xbar1, s1, n1, xbar2, s2, n2 }) {
+      const v1 = (s1 * s1) / n1;
+      const v2 = (s2 * s2) / n2;
+      const se = Math.sqrt(v1 + v2);
+      const num = (v1 + v2) * (v1 + v2);
+      const den = (v1 * v1) / (n1 - 1) + (v2 * v2) / (n2 - 1);
+      const df = num / den;
+      const t = (xbar1 - xbar2) / se;
+      return { t, df, se };
+    }
+    function pairedStats({ before, after }) {
+      const n = before.length;
+      const d = before.map((b, i) => after[i] - b);
+      const dbar = d.reduce((a, x) => a + x, 0) / n;
+      const sd = Math.sqrt(d.reduce((a, x) => a + (x - dbar) * (x - dbar), 0) / (n - 1));
+      const se = sd / Math.sqrt(n);
+      const t = dbar / se;
+      return { t, df: n - 1, se, dbar, sd, n };
+    }
+    function indepStats({ a, b }) {
+      const m = (arr) => arr.reduce((s, x) => s + x, 0) / arr.length;
+      const v = (arr, mean) => arr.reduce((s, x) => s + (x - mean) ** 2, 0) / (arr.length - 1);
+      const ma = m(a), mb = m(b);
+      const sa = Math.sqrt(v(a, ma)), sb = Math.sqrt(v(b, mb));
+      return welchStats({ xbar1: ma, s1: sa, n1: a.length, xbar2: mb, s2: sb, n2: b.length });
+    }
+
+    function fmt(x, d = 3) {
+      if (!isFinite(x)) return '—';
+      if (Math.abs(x) < 1e-4 && x !== 0) return x.toExponential(2);
+      return x.toFixed(d);
+    }
+
+    /* ============================================================
+       PRIMITIVES
+       ============================================================ */
+
+    function Reveal({ children, delay = 0, as: Tag = 'div', className = '' }) {
+      const ref = useRef(null);
+      const [v, setV] = useState(false);
+      useEffect(() => {
+        const node = ref.current;
+        if (!node) return;
+        const o = new IntersectionObserver(([e]) => {
+          if (e.isIntersecting) { setV(true); o.disconnect(); }
+        }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+        o.observe(node);
+        return () => o.disconnect();
+      }, []);
+      return (
+        <Tag ref={ref} className={`reveal ${v ? 'visible' : ''} ${className}`} style={{ transitionDelay: `${delay}s` }}>
+          {children}
+        </Tag>
+      );
+    }
+
+    function Tex({ tex, block = false, className = '' }) {
+      const ref = useRef(null);
+      useLayoutEffect(() => {
+        if (ref.current && window.katex) {
+          try {
+            window.katex.render(tex, ref.current, { displayMode: block, throwOnError: false, output: 'html' });
+          } catch (e) { ref.current.textContent = tex; }
+        }
+      }, [tex, block]);
+      return <span ref={ref} className={className} />;
+    }
+
+    function FormulaSweep({ tex, className = '', delay = 0 }) {
+      const ref = useRef(null);
+      const [swept, setSwept] = useState(false);
+      useEffect(() => {
+        const node = ref.current;
+        if (!node) return;
+        const o = new IntersectionObserver(([e]) => {
+          if (e.isIntersecting) {
+            setTimeout(() => setSwept(true), delay * 1000);
+            o.disconnect();
+          }
+        }, { threshold: 0.4 });
+        o.observe(node);
+        return () => o.disconnect();
+      }, [delay]);
+      return (
+        <div ref={ref} className={`formula-sweep ${swept ? 'swept' : ''} ${className}`}>
+          <Tex tex={tex} block className="tex-large block" />
+        </div>
+      );
+    }
+
+    function useCountUp(target, duration = 700) {
+      const [value, setValue] = useState(target);
+      const fromRef = useRef(target);
+      const startRef = useRef(null);
+      useEffect(() => {
+        const from = fromRef.current;
+        if (!isFinite(target) || !isFinite(from)) { setValue(target); fromRef.current = target; return; }
+        let raf;
+        startRef.current = performance.now();
+        const tick = (now) => {
+          const t = Math.min(1, (now - startRef.current) / duration);
+          const eased = 1 - Math.pow(1 - t, 3);
+          setValue(from + (target - from) * eased);
+          if (t < 1) raf = requestAnimationFrame(tick);
+          else fromRef.current = target;
+        };
+        raf = requestAnimationFrame(tick);
+        return () => cancelAnimationFrame(raf);
+      }, [target, duration]);
+      return value;
+    }
+
+    function AnimatedNumber({ value, decimals = 3, className = '' }) {
+      const v = useCountUp(value);
+      return <span className={className}>{fmt(v, decimals)}</span>;
+    }
+
+    /* ============================================================
+       NAVIGATION
+       ============================================================ */
+
+    const SECTIONS = [
+      { id: 'overview', label: 'Overview' },
+      { id: 'guide', label: 'Decide' },
+      { id: 'one-mean', label: 'One-mean' },
+      { id: 'paired', label: 'Paired' },
+      { id: 'pooled', label: 'Pooled' },
+      { id: 'welch', label: 'Welch' },
+      { id: 'lab', label: 'Live lab' },
+      { id: 'compare', label: 'Compare' },
+      { id: 'pitfalls', label: 'Pitfalls' }
+    ];
+
+    function ThemeToggle() {
+      const [theme, setTheme] = useState(() =>
+        document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark'
+      );
+      const toggle = () => {
+        const next = theme === 'light' ? 'dark' : 'light';
+        setTheme(next);
+        if (next === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        else document.documentElement.removeAttribute('data-theme');
+        try { localStorage.setItem('ttests-theme', next); } catch (e) {}
+      };
+      return (
+        <button onClick={toggle} aria-label="Toggle theme" className="btn-ghost rounded-full w-9 h-9 flex items-center justify-center text-base">
+          {theme === 'light' ? (
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>
+          ) : (
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" /></svg>
+          )}
+        </button>
+      );
+    }
+
+    function TopNav() {
+      const [progress, setProgress] = useState(0);
+      const [active, setActive] = useState('overview');
+      useEffect(() => {
+        const onScroll = () => {
+          const h = document.documentElement;
+          const max = h.scrollHeight - window.innerHeight;
+          setProgress(max > 0 ? h.scrollTop / max : 0);
+          // active section
+          let curr = SECTIONS[0].id;
+          for (const s of SECTIONS) {
+            const el = document.getElementById(s.id);
+            if (el && el.getBoundingClientRect().top <= 140) curr = s.id;
+          }
+          setActive(curr);
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+        return () => window.removeEventListener('scroll', onScroll);
+      }, []);
+      return (
+        <header className="glass fixed top-0 inset-x-0 z-40">
+          <div className="max-w-[1200px] mx-auto px-6 md:px-10 py-3 flex items-center gap-6">
+            <a href="index.html" className="font-display text-[20px] tracking-tight text-ink-strong hover:opacity-80 transition-opacity">
+              steadfastnguyen<span className="grad-text">.</span>com
+            </a>
+            <div className="hidden md:block h-5 w-px bg-rule" />
+            <nav className="hidden md:flex items-center gap-5 text-[13px] font-mono text-mute small-caps overflow-x-auto no-scrollbar">
+              {SECTIONS.map(s => (
+                <a key={s.id} href={`#${s.id}`} className={`nav-link whitespace-nowrap ${active === s.id ? 'active text-ink-strong' : ''}`}>{s.label}</a>
+              ))}
+            </nav>
+            <div className="ml-auto flex items-center gap-2">
+              <a href="blog.html" className="hidden sm:inline-block text-[12px] font-mono text-mute hover:text-ink transition-colors">← blog</a>
+              <ThemeToggle />
+            </div>
+          </div>
+          <div className="h-[2px] bg-rule">
+            <div className="progress-bar h-full" style={{ transform: `scaleX(${progress})` }} />
+          </div>
+        </header>
+      );
+    }
+
+    /* ============================================================
+       HERO + ANIMATED BACKGROUND CURVE
+       ============================================================ */
+
+    function HeroCurve() {
+      // Two overlapping bell-ish curves that gently shift over time
+      const [phase, setPhase] = useState(0);
+      useEffect(() => {
+        let raf;
+        let start = performance.now();
+        const tick = (now) => {
+          setPhase((now - start) / 8000);
+          raf = requestAnimationFrame(tick);
+        };
+        raf = requestAnimationFrame(tick);
+        return () => cancelAnimationFrame(raf);
+      }, []);
+      const W = 1200, H = 520;
+      const path = (offset, scale) => {
+        const pts = [];
+        for (let i = 0; i <= 200; i++) {
+          const x = i / 200;
+          const u = (x - 0.5) * 8 + Math.sin(phase + offset) * 0.4;
+          const y = Math.exp(-u * u / 2) * scale;
+          pts.push([x * W, H - y * H * 0.65 - 60]);
+        }
+        return 'M' + pts.map(p => p.join(',')).join('L');
+      };
+      return (
+        <svg className="hero-curve" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="heroGrad1" x1="0" x2="1" y1="0" y2="0">
+              <stop offset="0%" stopColor="#7C5CFF" stopOpacity="0" />
+              <stop offset="50%" stopColor="#7C5CFF" stopOpacity="0.7" />
+              <stop offset="100%" stopColor="#FF7A59" stopOpacity="0" />
+            </linearGradient>
+            <linearGradient id="heroGrad2" x1="0" x2="1" y1="0" y2="0">
+              <stop offset="0%" stopColor="#FF7A59" stopOpacity="0" />
+              <stop offset="50%" stopColor="#A88BFF" stopOpacity="0.45" />
+              <stop offset="100%" stopColor="#7C5CFF" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+          <path d={path(0, 1)} stroke="url(#heroGrad1)" strokeWidth="1.6" fill="none" />
+          <path d={path(1.7, 0.85)} stroke="url(#heroGrad2)" strokeWidth="1.4" fill="none" />
+          <path d={path(3.1, 0.7)} stroke="url(#heroGrad1)" strokeWidth="1" fill="none" opacity="0.6" />
+        </svg>
+      );
+    }
+
+    function Hero() {
+      return (
+        <section className="relative pt-36 md:pt-44 pb-24 md:pb-32 overflow-hidden">
+          <HeroCurve />
+          <div className="relative max-w-[1100px] mx-auto px-6 md:px-10">
+            <Reveal delay={0}>
+              <div className="font-mono text-[11px] small-caps text-mute mb-6 flex items-center gap-3">
+                <span className="inline-block w-8 h-px bg-rule-strong" />
+                Field notes · hypothesis testing · {new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+              </div>
+            </Reveal>
+            <Reveal delay={0.05}>
+              <h1 className="font-display text-[clamp(48px,8.5vw,108px)] leading-[0.96] tracking-tight text-ink-strong">
+                The four <span className="grad-text italic">flavors</span><br/>
+                of <em className="italic font-display">t</em>-test.
+              </h1>
+            </Reveal>
+            <Reveal delay={0.18}>
+              <p className="mt-8 max-w-[640px] text-[19px] md:text-[21px] leading-[1.5] text-ink/85">
+                A <em>t</em>-test answers a single question: is the difference in means we observed{' '}
+                <span className="grad-text font-medium">real</span>, or is it just{' '}
+                <span className="grad-text font-medium">random noise</span>? This page shows you the four ways we ask it, with live calculators and a curve that moves when you do.
+              </p>
+            </Reveal>
+            <Reveal delay={0.28}>
+              <div className="mt-10 verse-aside max-w-[520px]">
+                "Test all things; hold fast what is good."
+                <span className="verse-cite">1 Thessalonians 5:21</span>
+              </div>
+            </Reveal>
+            <Reveal delay={0.42}>
+              <div className="mt-12 flex flex-wrap items-center gap-3">
+                <a href="#guide" className="btn-grad rounded-full px-6 py-3 text-[14px] font-medium">Which test do I need?</a>
+                <a href="#lab" className="btn-ghost rounded-full px-6 py-3 text-[14px] font-mono small-caps">Open the live lab</a>
+              </div>
+            </Reveal>
+          </div>
+        </section>
+      );
+    }
+
+    /* ============================================================
+       OVERVIEW — universal formula
+       ============================================================ */
+
+    function Overview() {
+      return (
+        <section id="overview" className="section-anchor py-24 md:py-32 border-t border-rule">
+          <div className="max-w-[1100px] mx-auto px-6 md:px-10">
+            <SectionHeading n="00" kicker="The shape of every t-test" title="One formula, four costumes." lede="Whatever the test is called, it's the same recipe: take an observed difference, divide by how surprised you'd be by chance. Memorize this and the rest is bookkeeping." />
+            <Reveal delay={0.1}>
+              <div className="mt-14 card-surface p-8 md:p-12 grad-soft-bg">
+                <FormulaSweep tex={String.raw`t \;=\; \dfrac{\text{observed difference}}{\text{standard error}} \;=\; \dfrac{\text{signal}}{\text{noise}}`} className="text-center" delay={0.15} />
+              </div>
+            </Reveal>
+            <div className="mt-10 grid md:grid-cols-3 gap-4">
+              <Reveal delay={0.05}>
+                <div className="card-surface p-6 h-full">
+                  <div className="font-mono text-[11px] small-caps text-mute mb-3">numerator</div>
+                  <div className="font-display text-[26px] mb-2">Observed difference</div>
+                  <p className="text-[14px] leading-[1.6] text-ink/80">How far the sample mean is from where the null hypothesis says it should be. Bigger gap → bigger <em>t</em>.</p>
+                </div>
+              </Reveal>
+              <Reveal delay={0.12}>
+                <div className="card-surface p-6 h-full">
+                  <div className="font-mono text-[11px] small-caps text-mute mb-3">denominator</div>
+                  <div className="font-display text-[26px] mb-2">Standard error</div>
+                  <p className="text-[14px] leading-[1.6] text-ink/80">How much the sample mean would jitter around if you re-ran the experiment. Noisier data → bigger SE → smaller <em>t</em>.</p>
+                </div>
+              </Reveal>
+              <Reveal delay={0.19}>
+                <div className="card-surface p-6 h-full">
+                  <div className="font-mono text-[11px] small-caps text-mute mb-3">verdict</div>
+                  <div className="font-display text-[26px] mb-2">Compare to the <em>t</em>-distribution</div>
+                  <p className="text-[14px] leading-[1.6] text-ink/80">The further <em>t</em> is from zero, the deeper into the tails of the <em>t</em>-distribution we land — and the smaller the p-value gets.</p>
+                </div>
+              </Reveal>
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    function SectionHeading({ n, kicker, title, lede }) {
+      return (
+        <Reveal>
+          <div className="flex flex-col gap-3">
+            <div className="font-mono text-[11px] small-caps text-mute flex items-center gap-3">
+              <span>{n}</span>
+              <span className="inline-block w-6 h-px bg-rule-strong" />
+              <span>{kicker}</span>
+            </div>
+            <h2 className="font-display text-[clamp(36px,5vw,64px)] leading-[1.02] text-ink-strong tracking-tight max-w-[18ch]">{title}</h2>
+            {lede && <p className="mt-3 text-[17px] md:text-[18px] leading-[1.55] text-ink/75 max-w-[64ch]">{lede}</p>}
+          </div>
+        </Reveal>
+      );
+    }
+
+    /* ============================================================
+       DECISION GUIDE
+       ============================================================ */
+
+    function DecisionGuide() {
+      const [a1, setA1] = useState(null); // one or two
+      const [a2, setA2] = useState(null); // paired or independent
+      const [a3, setA3] = useState(null); // equal vars
+      const recommended = (() => {
+        if (a1 === 'one') return 'one-mean';
+        if (a1 === 'two' && a2 === 'paired') return 'paired';
+        if (a1 === 'two' && a2 === 'indep' && a3 === 'yes') return 'pooled';
+        if (a1 === 'two' && a2 === 'indep' && a3 === 'no') return 'welch';
+        return null;
+      })();
+      const reset = () => { setA1(null); setA2(null); setA3(null); };
+      const Q = ({ q, options, value, onChange, disabled }) => (
+        <div className={disabled ? 'opacity-40 pointer-events-none' : ''}>
+          <div className="font-mono text-[11px] small-caps text-mute mb-3">{q}</div>
+          <div className="flex flex-wrap gap-2">
+            {options.map(o => (
+              <button key={o.v} onClick={() => onChange(o.v)}
+                className={`px-4 py-2 rounded-full text-[13px] font-mono small-caps transition-all ${value === o.v ? 'btn-grad text-white' : 'btn-ghost'}`}>
+                {o.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      );
+      const tests = [
+        { id: 'one-mean', name: 'One-mean', sub: 'one sample vs. a number', href: '#one-mean' },
+        { id: 'paired', name: 'Paired', sub: 'same subject, two times', href: '#paired' },
+        { id: 'pooled', name: 'Pooled two-sample', sub: 'two groups, equal variance', href: '#pooled' },
+        { id: 'welch', name: "Welch's two-sample", sub: 'two groups, anything goes', href: '#welch' }
+      ];
+      return (
+        <section id="guide" className="section-anchor py-24 md:py-32 border-t border-rule">
+          <div className="max-w-[1100px] mx-auto px-6 md:px-10">
+            <SectionHeading n="01" kicker="Decide" title="Which test do I need?" lede="Three yes-or-no questions narrow the four down to one. Answer them and the right card lights up." />
+            <div className="mt-14 grid md:grid-cols-2 gap-10">
+              <div className="space-y-7">
+                <Q q="01 · How many samples?"
+                  options={[{ v: 'one', label: 'One' }, { v: 'two', label: 'Two' }]}
+                  value={a1} onChange={setA1} />
+                <Q q="02 · Are the two groups paired?"
+                  options={[{ v: 'paired', label: 'Yes (same subjects)' }, { v: 'indep', label: 'No (independent)' }]}
+                  value={a2} onChange={setA2} disabled={a1 !== 'two'} />
+                <Q q="03 · Equal variance assumption holds?"
+                  options={[{ v: 'yes', label: 'Yes' }, { v: 'no', label: 'No / unsure' }]}
+                  value={a3} onChange={setA3} disabled={a1 !== 'two' || a2 !== 'indep'} />
+                <button onClick={reset} className="text-[12px] font-mono small-caps text-mute hover:text-ink transition-colors">↺ reset</button>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {tests.map((t, i) => (
+                  <a href={t.href} key={t.id}
+                    className={`dg-card card-surface p-5 ${recommended === t.id ? 'active' : ''}`}>
+                    <div className="font-mono text-[11px] small-caps text-mute">{`0${i + 1}`}</div>
+                    <div className="font-display text-[22px] mt-1">{t.name}</div>
+                    <div className="text-[13px] text-ink/70 mt-1">{t.sub}</div>
+                    {recommended === t.id && <div className="mt-3 chip ok">↳ recommended</div>}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    /* ============================================================
+       TEST SECTIONS
+       ============================================================ */
+
+    function TestSection({ id, n, kicker, title, plainEnglish, whenToUse, hypotheses, formulaTeX, df, dfTeX, example, assumptions, verse }) {
+      return (
+        <section id={id} className="section-anchor py-24 md:py-32 border-t border-rule">
+          <div className="max-w-[1100px] mx-auto px-6 md:px-10">
+            <SectionHeading n={n} kicker={kicker} title={title} lede={plainEnglish} />
+            <div className="mt-14 grid lg:grid-cols-[1fr_280px] gap-10 lg:gap-14">
+              <div className="space-y-12">
+                {/* When to use */}
+                <Reveal>
+                  <div>
+                    <div className="font-mono text-[11px] small-caps text-mute mb-3">when to use</div>
+                    <ul className="space-y-2 text-[15px] leading-[1.65]">
+                      {whenToUse.map((w, i) => (
+                        <li key={i} className="flex gap-3">
+                          <span className="grad-text font-mono mt-[2px]">→</span>
+                          <span>{w}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </Reveal>
+                {/* Hypotheses */}
+                <Reveal>
+                  <div>
+                    <div className="font-mono text-[11px] small-caps text-mute mb-3">hypotheses</div>
+                    <div className="grid sm:grid-cols-2 gap-3">
+                      <div className="card-surface p-5">
+                        <div className="font-mono text-[11px] small-caps text-mute mb-1">H₀ · null</div>
+                        <div className="text-[15px]"><Tex tex={hypotheses.H0} /></div>
+                      </div>
+                      <div className="card-surface p-5">
+                        <div className="font-mono text-[11px] small-caps text-mute mb-1">H₁ · alternative</div>
+                        <div className="text-[15px]"><Tex tex={hypotheses.H1} /></div>
+                      </div>
+                    </div>
+                  </div>
+                </Reveal>
+                {/* Formula */}
+                <Reveal>
+                  <div>
+                    <div className="font-mono text-[11px] small-caps text-mute mb-3">test statistic</div>
+                    <div className="card-surface p-8 md:p-10 grad-soft-bg">
+                      <FormulaSweep tex={formulaTeX} className="text-center" />
+                    </div>
+                    <div className="mt-3 font-mono text-[12px] text-mute">
+                      degrees of freedom: <span className="text-ink">{dfTeX ? <Tex tex={dfTeX} /> : df}</span>
+                    </div>
+                  </div>
+                </Reveal>
+                {/* Example */}
+                <Reveal>
+                  <div>
+                    <div className="font-mono text-[11px] small-caps text-mute mb-3">worked example</div>
+                    {example}
+                  </div>
+                </Reveal>
+                {/* Assumptions */}
+                <Reveal>
+                  <div>
+                    <div className="font-mono text-[11px] small-caps text-mute mb-3">key assumptions</div>
+                    <div className="grid sm:grid-cols-2 gap-3">
+                      {assumptions.map((a, i) => (
+                        <div key={i} className="card-surface p-4">
+                          <div className="font-mono text-[11px] small-caps grad-text mb-1">{a.label}</div>
+                          <div className="text-[13.5px] leading-[1.55] text-ink/85">{a.text}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </Reveal>
+              </div>
+              {/* Verse aside */}
+              <Reveal delay={0.3}>
+                <aside className="lg:sticky lg:top-28 self-start">
+                  <div className="verse-aside">
+                    {verse.text}
+                    <span className="verse-cite">{verse.cite}</span>
+                  </div>
+                </aside>
+              </Reveal>
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    function Example({ context, computation, result, interpretation }) {
+      return (
+        <div className="card-surface p-6">
+          <div className="text-[14.5px] leading-[1.65] text-ink/85 mb-4">{context}</div>
+          <div className="rounded-xl bg-base-deep p-5 hairline space-y-2 font-mono text-[13px] text-ink/90 overflow-x-auto">
+            {computation.map((line, i) => (
+              <div key={i} className="flex flex-wrap items-baseline gap-2">
+                <span className="text-mute small-caps">{line.label}</span>
+                <span className="text-ink"><Tex tex={line.tex} /></span>
+              </div>
+            ))}
+          </div>
+          <div className="mt-4 flex flex-wrap items-center gap-3">
+            <span className="chip ok"><Tex tex={result.tex} /></span>
+            <span className="text-[14px] text-ink/85">{interpretation}</span>
+          </div>
+        </div>
+      );
+    }
+
+    /* ============================================================
+       LIVE LAB
+       ============================================================ */
+
+    function TDistPlot({ t, df, sided, alpha = 0.05 }) {
+      const W = 720, H = 280, padX = 40, padY = 20;
+      const xRange = 5;
+      const { points, maxY } = useMemo(() => {
+        const N = 240;
+        const arr = [];
+        for (let i = 0; i <= N; i++) {
+          const x = -xRange + (i / N) * 2 * xRange;
+          arr.push({ x, y: tPdf(x, Math.max(1, df)) });
+        }
+        const m = Math.max(...arr.map(p => p.y));
+        return { points: arr.map(p => ({ x: p.x, y: p.y / m })), maxY: m };
+      }, [df]);
+
+      const xToPx = (x) => padX + ((x + xRange) / (2 * xRange)) * (W - 2 * padX);
+      const yToPx = (y) => H - padY - y * (H - 2 * padY);
+
+      const curvePath = 'M' + points.map(p => `${xToPx(p.x)},${yToPx(p.y)}`).join(' L ');
+      const fillPath = curvePath + ` L ${xToPx(xRange)},${yToPx(0)} L ${xToPx(-xRange)},${yToPx(0)} Z`;
+
+      const tcrit = critical(alpha, Math.max(1, df), sided);
+
+      const rejectPath = (() => {
+        if (sided === 'two') {
+          const right = points.filter(p => p.x >= tcrit);
+          const left = points.filter(p => p.x <= -tcrit);
+          const r = right.length ? 'M' + right.map(p => `${xToPx(p.x)},${yToPx(p.y)}`).join(' L ')
+            + ` L ${xToPx(right[right.length-1].x)},${yToPx(0)} L ${xToPx(right[0].x)},${yToPx(0)} Z` : '';
+          const l = left.length ? 'M' + left.map(p => `${xToPx(p.x)},${yToPx(p.y)}`).join(' L ')
+            + ` L ${xToPx(left[left.length-1].x)},${yToPx(0)} L ${xToPx(left[0].x)},${yToPx(0)} Z` : '';
+          return r + ' ' + l;
+        }
+        if (sided === 'right') {
+          const right = points.filter(p => p.x >= tcrit);
+          if (!right.length) return '';
+          return 'M' + right.map(p => `${xToPx(p.x)},${yToPx(p.y)}`).join(' L ')
+            + ` L ${xToPx(right[right.length-1].x)},${yToPx(0)} L ${xToPx(right[0].x)},${yToPx(0)} Z`;
+        }
+        const left = points.filter(p => p.x <= -tcrit);
+        if (!left.length) return '';
+        return 'M' + left.map(p => `${xToPx(p.x)},${yToPx(p.y)}`).join(' L ')
+          + ` L ${xToPx(left[left.length-1].x)},${yToPx(0)} L ${xToPx(left[0].x)},${yToPx(0)} Z`;
+      })();
+
+      const tClamped = Math.max(-xRange + 0.05, Math.min(xRange - 0.05, t));
+      const markerX = xToPx(tClamped);
+      const markerY = yToPx(tPdf(tClamped, Math.max(1, df)) / maxY);
+
+      return (
+        <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label="t-distribution plot">
+          <defs>
+            <linearGradient id="tDistGrad" x1="0" x2="1">
+              <stop offset="0%" stopColor="#7C5CFF" />
+              <stop offset="100%" stopColor="#FF7A59" />
+            </linearGradient>
+            <linearGradient id="rejectGrad" x1="0" x2="1">
+              <stop offset="0%" stopColor="#FF7A59" />
+              <stop offset="100%" stopColor="#7C5CFF" />
+            </linearGradient>
+          </defs>
+          {/* x-axis ticks */}
+          {[-4, -2, 0, 2, 4].map(v => (
+            <g key={v}>
+              <line x1={xToPx(v)} y1={H - padY} x2={xToPx(v)} y2={H - padY + 5} className="grid-line" />
+              <text x={xToPx(v)} y={H - padY + 18} textAnchor="middle" className="axis-text">{v}</text>
+            </g>
+          ))}
+          <line x1={padX} y1={H - padY} x2={W - padX} y2={H - padY} className="grid-line" />
+          {/* fill under curve */}
+          <path d={fillPath} className="curve-fill" style={{ transition: 'd .4s cubic-bezier(.22,1,.36,1)' }} />
+          {/* rejection regions */}
+          <path d={rejectPath} className="reject-fill" />
+          {/* curve stroke */}
+          <path d={curvePath} className="curve-stroke" />
+          {/* t marker */}
+          <line x1={markerX} y1={H - padY} x2={markerX} y2={markerY} className="marker-line" style={{ transition: 'x1 .35s cubic-bezier(.22,1,.36,1), x2 .35s cubic-bezier(.22,1,.36,1), y2 .35s cubic-bezier(.22,1,.36,1)' }} />
+          <circle cx={markerX} cy={markerY} r="5" fill="var(--accent2)" stroke="var(--bg)" strokeWidth="2" style={{ transition: 'cx .35s cubic-bezier(.22,1,.36,1), cy .35s cubic-bezier(.22,1,.36,1)' }} />
+          <text x={markerX} y={markerY - 12} textAnchor="middle" className="axis-text" fill="var(--accent2)">t = {fmt(t, 2)}</text>
+        </svg>
+      );
+    }
+
+    function Slider({ label, value, onChange, min, max, step, decimals = 1, suffix }) {
+      return (
+        <label className="block">
+          <div className="flex items-baseline justify-between mb-2">
+            <span className="font-mono text-[11px] small-caps text-mute">{label}</span>
+            <span className="font-mono text-[13px] text-ink-strong">{fmt(value, decimals)}{suffix}</span>
+          </div>
+          <input type="range" min={min} max={max} step={step} value={value} onChange={e => onChange(Number(e.target.value))} />
+        </label>
+      );
+    }
+
+    function LiveLab() {
+      const [type, setType] = useState('one-mean');
+      const [sided, setSided] = useState('two');
+      const [alpha, setAlpha] = useState(0.05);
+
+      // one-mean state
+      const [xbar, setXbar] = useState(102);
+      const [mu0, setMu0] = useState(100);
+      const [s, setS] = useState(8);
+      const [n, setN] = useState(25);
+
+      // two-sample state (used for pooled / welch / paired)
+      const [xbar1, setXbar1] = useState(72);
+      const [s1, setS1] = useState(9);
+      const [n1, setN1] = useState(20);
+      const [xbar2, setXbar2] = useState(67);
+      const [s2, setS2] = useState(11);
+      const [n2, setN2] = useState(22);
+
+      // paired state — pre-baked dataset
+      const pairedBefore = [78, 82, 65, 91, 73, 88, 70, 79];
+      const [pairedAfter, setPairedAfter] = useState([85, 88, 70, 95, 78, 90, 76, 83]);
+
+      const stats = useMemo(() => {
+        if (type === 'one-mean') return oneMeanStats({ xbar, mu0, s, n });
+        if (type === 'paired') return pairedStats({ before: pairedBefore, after: pairedAfter });
+        if (type === 'pooled') return pooledStats({ xbar1, s1, n1, xbar2, s2, n2 });
+        return welchStats({ xbar1, s1, n1, xbar2, s2, n2 });
+      }, [type, xbar, mu0, s, n, xbar1, s1, n1, xbar2, s2, n2, pairedAfter]);
+
+      const p = pValue(stats.t, stats.df, sided);
+      const reject = p < alpha;
+
+      const TYPES = [
+        { v: 'one-mean', label: 'One-mean' },
+        { v: 'paired', label: 'Paired' },
+        { v: 'pooled', label: 'Pooled' },
+        { v: 'welch', label: 'Welch' }
+      ];
+      const SIDES = [
+        { v: 'two', label: 'Two-sided' },
+        { v: 'right', label: 'Right' },
+        { v: 'left', label: 'Left' }
+      ];
+
+      return (
+        <section id="lab" className="section-anchor py-24 md:py-32 border-t border-rule grad-soft-bg">
+          <div className="max-w-[1200px] mx-auto px-6 md:px-10">
+            <SectionHeading n="06" kicker="Live lab" title="Move the inputs. Watch the curve." lede="The t-statistic, the rejection region, and the p-value all update together. Build intuition by playing — bigger sample sizes, smaller standard deviations, see what happens to p." />
+            <Reveal delay={0.05}>
+              <div className="mt-12 card-surface p-6 md:p-8">
+                <div className="flex flex-wrap gap-3 items-center mb-6">
+                  <div className="seg">
+                    {TYPES.map(o => (
+                      <button key={o.v} onClick={() => setType(o.v)} className={type === o.v ? 'active' : ''}>{o.label}</button>
+                    ))}
+                  </div>
+                  <div className="seg">
+                    {SIDES.map(o => (
+                      <button key={o.v} onClick={() => setSided(o.v)} className={sided === o.v ? 'active' : ''}>{o.label}</button>
+                    ))}
+                  </div>
+                  <label className="flex items-center gap-2 ml-auto">
+                    <span className="font-mono text-[11px] small-caps text-mute">α</span>
+                    <input type="number" step="0.01" min="0.001" max="0.5" value={alpha} onChange={e => setAlpha(Number(e.target.value) || 0.05)} className="w-20" />
+                  </label>
+                </div>
+                <div className="grid lg:grid-cols-[1fr_1.4fr] gap-10">
+                  {/* Inputs */}
+                  <div className="space-y-5">
+                    {type === 'one-mean' && (
+                      <Fragment>
+                        <Slider label="sample mean x̄" value={xbar} onChange={setXbar} min={80} max={120} step={0.1} decimals={1} />
+                        <Slider label="hypothesized μ₀" value={mu0} onChange={setMu0} min={80} max={120} step={0.1} decimals={1} />
+                        <Slider label="sample SD s" value={s} onChange={setS} min={1} max={25} step={0.1} decimals={1} />
+                        <Slider label="sample size n" value={n} onChange={setN} min={3} max={150} step={1} decimals={0} />
+                      </Fragment>
+                    )}
+                    {(type === 'pooled' || type === 'welch') && (
+                      <div className="grid grid-cols-2 gap-x-5 gap-y-4">
+                        <div className="col-span-2 font-mono text-[11px] small-caps text-mute">group 1</div>
+                        <Slider label="x̄₁" value={xbar1} onChange={setXbar1} min={50} max={90} step={0.1} decimals={1} />
+                        <Slider label="s₁" value={s1} onChange={setS1} min={1} max={25} step={0.1} decimals={1} />
+                        <Slider label="n₁" value={n1} onChange={setN1} min={3} max={120} step={1} decimals={0} />
+                        <div />
+                        <div className="col-span-2 font-mono text-[11px] small-caps text-mute mt-2">group 2</div>
+                        <Slider label="x̄₂" value={xbar2} onChange={setXbar2} min={50} max={90} step={0.1} decimals={1} />
+                        <Slider label="s₂" value={s2} onChange={setS2} min={1} max={25} step={0.1} decimals={1} />
+                        <Slider label="n₂" value={n2} onChange={setN2} min={3} max={120} step={1} decimals={0} />
+                      </div>
+                    )}
+                    {type === 'paired' && (
+                      <div className="space-y-3">
+                        <div className="font-mono text-[11px] small-caps text-mute">pre-test → post-test (drag any "after" value)</div>
+                        <div className="grid grid-cols-1 gap-2">
+                          {pairedBefore.map((b, i) => (
+                            <div key={i} className="flex items-center gap-3">
+                              <span className="font-mono text-[12px] text-mute w-6">#{i + 1}</span>
+                              <span className="font-mono text-[13px] text-ink/80 w-12">{b}</span>
+                              <span className="text-mute">→</span>
+                              <input type="range" min={50} max={110} step={1} value={pairedAfter[i]}
+                                onChange={e => {
+                                  const v = Number(e.target.value);
+                                  setPairedAfter(arr => arr.map((x, j) => j === i ? v : x));
+                                }} className="flex-1" />
+                              <span className="font-mono text-[13px] text-ink-strong w-12 text-right">{pairedAfter[i]}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  {/* Plot + readout */}
+                  <div className="space-y-5">
+                    <div className="rounded-xl bg-base-deep p-4 hairline">
+                      <TDistPlot t={stats.t} df={stats.df} sided={sided} alpha={alpha} />
+                    </div>
+                    <div className="grid grid-cols-3 gap-3">
+                      <Stat label="t-statistic" value={stats.t} decimals={3} />
+                      <Stat label="df" value={stats.df} decimals={2} />
+                      <Stat label="p-value" value={p} decimals={4} accent />
+                    </div>
+                    <div className={`p-4 rounded-xl hairline ${reject ? 'border-accent' : ''}`} style={reject ? { borderColor: 'var(--accent)' } : {}}>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className={`chip ${reject ? 'ok' : 'warn'}`}>{reject ? 'Reject H₀' : 'Fail to reject H₀'}</span>
+                        <span className="font-mono text-[11px] text-mute">at α = {alpha}</span>
+                      </div>
+                      <div className="text-[13.5px] text-ink/85">
+                        {reject
+                          ? `The observed difference is unlikely under H₀ (p ≈ ${fmt(p, 4)}). The data give us reason to doubt the null.`
+                          : `The observed difference is consistent with chance under H₀ (p ≈ ${fmt(p, 4)}). Not enough evidence to reject the null.`}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Reveal>
+          </div>
+        </section>
+      );
+    }
+
+    function Stat({ label, value, decimals, accent }) {
+      return (
+        <div className="card-surface p-4">
+          <div className="font-mono text-[11px] small-caps text-mute mb-1">{label}</div>
+          <div className={`font-display text-[28px] leading-none ${accent ? 'grad-text' : 'text-ink-strong'}`}>
+            <AnimatedNumber value={value} decimals={decimals} />
+          </div>
+        </div>
+      );
+    }
+
+    /* ============================================================
+       POOLED VS WELCH
+       ============================================================ */
+
+    function PooledVsWelch() {
+      const [xbar1, setXbar1] = useState(72);
+      const [s1, setS1] = useState(8);
+      const [n1, setN1] = useState(15);
+      const [xbar2, setXbar2] = useState(67);
+      const [s2, setS2] = useState(18);
+      const [n2, setN2] = useState(15);
+      const pooled = pooledStats({ xbar1, s1, n1, xbar2, s2, n2 });
+      const welch = welchStats({ xbar1, s1, n1, xbar2, s2, n2 });
+      const pP = pValue(pooled.t, pooled.df, 'two');
+      const pW = pValue(welch.t, welch.df, 'two');
+      const dfDiverge = Math.abs(pooled.df - welch.df) / pooled.df > 0.10;
+      const sdRatio = Math.max(s1, s2) / Math.min(s1, s2);
+      return (
+        <Reveal>
+          <div className="mt-12 card-surface p-6 md:p-8">
+            <div className="font-mono text-[11px] small-caps text-mute mb-3">side-by-side</div>
+            <h3 className="font-display text-[34px] mb-4">Pooled vs. Welch — when do they disagree?</h3>
+            <p className="text-[15px] text-ink/80 max-w-[68ch] mb-8">
+              Crank up the standard-deviation ratio and watch Welch's degrees of freedom drift away from pooled's. When variances are similar, the two tests give nearly identical answers; when they diverge, pooled's p-value is no longer trustworthy.
+            </p>
+            <div className="grid lg:grid-cols-2 gap-8">
+              <div className="space-y-4">
+                <div className="font-mono text-[11px] small-caps grad-text">group 1</div>
+                <Slider label="x̄₁" value={xbar1} onChange={setXbar1} min={50} max={90} step={0.1} />
+                <Slider label="s₁" value={s1} onChange={setS1} min={1} max={30} step={0.1} />
+                <Slider label="n₁" value={n1} onChange={setN1} min={3} max={80} step={1} decimals={0} />
+                <div className="font-mono text-[11px] small-caps grad-text mt-6">group 2</div>
+                <Slider label="x̄₂" value={xbar2} onChange={setXbar2} min={50} max={90} step={0.1} />
+                <Slider label="s₂" value={s2} onChange={setS2} min={1} max={30} step={0.1} />
+                <Slider label="n₂" value={n2} onChange={setN2} min={3} max={80} step={1} decimals={0} />
+                <div className="mt-4 flex items-center gap-3">
+                  <span className="chip">SD ratio = {fmt(sdRatio, 2)}</span>
+                  {dfDiverge && <span className="chip warn">df diverged &gt; 10%</span>}
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3 self-start">
+                <ResultCard title="Pooled" t={pooled.t} df={pooled.df} p={pP} />
+                <ResultCard title="Welch" t={welch.t} df={welch.df} p={pW} />
+                {dfDiverge && (
+                  <div className="col-span-2 mt-2 rounded-xl p-4 hairline" style={{ borderColor: 'var(--warn)' }}>
+                    <div className="font-mono text-[11px] small-caps text-warn mb-1">heteroscedasticity warning</div>
+                    <div className="text-[13.5px] text-ink/85">
+                      The two groups have very different spreads. The pooled test's "shared variance" assumption is shaky here — Welch is the safer call.
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </Reveal>
+      );
+    }
+
+    function ResultCard({ title, t, df, p }) {
+      return (
+        <div className="card-surface p-5">
+          <div className="font-mono text-[11px] small-caps text-mute">{title}</div>
+          <div className="mt-3 space-y-2">
+            <div className="flex items-baseline justify-between">
+              <span className="font-mono text-[11px] text-mute small-caps">t</span>
+              <span className="font-display text-[24px] text-ink-strong"><AnimatedNumber value={t} decimals={3} /></span>
+            </div>
+            <div className="flex items-baseline justify-between">
+              <span className="font-mono text-[11px] text-mute small-caps">df</span>
+              <span className="font-mono text-[14px]"><AnimatedNumber value={df} decimals={2} /></span>
+            </div>
+            <div className="flex items-baseline justify-between">
+              <span className="font-mono text-[11px] text-mute small-caps">p (two-sided)</span>
+              <span className="font-mono text-[14px] grad-text"><AnimatedNumber value={p} decimals={4} /></span>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    /* ============================================================
+       PAIRED VS UNPAIRED DEMO
+       ============================================================ */
+
+    function PairedDemo() {
+      const before = [78, 82, 65, 91, 73, 88, 70, 79];
+      const after  = [85, 88, 70, 95, 78, 90, 76, 83];
+      const [paired, setPaired] = useState(true);
+      const pairedR = pairedStats({ before, after });
+      const indepR = indepStats({ a: before, b: after });
+      const shown = paired ? pairedR : indepR;
+      const pShown = pValue(shown.t, shown.df, 'two');
+
+      const seScale = Math.max(pairedR.se, indepR.se);
+      return (
+        <Reveal>
+          <div className="mt-8 card-surface p-6 md:p-8">
+            <div className="font-mono text-[11px] small-caps text-mute mb-3">paired vs. independent</div>
+            <h3 className="font-display text-[34px] mb-3">Why pairing often wins.</h3>
+            <p className="text-[15px] text-ink/80 max-w-[68ch] mb-8">
+              Same eight subjects, measured twice. Treating them as paired exploits each person being their own control — which usually shrinks the standard error. Toggle to see the same data analyzed both ways.
+            </p>
+            <div className="flex flex-wrap gap-3 items-center mb-6">
+              <div className="seg">
+                <button className={paired ? 'active' : ''} onClick={() => setPaired(true)}>Paired</button>
+                <button className={!paired ? 'active' : ''} onClick={() => setPaired(false)}>Independent</button>
+              </div>
+            </div>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                <div className="grid grid-cols-3 gap-2 font-mono text-[12px]">
+                  <div className="text-mute small-caps">subject</div>
+                  <div className="text-mute small-caps">before</div>
+                  <div className="text-mute small-caps">after</div>
+                  {before.map((b, i) => (
+                    <Fragment key={i}>
+                      <div className="text-mute">#{i + 1}</div>
+                      <div>{b}</div>
+                      <div className="grad-text">{after[i]} <span className="text-mute">({after[i] - b > 0 ? '+' : ''}{after[i] - b})</span></div>
+                    </Fragment>
+                  ))}
+                </div>
+              </div>
+              <div className="space-y-4">
+                <div className="grid grid-cols-3 gap-3">
+                  <Stat label="t" value={shown.t} decimals={3} />
+                  <Stat label="df" value={shown.df} decimals={1} />
+                  <Stat label="p" value={pShown} decimals={4} accent />
+                </div>
+                <div>
+                  <div className="font-mono text-[11px] small-caps text-mute mb-3">standard error · less is more</div>
+                  <div className="space-y-3">
+                    <SeBar label="paired SE" value={pairedR.se} max={seScale} active={paired} />
+                    <SeBar label="independent SE" value={indepR.se} max={seScale} active={!paired} />
+                  </div>
+                  <div className="mt-4 text-[13.5px] text-ink/80">
+                    Pairing soaks up the between-subject variability that the independent test has to swallow as noise. Same signal, smaller denominator → bigger <em>t</em>.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Reveal>
+      );
+    }
+
+    function SeBar({ label, value, max, active }) {
+      return (
+        <div>
+          <div className="flex items-baseline justify-between mb-1">
+            <span className="font-mono text-[11px] small-caps text-mute">{label}</span>
+            <span className={`font-mono text-[13px] ${active ? 'grad-text font-semibold' : 'text-ink/70'}`}>{fmt(value, 3)}</span>
+          </div>
+          <div className="h-2 rounded-full bg-rule overflow-hidden">
+            <div className="h-full rounded-full transition-all duration-700" style={{
+              width: `${(value / max) * 100}%`,
+              background: active ? 'var(--grad)' : 'var(--mute-soft)'
+            }} />
+          </div>
+        </div>
+      );
+    }
+
+    /* ============================================================
+       COMPARISON TABLE
+       ============================================================ */
+
+    function ComparisonTable() {
+      const rows = [
+        { test: 'One-mean', when: 'one sample vs. a known number', stat: String.raw`\frac{\bar{x}-\mu_0}{s/\sqrt{n}}`, df: 'n − 1', assume: 'normal-ish, independent' },
+        { test: 'Paired', when: 'same subjects, two measurements', stat: String.raw`\frac{\bar{d}}{s_d/\sqrt{n}}`, df: 'n − 1', assume: 'differences normal-ish' },
+        { test: 'Pooled', when: 'two indep groups, equal variance', stat: String.raw`\frac{\bar{x}_1-\bar{x}_2}{s_p\sqrt{\tfrac{1}{n_1}+\tfrac{1}{n_2}}}`, df: 'n₁ + n₂ − 2', assume: 'normal, equal σ²' },
+        { test: "Welch's", when: 'two indep groups, anything goes', stat: String.raw`\frac{\bar{x}_1-\bar{x}_2}{\sqrt{s_1^2/n_1 + s_2^2/n_2}}`, df: 'Satterthwaite', assume: 'normal, σ² may differ' }
+      ];
+      return (
+        <section id="compare" className="section-anchor py-24 md:py-32 border-t border-rule">
+          <div className="max-w-[1100px] mx-auto px-6 md:px-10">
+            <SectionHeading n="07" kicker="At a glance" title="The four, side by side." lede="One last cheat sheet before the midterm." />
+            <Reveal>
+              <div className="mt-14 card-surface p-2 md:p-4 overflow-x-auto">
+                <table className="w-full text-left text-[14px]">
+                  <thead>
+                    <tr className="font-mono text-[11px] small-caps text-mute">
+                      <th className="p-4">test</th>
+                      <th className="p-4">use when</th>
+                      <th className="p-4">statistic</th>
+                      <th className="p-4">df</th>
+                      <th className="p-4">assumes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {rows.map((r, i) => (
+                      <tr key={i} className="border-t border-rule align-top">
+                        <td className="p-4 font-display text-[18px] text-ink-strong whitespace-nowrap">{r.test}</td>
+                        <td className="p-4 text-ink/85">{r.when}</td>
+                        <td className="p-4"><Tex tex={r.stat} /></td>
+                        <td className="p-4 font-mono text-[13px]">{r.df}</td>
+                        <td className="p-4 text-ink/75">{r.assume}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </Reveal>
+          </div>
+        </section>
+      );
+    }
+
+    /* ============================================================
+       PITFALLS / FAQ
+       ============================================================ */
+
+    const PITFALLS = [
+      {
+        q: "Is a small p-value the same as a large effect?",
+        a: "No. With a huge n, a tiny meaningless difference can have p < 0.001. Always look at the effect size and confidence interval, not just the p-value."
+      },
+      {
+        q: "What does \"failing to reject H₀\" actually prove?",
+        a: "Nothing positive about H₀. It means the evidence isn't strong enough to rule it out — which is not the same as saying H₀ is true."
+      },
+      {
+        q: "Should I always use Welch's instead of pooled?",
+        a: "Many statisticians say yes — Welch's is robust to unequal variances and only slightly less powerful when they're equal. Pooled is only optimal in the (rare) case where variances really are equal."
+      },
+      {
+        q: "Can I run a t-test if my data isn't normal?",
+        a: "Often yes. The Central Limit Theorem rescues us when n is moderate (≥ 30 per group is a common rule of thumb). For small samples with skew, consider a non-parametric test (Wilcoxon)."
+      },
+      {
+        q: "When does pairing hurt instead of help?",
+        a: "When the within-pair correlation is near zero, pairing wastes degrees of freedom (n−1 instead of 2n−2) without reducing noise. But this is rare — usually pairs are correlated."
+      },
+      {
+        q: "Two-sided or one-sided?",
+        a: "Two-sided unless you have a directional hypothesis specified before looking at the data. One-sided after peeking at results is p-hacking."
+      }
+    ];
+
+    function Pitfalls() {
+      const [open, setOpen] = useState(0);
+      return (
+        <section id="pitfalls" className="section-anchor py-24 md:py-32 border-t border-rule">
+          <div className="max-w-[1100px] mx-auto px-6 md:px-10">
+            <SectionHeading n="08" kicker="Common pitfalls" title="The traps that actually cost points." />
+            <div className="mt-14 grid gap-3">
+              {PITFALLS.map((p, i) => (
+                <Reveal key={i} delay={i * 0.04}>
+                  <button onClick={() => setOpen(open === i ? -1 : i)} className="w-full text-left card-surface p-5 transition-all">
+                    <div className="flex items-baseline justify-between gap-4">
+                      <span className="font-display text-[20px] text-ink-strong">{p.q}</span>
+                      <span className="font-mono text-mute text-[18px] leading-none mt-1">{open === i ? '−' : '+'}</span>
+                    </div>
+                    <div className="overflow-hidden transition-all duration-500" style={{ maxHeight: open === i ? '300px' : '0px', opacity: open === i ? 1 : 0 }}>
+                      <p className="mt-4 text-[15px] leading-[1.65] text-ink/85">{p.a}</p>
+                    </div>
+                  </button>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    /* ============================================================
+       MIDTERM BENEDICTION
+       ============================================================ */
+
+    function MidtermBenediction() {
+      return (
+        <section className="py-28 md:py-36 border-t border-rule grad-soft-bg">
+          <div className="max-w-[860px] mx-auto px-6 md:px-10">
+            <Reveal>
+              <div className="card-surface p-10 md:p-14 text-center" style={{ borderImage: 'var(--grad) 1', borderImageSlice: 1 }}>
+                <div className="font-mono text-[11px] small-caps text-mute mb-6">a word for midterm season</div>
+                <p className="font-display italic text-[26px] md:text-[32px] leading-[1.4] text-ink-strong">
+                  "Do not be anxious about anything, but in everything by prayer and supplication with thanksgiving let your requests be made known to God. And the peace of God, which surpasses all understanding, will guard your hearts and your minds in Christ Jesus."
+                </p>
+                <div className="mt-6 font-mono text-[12px] text-mute">— Philippians 4:6–7</div>
+                <div className="mt-10 max-w-[52ch] mx-auto text-[15px] leading-[1.65] text-ink/75">
+                  The math is in its lane. Your peace doesn't depend on it. Study with care, walk into the exam with confidence, and let Christ be the unmoved center while the rest moves.
+                </div>
+              </div>
+            </Reveal>
+          </div>
+        </section>
+      );
+    }
+
+    /* ============================================================
+       FOOTER
+       ============================================================ */
+
+    function Footer() {
+      return (
+        <footer className="border-t border-rule py-16">
+          <div className="max-w-[1100px] mx-auto px-6 md:px-10">
+            <div className="text-center mb-10">
+              <div className="font-display italic text-[18px] md:text-[20px] text-ink/85 leading-[1.6] max-w-[60ch] mx-auto">
+                "The Lord bless you and keep you; the Lord make his face to shine upon you and be gracious to you; the Lord lift up his countenance upon you and give you peace."
+              </div>
+              <div className="mt-4 font-mono text-[11px] text-mute small-caps">numbers 6:24–26</div>
+            </div>
+            <div className="flex flex-wrap items-center justify-between gap-4 pt-8 border-t border-rule">
+              <div className="font-display text-[18px]">T-Tests · Field Notes</div>
+              <div className="font-mono text-[11px] small-caps text-mute">Brandon Nguyen · steadfastnguyen.com</div>
+              <div className="flex gap-4 font-mono text-[12px]">
+                <a href="index.html" className="text-mute hover:text-ink transition-colors">home</a>
+                <a href="blog.html" className="text-mute hover:text-ink transition-colors">blog</a>
+                <a href="#overview" className="text-mute hover:text-ink transition-colors">↑ top</a>
+              </div>
+            </div>
+          </div>
+        </footer>
+      );
+    }
+
+    /* ============================================================
+       APP
+       ============================================================ */
+
+    function App() {
+      return (
+        <Fragment>
+          <TopNav />
+          <Hero />
+          <Overview />
+          <DecisionGuide />
+
+          <TestSection
+            id="one-mean"
+            n="02"
+            kicker="Single sample"
+            title="One-mean t-test."
+            plainEnglish="Does my one sample's mean look like it came from a population with this specific value?"
+            whenToUse={[
+              'You have one sample of measurements.',
+              'You want to compare its mean to a known reference value (a manufacturer claim, a textbook constant, last year\'s average).',
+              'You don\'t know the true population standard deviation — only your sample\'s.'
+            ]}
+            hypotheses={{
+              H0: String.raw`H_0: \mu = \mu_0`,
+              H1: String.raw`H_1: \mu \neq \mu_0 \quad \text{(or one-sided)}`
+            }}
+            formulaTeX={String.raw`t \;=\; \dfrac{\bar{x} - \mu_0}{s/\sqrt{n}}`}
+            df="n − 1"
+            example={
+              <Example
+                context={<>A coffee shop claims their lattes contain <strong>200 mg</strong> of caffeine. You pull <strong>n = 16</strong> shots and measure <em>x̄</em> = 208.4 mg with <em>s</em> = 12.6 mg. Is the claim consistent with your sample?</>}
+                computation={[
+                  { label: 'standard error', tex: String.raw`SE = \tfrac{12.6}{\sqrt{16}} = 3.15` },
+                  { label: 't-statistic',   tex: String.raw`t = \tfrac{208.4 - 200}{3.15} \approx 2.67` },
+                  { label: 'df',            tex: String.raw`16 - 1 = 15` },
+                  { label: 'two-sided p',   tex: String.raw`p \approx 0.018` }
+                ]}
+                result={{ tex: String.raw`p < 0.05 \Rightarrow \text{reject } H_0` }}
+                interpretation="Your samples are running hotter than the claim — and not just by chance."
+              />
+            }
+            assumptions={[
+              { label: 'normality', text: 'Population is approximately normal — or n is large enough for the CLT to do its job (n ≥ 30 is a common rule of thumb).' },
+              { label: 'independence', text: 'Each observation is independent of the others. No twins, no repeated measures, no time-series.' },
+              { label: 'random sample', text: 'The sample wasn\'t cherry-picked. If it was, no test will save you.' },
+              { label: 'unknown σ', text: 'You\'re using the sample SD s, not a known population σ. (If σ is known, it\'s a z-test.)' }
+            ]}
+            verse={{
+              text: '"For my thoughts are not your thoughts, neither are your ways my ways, declares the Lord."',
+              cite: 'Isaiah 55:8'
+            }}
+          />
+
+          <TestSection
+            id="paired"
+            n="03"
+            kicker="Same subjects, twice"
+            title="Paired t-test."
+            plainEnglish="Did this within-person change actually happen, or could each subject's before-and-after just be noise around zero?"
+            whenToUse={[
+              'You measured the same subjects twice — before/after, with/without, left/right.',
+              'Or you have natural pairs: twins, matched cases and controls, husband/wife.',
+              'You want to know whether the average difference is non-zero.'
+            ]}
+            hypotheses={{
+              H0: String.raw`H_0: \mu_d = 0`,
+              H1: String.raw`H_1: \mu_d \neq 0`
+            }}
+            formulaTeX={String.raw`t \;=\; \dfrac{\bar{d}}{s_d / \sqrt{n}} \qquad \text{where } d_i = x_i - y_i`}
+            df="n − 1"
+            example={
+              <Example
+                context={<>Eight students take a vocabulary test before and after a study program. The mean of their differences is <strong>d̄ = 5.4</strong> points with <em>s<sub>d</sub></em> = 4.1 (n = 8).</>}
+                computation={[
+                  { label: 'standard error', tex: String.raw`SE = \tfrac{4.1}{\sqrt{8}} \approx 1.45` },
+                  { label: 't-statistic',   tex: String.raw`t = \tfrac{5.4}{1.45} \approx 3.72` },
+                  { label: 'df',            tex: String.raw`8 - 1 = 7` },
+                  { label: 'two-sided p',   tex: String.raw`p \approx 0.0074` }
+                ]}
+                result={{ tex: String.raw`p < 0.01 \Rightarrow \text{reject } H_0` }}
+                interpretation="The program produced a real average gain — bigger than what within-person noise alone would explain."
+              />
+            }
+            assumptions={[
+              { label: 'normal differences', text: 'It\'s the differences d_i that need to be approximately normal — not the raw values.' },
+              { label: 'pairs are real', text: 'Each (before, after) is genuinely paired. If the pairing is fake, you destroy your own power.' },
+              { label: 'independent pairs', text: 'Different subjects are independent of each other. (Within a pair, dependence is the whole point.)' }
+            ]}
+            verse={{
+              text: '"Therefore, if anyone is in Christ, he is a new creation. The old has passed away; behold, the new has come."',
+              cite: '2 Corinthians 5:17'
+            }}
+          />
+
+          <TestSection
+            id="pooled"
+            n="04"
+            kicker="Two groups, equal spread"
+            title="Pooled two-sample t-test."
+            plainEnglish="Do these two independent groups have different means — assuming they have the same underlying variance?"
+            whenToUse={[
+              'You have two independent groups (different people).',
+              'You\'re willing to assume both groups share the same population variance.',
+              'You want to combine information from both groups to estimate that shared variance more precisely.'
+            ]}
+            hypotheses={{
+              H0: String.raw`H_0: \mu_1 = \mu_2`,
+              H1: String.raw`H_1: \mu_1 \neq \mu_2`
+            }}
+            formulaTeX={String.raw`t = \dfrac{\bar{x}_1 - \bar{x}_2}{s_p\sqrt{\tfrac{1}{n_1}+\tfrac{1}{n_2}}}, \quad s_p^2 = \dfrac{(n_1-1)s_1^2 + (n_2-1)s_2^2}{n_1 + n_2 - 2}`}
+            df="n₁ + n₂ − 2"
+            example={
+              <Example
+                context={<>Two sections of a class. Section A: <em>x̄₁</em> = 78, <em>s₁</em> = 6, <em>n₁</em> = 12. Section B: <em>x̄₂</em> = 73, <em>s₂</em> = 7, <em>n₂</em> = 14. Variances look similar — pooled is reasonable.</>}
+                computation={[
+                  { label: 'pooled var', tex: String.raw`s_p^2 = \tfrac{11 \cdot 36 + 13 \cdot 49}{24} \approx 43.04` },
+                  { label: 'pooled SD',  tex: String.raw`s_p \approx 6.56` },
+                  { label: 'standard error', tex: String.raw`SE = 6.56 \cdot \sqrt{\tfrac{1}{12}+\tfrac{1}{14}} \approx 2.58` },
+                  { label: 't-statistic',   tex: String.raw`t = \tfrac{78 - 73}{2.58} \approx 1.94` },
+                  { label: 'df',            tex: String.raw`12 + 14 - 2 = 24` },
+                  { label: 'two-sided p',   tex: String.raw`p \approx 0.064` }
+                ]}
+                result={{ tex: String.raw`p > 0.05 \Rightarrow \text{fail to reject}` }}
+                interpretation="Suggestive but not significant at α = 0.05. The 5-point gap could plausibly be chance."
+              />
+            }
+            assumptions={[
+              { label: 'normality', text: 'Both populations approximately normal (or both samples large enough for CLT).' },
+              { label: 'equal variance', text: 'σ₁² = σ₂². Check with Levene\'s test, an F-test, or just side-by-side boxplots.' },
+              { label: 'independence', text: 'Groups are independent and observations within each group are independent.' },
+              { label: 'random samples', text: 'Both groups drawn at random from their populations.' }
+            ]}
+            verse={{
+              text: '"There is neither Jew nor Greek, there is neither slave nor free, there is no male and female, for you are all one in Christ Jesus."',
+              cite: 'Galatians 3:28'
+            }}
+          />
+
+          <TestSection
+            id="welch"
+            n="05"
+            kicker="Two groups, unequal spread"
+            title="Welch's two-sample t-test."
+            plainEnglish="Do these two independent groups have different means — without pretending their variances are the same?"
+            whenToUse={[
+              'You have two independent groups.',
+              'Their variances might differ (or you don\'t want to commit to assuming they\'re equal).',
+              'You want a test that\'s robust to unequal variances at minimal power cost.'
+            ]}
+            hypotheses={{
+              H0: String.raw`H_0: \mu_1 = \mu_2`,
+              H1: String.raw`H_1: \mu_1 \neq \mu_2`
+            }}
+            formulaTeX={String.raw`t = \dfrac{\bar{x}_1 - \bar{x}_2}{\sqrt{s_1^2/n_1 + s_2^2/n_2}}`}
+            dfTeX={String.raw`\nu \approx \dfrac{(s_1^2/n_1 + s_2^2/n_2)^2}{(s_1^2/n_1)^2/(n_1-1) + (s_2^2/n_2)^2/(n_2-1)}`}
+            example={
+              <Example
+                context={<>A new tutoring program. Treatment: <em>x̄₁</em> = 82, <em>s₁</em> = 6, <em>n₁</em> = 20. Control: <em>x̄₂</em> = 76, <em>s₂</em> = 14, <em>n₂</em> = 22. The spreads are wildly different — Welch's it is.</>}
+                computation={[
+                  { label: 's₁²/n₁', tex: String.raw`36/20 = 1.8` },
+                  { label: 's₂²/n₂', tex: String.raw`196/22 \approx 8.91` },
+                  { label: 'standard error', tex: String.raw`SE = \sqrt{1.8 + 8.91} \approx 3.27` },
+                  { label: 't-statistic',   tex: String.raw`t = \tfrac{82 - 76}{3.27} \approx 1.83` },
+                  { label: 'df (Satterthwaite)', tex: String.raw`\nu \approx \tfrac{(10.71)^2}{(1.8)^2/19 + (8.91)^2/21} \approx 28.7` },
+                  { label: 'two-sided p',   tex: String.raw`p \approx 0.078` }
+                ]}
+                result={{ tex: String.raw`p > 0.05 \Rightarrow \text{fail to reject}` }}
+                interpretation="Notice the df: 28.7, well below pooled's 40. Welch penalizes you in df precisely because it doesn't trust the variances to combine."
+              />
+            }
+            assumptions={[
+              { label: 'normality', text: 'Both populations approximately normal (or both samples large).' },
+              { label: 'independence', text: 'Groups independent, observations within each independent.' },
+              { label: 'no equal-σ assumption', text: 'You explicitly do not require σ₁² = σ₂². The Satterthwaite df adjusts for the asymmetry.' },
+              { label: 'default in R', text: 't.test() in R uses Welch\'s by default. var.equal = FALSE is the safe place to start.' }
+            ]}
+            verse={{
+              text: '"Jesus Christ is the same yesterday and today and forever."',
+              cite: 'Hebrews 13:8'
+            }}
+          />
+
+          <LiveLab />
+
+          <section className="py-12 border-t border-rule">
+            <div className="max-w-[1200px] mx-auto px-6 md:px-10">
+              <PooledVsWelch />
+              <PairedDemo />
+            </div>
+          </section>
+
+          <ComparisonTable />
+          <Pitfalls />
+          <MidtermBenediction />
+          <Footer />
+        </Fragment>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+
+  <script>
+    // After mount: smooth scroll + GSAP entrance
+    window.addEventListener('load', function () {
+      var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      // Lenis smooth scroll
+      try {
+        if (!reduced && window.Lenis) {
+          var lenis = new window.Lenis({
+            duration: 1.15,
+            easing: function (x) { return Math.min(1, 1.001 - Math.pow(2, -10 * x)); },
+            smoothWheel: true,
+            wheelMultiplier: 1,
+            touchMultiplier: 2
+          });
+          function raf(t) { lenis.raf(t); requestAnimationFrame(raf); }
+          requestAnimationFrame(raf);
+          window.__lenis = lenis;
+        }
+      } catch (e) { console.warn('Lenis init failed:', e); }
+
+      // GSAP ScrollTrigger refresh after layout (React renders async)
+      try {
+        if (window.gsap && window.ScrollTrigger) {
+          window.gsap.registerPlugin(window.ScrollTrigger);
+          setTimeout(function () { window.ScrollTrigger.refresh(); }, 200);
+        }
+      } catch (e) {}
+    });
+  </script>
+</body>
+</html>
