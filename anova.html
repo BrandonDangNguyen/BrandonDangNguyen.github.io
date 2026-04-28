@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ANOVA &amp; the F-Statistic — an interactive explainer</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+        onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'\\(',right:'\\)',display:false},{left:'\\[',right:'\\]',display:true}],throwOnError:false});"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/jstat@1.9.6/dist/jstat.min.js"></script>
+
+<style>
+  :root{
+    --c1:#1f77b4;
+    --c2:#2ca02c;
+    --c3:#d62728;
+    --bg:#fafafa;
+    --fg:#1a1a1a;
+    --muted:#5a5a5a;
+    --border:#dcdcdc;
+    --card:#ffffff;
+    --accent:#0b4d8a;
+    --good:#157a3a;
+    --bad:#999;
+    --reject-fill:#ffe1e1;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.6;font-size:16px}
+  main{max-width:780px;margin:0 auto;padding:32px 20px 80px}
+  h1{font-size:2rem;line-height:1.25;margin:0 0 8px}
+  h2{font-size:1.4rem;margin:48px 0 12px;border-bottom:1px solid var(--border);padding-bottom:6px}
+  h3{font-size:1.1rem;margin:24px 0 8px}
+  p{margin:12px 0}
+  .lede{font-size:1.05rem;color:var(--muted);margin-bottom:24px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:20px;margin:16px 0}
+  .callout{background:#fff7e0;border-left:4px solid #d4a017;padding:14px 16px;border-radius:4px;margin:18px 0}
+  .callout strong{color:#7a5a00}
+  .punchline{background:#e7f3ff;border-left:4px solid var(--accent);padding:14px 16px;border-radius:4px;margin:18px 0;font-style:italic}
+  .verdict{display:inline-block;padding:4px 12px;border-radius:999px;font-weight:600;font-size:0.9rem;letter-spacing:0.02em}
+  .verdict.reject{background:#e6f7ec;color:var(--good);border:1px solid #aed8be}
+  .verdict.fail  {background:#f0f0f0;color:#555;border:1px solid #cfcfcf}
+
+  /* Sandbox */
+  .sandbox{display:grid;grid-template-columns:1fr;gap:18px}
+  .controls{display:grid;grid-template-columns:1fr 1fr;gap:12px 18px;align-items:center}
+  .controls label{font-size:0.92rem;color:var(--muted);display:flex;flex-direction:column;gap:4px}
+  .controls label span.value{color:var(--fg);font-variant-numeric:tabular-nums;font-weight:600}
+  .controls input[type=range]{width:100%}
+  .controls .full{grid-column:1/-1;display:flex;gap:10px;align-items:center;justify-content:flex-start}
+  .controls button{background:var(--accent);color:white;border:0;padding:8px 14px;border-radius:6px;font-size:0.9rem;cursor:pointer}
+  .controls button:hover{background:#093d6d}
+  .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:8px}
+  .stat{background:#f4f7fb;border-radius:6px;padding:8px 10px;text-align:center}
+  .stat .label{font-size:0.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.04em}
+  .stat .number{font-size:1.15rem;font-variant-numeric:tabular-nums;font-weight:600}
+  .plots{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .plots > div{min-width:0}
+  .plots svg{width:100%;height:auto;display:block}
+  .plot-title{font-size:0.85rem;color:var(--muted);margin:0 0 4px;text-align:center}
+
+  /* Math + tables */
+  .math-row{display:grid;grid-template-columns:1fr 1.1fr;gap:14px;margin:8px 0;align-items:baseline}
+  .math-row .gloss{color:var(--muted);font-size:0.92rem}
+  table.data{border-collapse:collapse;margin:12px 0;font-variant-numeric:tabular-nums}
+  table.data th,table.data td{border:1px solid var(--border);padding:6px 10px;text-align:right}
+  table.data th{background:#f4f7fb;font-weight:600}
+  table.data td:first-child,table.data th:first-child{text-align:left;background:#f4f7fb;font-weight:600}
+  table.data tr.summary td,table.data tr.summary th{background:#eef3f8;font-weight:600}
+
+  /* Collapsibles */
+  details{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:8px 14px;margin:8px 0}
+  details + details{margin-top:6px}
+  details summary{cursor:pointer;font-weight:600;list-style:none;padding:6px 0}
+  details summary::-webkit-details-marker{display:none}
+  details summary::before{content:"▸ ";color:var(--accent);transition:transform 0.15s}
+  details[open] summary::before{content:"▾ "}
+  details .content{padding:6px 0 10px;border-top:1px dashed var(--border);margin-top:4px}
+
+  /* Sticky verdict on wide screens */
+  .sticky-verdict{display:none}
+  @media (min-width:1180px){
+    .sticky-verdict{display:block;position:fixed;top:24px;right:24px;background:var(--card);
+      border:1px solid var(--border);border-radius:8px;padding:14px 16px;width:200px;
+      box-shadow:0 2px 8px rgba(0,0,0,0.05);z-index:10}
+    .sticky-verdict .label{font-size:0.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.04em}
+    .sticky-verdict .number{font-size:1.4rem;font-weight:700;font-variant-numeric:tabular-nums}
+    .sticky-verdict .meta{font-size:0.82rem;color:var(--muted);margin-top:4px}
+  }
+
+  /* Responsive */
+  @media (max-width:640px){
+    main{padding:20px 14px 60px}
+    h1{font-size:1.6rem}
+    .controls{grid-template-columns:1fr}
+    .plots{grid-template-columns:1fr}
+    .stats-row{grid-template-columns:repeat(2,1fr)}
+    .math-row{grid-template-columns:1fr}
+    table.data{display:block;overflow-x:auto;max-width:100%;white-space:nowrap;font-size:0.92rem}
+  }
+
+  /* Small caps for axis labels */
+  .axis text{font-size:11px;fill:var(--muted)}
+  .axis path,.axis line{stroke:#bbb}
+  .grid line{stroke:#eee;shape-rendering:crispEdges}
+
+  code{background:#eef3f8;padding:1px 5px;border-radius:3px;font-size:0.92em}
+  ul.tight{margin:8px 0;padding-left:22px}
+  ul.tight li{margin:4px 0}
+  .footnote{color:var(--muted);font-size:0.88rem;margin-top:24px;padding-top:14px;border-top:1px solid var(--border)}
+</style>
+</head>
+<body>
+
+<aside class="sticky-verdict" id="stickyVerdict" aria-hidden="true">
+  <div class="label">Current F</div>
+  <div class="number" id="stickyF">—</div>
+  <div class="meta" id="stickyMeta">—</div>
+</aside>
+
+<main>
+
+<h1>ANOVA &amp; the F-Statistic</h1>
+<p class="lede">An interactive review for someone who needs the intuition <em>and</em> the formulas — fast.</p>
+
+<!-- ============== 1. The question ============== -->
+<h2>1 · The question ANOVA answers</h2>
+<p>You have several groups and a single measurement per observation. Are the group <em>means</em> actually different, or is what you see just sampling noise?</p>
+<p>A two-sample test (the t-test) handles two groups. ANOVA generalizes it to three or more, with one omnibus test. Here are three groups — eyeballing it, are they different?</p>
+<div class="card">
+  <div id="heroPlot"></div>
+</div>
+
+<!-- ============== 2. Core intuition ============== -->
+<h2>2 · The one-sentence intuition</h2>
+<p><strong>F = signal ÷ noise</strong> — specifically, the variance <em>between</em> group means divided by the variance <em>within</em> each group.</p>
+<ul class="tight">
+  <li>If groups are tightly clustered and far apart → big F → reject H₀.</li>
+  <li>If groups overlap a lot relative to how spread their means are → F ≈ 1 → fail to reject.</li>
+</ul>
+<div class="card">
+  <div class="plots">
+    <div><p class="plot-title">Big F: tight clusters, spread-apart means</p><div id="intuitionBig"></div></div>
+    <div><p class="plot-title">F ≈ 1: noisy clusters, similar means</p><div id="intuitionSmall"></div></div>
+  </div>
+</div>
+
+<!-- ============== 3. Sandbox ============== -->
+<h2>3 · Drag the sliders, watch F respond</h2>
+<p>Three groups, normally distributed, equal variance. Move the means apart or shrink σ, and watch the F-statistic and p-value update live. Click <em>Resample</em> to redraw new random data.</p>
+
+<div class="card sandbox">
+  <div class="controls">
+    <label>μ₁ (group 1 mean) <span class="value" id="m1Val">10.0</span>
+      <input type="range" id="m1" min="0" max="20" step="0.5" value="10">
+    </label>
+    <label>μ₂ (group 2 mean) <span class="value" id="m2Val">10.0</span>
+      <input type="range" id="m2" min="0" max="20" step="0.5" value="10">
+    </label>
+    <label>μ₃ (group 3 mean) <span class="value" id="m3Val">10.0</span>
+      <input type="range" id="m3" min="0" max="20" step="0.5" value="10">
+    </label>
+    <label>σ (within-group SD) <span class="value" id="sVal">2.0</span>
+      <input type="range" id="s" min="0.5" max="5" step="0.1" value="2">
+    </label>
+    <label>n per group <span class="value" id="nVal">20</span>
+      <input type="range" id="n" min="5" max="50" step="1" value="20">
+    </label>
+    <div class="full">
+      <button id="resampleBtn">Resample</button>
+      <span class="verdict" id="verdict">—</span>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat"><div class="label">F</div><div class="number" id="Fval">—</div></div>
+    <div class="stat"><div class="label">df</div><div class="number" id="dfVal">—</div></div>
+    <div class="stat"><div class="label">p-value</div><div class="number" id="pVal">—</div></div>
+    <div class="stat"><div class="label">SSB / SST</div><div class="number" id="ratioVal">—</div></div>
+  </div>
+
+  <div class="plots">
+    <div><p class="plot-title">Group dot plot (means as ◆)</p><div id="dotPlot"></div></div>
+    <div><p class="plot-title">F-distribution under H₀ (red = reject region)</p><div id="fPlot"></div></div>
+  </div>
+  <div>
+    <p class="plot-title" style="margin-top:8px">Variance partition: SST = SSB + SSW</p>
+    <div id="partPlot"></div>
+  </div>
+</div>
+
+<!-- ============== 4. The math ============== -->
+<h2>4 · The math, compactly</h2>
+<div class="math-row"><div>\(SS_T = \sum_{i,j}(x_{ij}-\bar{x})^2\)</div><div class="gloss">Total variability around the grand mean.</div></div>
+<div class="math-row"><div>\(SS_B = \sum_j n_j(\bar{x}_j-\bar{x})^2\)</div><div class="gloss">Between-group: how far each group mean sits from the grand mean.</div></div>
+<div class="math-row"><div>\(SS_W = \sum_{i,j}(x_{ij}-\bar{x}_j)^2\)</div><div class="gloss">Within-group: leftover scatter inside each group.</div></div>
+<div class="math-row"><div>\(SS_T = SS_B + SS_W\)</div><div class="gloss">The variance partition — exact, not approximate.</div></div>
+<div class="math-row"><div>\(MS_B = \frac{SS_B}{k-1},\quad MS_W = \frac{SS_W}{N-k}\)</div><div class="gloss">Average squared deviation per degree of freedom.</div></div>
+<div class="math-row"><div>\(F = \dfrac{MS_B}{MS_W} \sim F_{k-1,\,N-k}\) under H₀</div><div class="gloss">Under H₀ (all means equal), both MS estimate σ². Their ratio sits near 1.</div></div>
+
+<!-- ============== 5. Worked one-way example ============== -->
+<h2>5 · Worked one-way example by hand</h2>
+<p>Three teaching methods, four students per group. Final exam scores:</p>
+<table class="data">
+  <tr><th>Method</th><th>x₁</th><th>x₂</th><th>x₃</th><th>x₄</th><th>mean</th></tr>
+  <tr><td>A</td><td>72</td><td>76</td><td>74</td><td>78</td><td>75</td></tr>
+  <tr><td>B</td><td>80</td><td>82</td><td>84</td><td>78</td><td>81</td></tr>
+  <tr><td>C</td><td>88</td><td>84</td><td>86</td><td>90</td><td>87</td></tr>
+  <tr class="summary"><td>grand</td><td colspan="4"></td><td>81</td></tr>
+</table>
+
+<details open><summary>Step 1 — SSB (between-group)</summary><div class="content">
+<p>\(SS_B = 4\big[(75-81)^2+(81-81)^2+(87-81)^2\big] = 4(36+0+36) = \mathbf{288}\)</p>
+</div></details>
+
+<details><summary>Step 2 — SSW (within-group)</summary><div class="content">
+<p>Group A deviations from 75: −3, +1, −1, +3 → squares 9+1+1+9 = 20<br>
+Group B deviations from 81: −1, +1, +3, −3 → squares 1+1+9+9 = 20<br>
+Group C deviations from 87: +1, −3, −1, +3 → squares 1+9+1+9 = 20<br>
+\(SS_W = 20 + 20 + 20 = \mathbf{60}\)</p>
+</div></details>
+
+<details><summary>Step 3 — degrees of freedom</summary><div class="content">
+<p>\(df_1 = k - 1 = 2\), \(df_2 = N - k = 12 - 3 = 9\)</p>
+</div></details>
+
+<details><summary>Step 4 — mean squares and F</summary><div class="content">
+<p>\(MS_B = 288/2 = 144\), \(MS_W = 60/9 \approx 6.667\)<br>
+\(F = 144 / 6.667 = \mathbf{21.6}\)</p>
+</div></details>
+
+<details><summary>Step 5 — decision</summary><div class="content">
+<p>Critical value \(F_{0.05,\,2,9} \approx 4.26\). Observed F = 21.6 ≫ 4.26 → <strong>reject H₀</strong>. p ≈ <span id="onewayP">…</span> (computed live by jStat below).</p>
+<p class="footnote">Cross-check (R): <code>summary(aov(score ~ method, data=d))</code> on these 12 numbers should print F = 21.6, p ≈ 3.7e-4.</p>
+</div></details>
+
+<!-- ============== 6. RCBD ============== -->
+<h2>6 · Randomized Complete Block Design (RCBD)</h2>
+
+<h3>Why blocking</h3>
+<p>If your experimental units differ on a known nuisance variable — soil quality, student ability, machine batch, time of day — that variability gets dumped into the error term and washes out your treatment signal. <strong>Block on the nuisance variable</strong> so its variance is recognized as a separate source instead of polluting error.</p>
+
+<h3>The model</h3>
+<p>\(y_{ij} = \mu + \tau_i + \beta_j + \varepsilon_{ij}\) — additive: each treatment shifts the mean by \(\tau_i\), each block by \(\beta_j\), and the residual is \(\varepsilon_{ij}\). One observation per cell, no treatment×block interaction.</p>
+
+<h3>The variance partition</h3>
+<ul class="tight">
+  <li>\(SS_T = SS_{\text{Trt}} + SS_{\text{Blk}} + SS_E\)</li>
+  <li>df: treatment \(k-1\), block \(b-1\), error \((k-1)(b-1)\), total \(kb-1\)</li>
+  <li>Test of interest: \(F = MS_{\text{Trt}} / MS_E\), with \(F_{k-1,\,(k-1)(b-1)}\)</li>
+</ul>
+
+<h3>Worked example — fertilizer × field</h3>
+<p>Three fertilizers (T1, T2, T3) tested across four fields used as blocks (B1–B4). Each fertilizer applied once per field. Yield in bushels:</p>
+<table class="data">
+  <tr><th></th><th>T1</th><th>T2</th><th>T3</th><th>block mean</th></tr>
+  <tr><td>B1</td><td>7</td><td>12</td><td>14</td><td>11</td></tr>
+  <tr><td>B2</td><td>6</td><td>8</td><td>13</td><td>9</td></tr>
+  <tr><td>B3</td><td>11</td><td>13</td><td>15</td><td>13</td></tr>
+  <tr><td>B4</td><td>4</td><td>7</td><td>10</td><td>7</td></tr>
+  <tr class="summary"><td>trt mean</td><td>7</td><td>10</td><td>13</td><td>10</td></tr>
+</table>
+
+<details open><summary>Step 1 — SS_Treatment</summary><div class="content">
+<p>\(SS_{\text{Trt}} = b\sum_i(\bar{T}_i-\bar{x})^2 = 4[(7-10)^2+(10-10)^2+(13-10)^2] = 4(9+0+9) = \mathbf{72}\)</p>
+</div></details>
+
+<details><summary>Step 2 — SS_Block</summary><div class="content">
+<p>\(SS_{\text{Blk}} = k\sum_j(\bar{B}_j-\bar{x})^2 = 3[(11-10)^2+(9-10)^2+(13-10)^2+(7-10)^2] = 3(1+1+9+9) = \mathbf{60}\)</p>
+</div></details>
+
+<details><summary>Step 3 — SS_Total</summary><div class="content">
+<p>Sum of squared deviations of all 12 cells from the grand mean (10):</p>
+<p>B1: (−3)²+2²+4² = 29 · B2: (−4)²+(−2)²+3² = 29 · B3: 1²+3²+5² = 35 · B4: (−6)²+(−3)²+0² = 45<br>
+\(SS_T = 29+29+35+45 = \mathbf{138}\)</p>
+</div></details>
+
+<details><summary>Step 4 — SS_Error</summary><div class="content">
+<p>\(SS_E = SS_T - SS_{\text{Trt}} - SS_{\text{Blk}} = 138 - 72 - 60 = \mathbf{6}\)</p>
+<p class="footnote">Sanity check: residual at cell (i,j) is \(e_{ij}=x_{ij}-\bar{T}_i-\bar{B}_j+\bar{x}\). All twelve are 0 or ±1; their squares sum to 6. ✓</p>
+</div></details>
+
+<details><summary>Step 5 — degrees of freedom</summary><div class="content">
+<p>Treatment: \(k-1=2\) · Block: \(b-1=3\) · Error: \((k-1)(b-1)=6\) · Total: \(kb-1=11\)</p>
+</div></details>
+
+<details><summary>Step 6 — F and decision</summary><div class="content">
+<p>\(MS_{\text{Trt}} = 72/2 = 36\), \(MS_E = 6/6 = 1\)<br>
+\(F = 36/1 = \mathbf{36}\), \(F_{0.05,\,2,6} \approx 5.14\) → <strong>reject H₀</strong>, p ≈ <span id="rcbdP">…</span></p>
+</div></details>
+
+<h3>Blocking vs. ignoring blocks — same data, two analyses</h3>
+<p>What if we'd run a one-way ANOVA on the same numbers, ignoring the blocks?</p>
+<table class="data">
+  <tr><th>Analysis</th><th>SS_Error</th><th>df_Error</th><th>MS_Error</th><th>F</th><th>F_crit (α=0.05)</th><th>Verdict</th></tr>
+  <tr><td>RCBD (block-aware)</td><td>6</td><td>6</td><td>1.00</td><td><strong>36.0</strong></td><td>5.14</td><td>reject decisively</td></tr>
+  <tr><td>One-way (blocks ignored)</td><td>66</td><td>9</td><td>7.33</td><td><strong>4.91</strong></td><td>4.26</td><td>barely reject</td></tr>
+</table>
+<p class="punchline">Blocking moved 60 units of variance out of "error" and into a recognized source — same data, same treatment effect, but F jumped from 4.91 to 36. That's the entire reason RCBD exists: control nuisance variance to gain power.</p>
+
+<h3>When RCBD goes wrong</h3>
+<ul class="tight">
+  <li><strong>Missing cells</strong> break the partition (use a mixed model or expected-mean-squares approach).</li>
+  <li><strong>Treatment×block interaction</strong> violates additivity — diagnose with a residual-vs-block plot.</li>
+  <li><strong>Post-hoc blocking</strong> is cheating: blocks must be defined before you see outcomes.</li>
+</ul>
+
+<!-- ============== 7. Why not multiple t-tests ============== -->
+<h2>7 · Why not just run multiple t-tests?</h2>
+<div class="callout">
+  <strong>Family-wise error inflation.</strong> Each pairwise t-test has a 5% false-positive rate. Running \(\binom{k}{2}\) of them at α = 0.05 each gives an overall false-positive rate of about \(1 - 0.95^{\binom{k}{2}}\). For k=3 groups (3 tests): ≈ 14%. For k=5 (10 tests): ≈ 40%. ANOVA gives one omnibus test at the nominal α; if it's significant, then a controlled post-hoc procedure (Tukey HSD) tells you <em>which</em> pairs differ.
+</div>
+
+<!-- ============== 8. Assumptions ============== -->
+<h2>8 · Assumptions cheatsheet</h2>
+<ul class="tight">
+  <li><strong>Independence</strong> of observations (within and between groups).</li>
+  <li><strong>Normality</strong> of residuals within each group — ANOVA is fairly robust unless n is small <em>and</em> distributions are wildly skewed.</li>
+  <li><strong>Equal variances</strong> across groups (homoscedasticity). Check with Levene's test or plot residuals.</li>
+  <li><strong>RCBD only:</strong> additivity — no treatment×block interaction.</li>
+</ul>
+
+<!-- ============== 9. Exam traps ============== -->
+<h2>9 · Exam traps</h2>
+<ul class="tight">
+  <li>F is always ≥ 0 — it's a ratio of variances.</li>
+  <li>A significant ANOVA tells you <em>something</em> differs, not <em>which pair</em>. Post-hoc tests (Tukey HSD) come next.</li>
+  <li><strong>One-way</strong>: one factor. <strong>Two-way</strong>: two factors crossed (with possible interaction). <strong>RCBD</strong>: one treatment factor, one nuisance factor, no interaction modeled.</li>
+  <li>A large F means strong evidence against H₀, not necessarily a large effect size — report η² or ω² for that.</li>
+  <li>In RCBD the F for blocks is usually printed but rarely the question of interest — blocks are there for variance control, not hypothesis testing.</li>
+</ul>
+
+<p class="footnote">Built with D3, jStat, and KaTeX. View source for the math.</p>
+
+</main>
+
+<script>
+// =========================================================================
+// Utilities: seeded RNG and Box-Muller
+// =========================================================================
+function mulberry32(seed){
+  let s = seed >>> 0;
+  return function(){
+    s = (s + 0x6D2B79F5) >>> 0;
+    let t = s;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function boxMuller(rng){
+  const u1 = Math.max(rng(), 1e-9);
+  const u2 = rng();
+  return Math.sqrt(-2*Math.log(u1)) * Math.cos(2*Math.PI*u2);
+}
+
+// =========================================================================
+// Statistics
+// =========================================================================
+function mean(arr){ let s=0; for (const x of arr) s+=x; return s/arr.length; }
+
+// One-way ANOVA on an array of group arrays.
+function anovaOneWay(groups){
+  const all = groups.flat();
+  const N = all.length, k = groups.length;
+  const grand = mean(all);
+  let ssb = 0, ssw = 0;
+  const groupMeans = [];
+  for (const g of groups){
+    const m = mean(g); groupMeans.push(m);
+    ssb += g.length * (m - grand) ** 2;
+    for (const x of g) ssw += (x - m) ** 2;
+  }
+  const sst = ssb + ssw;
+  const df1 = k - 1, df2 = N - k;
+  const msb = ssb / df1, msw = ssw / df2;
+  const F = msw === 0 ? Infinity : msb / msw;
+  const p = isFinite(F) ? 1 - jStat.centralF.cdf(F, df1, df2) : 0;
+  return {F, df1, df2, p, ssb, ssw, sst, msb, msw, grand, groupMeans, N, k};
+}
+
+// RCBD ANOVA on a matrix m[block][trt].
+function anovaRCBD(matrix){
+  const b = matrix.length, k = matrix[0].length;
+  const blockMeans = matrix.map(mean);
+  const trtMeans = [];
+  for (let i=0;i<k;i++){
+    let s=0; for (let j=0;j<b;j++) s+=matrix[j][i];
+    trtMeans.push(s/b);
+  }
+  const all = matrix.flat();
+  const grand = mean(all);
+  let ssTrt = 0, ssBlk = 0, ssT = 0;
+  for (let i=0;i<k;i++) ssTrt += b * (trtMeans[i] - grand)**2;
+  for (let j=0;j<b;j++) ssBlk += k * (blockMeans[j] - grand)**2;
+  for (let j=0;j<b;j++) for (let i=0;i<k;i++) ssT += (matrix[j][i]-grand)**2;
+  const ssE = ssT - ssTrt - ssBlk;
+  const df1 = k-1, df2 = (k-1)*(b-1);
+  const msTrt = ssTrt/df1, msE = ssE/df2;
+  const F = msTrt/msE;
+  const p = 1 - jStat.centralF.cdf(F, df1, df2);
+  return {F, df1, df2, p, ssTrt, ssBlk, ssE, ssT, msTrt, msE, b, k};
+}
+
+// =========================================================================
+// Worked-example checks (verified against R / hand calc)
+// =========================================================================
+// EXPECTED: one-way example F = 21.6, p ≈ 3.74e-4
+// EXPECTED: RCBD example F = 36, one-way-on-same-data F ≈ 4.909
+(function checkWorkedExamples(){
+  const owGroups = [[72,76,74,78],[80,82,84,78],[88,84,86,90]];
+  const ow = anovaOneWay(owGroups);
+  console.log("[check] one-way F", ow.F.toFixed(3), "expected 21.600 ; p", ow.p.toExponential(2), "expected ~3.74e-4");
+  document.getElementById("onewayP").textContent = ow.p.toExponential(2);
+
+  const rcbd = [[7,12,14],[6,8,13],[11,13,15],[4,7,10]];
+  const r = anovaRCBD(rcbd);
+  console.log("[check] RCBD F", r.F.toFixed(3), "expected 36.000 ; p", r.p.toExponential(2));
+  document.getElementById("rcbdP").textContent = r.p.toExponential(2);
+
+  // Sanity: same data as one-way
+  const ow2 = anovaOneWay(rcbd[0].map((_,i)=>rcbd.map(row=>row[i])));
+  console.log("[check] one-way on RCBD data F", ow2.F.toFixed(3), "expected 4.909");
+})();
+
+// =========================================================================
+// Plot helpers
+// =========================================================================
+const PALETTE = ["#1f77b4","#2ca02c","#d62728"];
+
+function clearSvg(sel){ d3.select(sel).selectAll("*").remove(); }
+
+// Dot plot: groups laid out in horizontal rows, jittered.
+function drawDotPlot(selector, groups, opts={}){
+  const el = document.querySelector(selector);
+  if (!el) return;
+  const width = el.clientWidth || 360;
+  const height = opts.height || 180;
+  const margin = {top: 16, right: 16, bottom: 30, left: 50};
+  const w = width - margin.left - margin.right;
+  const h = height - margin.top - margin.bottom;
+
+  clearSvg(selector);
+  const svg = d3.select(selector).append("svg")
+    .attr("viewBox", `0 0 ${width} ${height}`)
+    .attr("preserveAspectRatio","xMinYMin meet");
+  const g = svg.append("g").attr("transform",`translate(${margin.left},${margin.top})`);
+
+  const all = groups.flat();
+  const lo = opts.xMin ?? d3.min(all);
+  const hi = opts.xMax ?? d3.max(all);
+  const pad = (hi - lo) * 0.1 || 1;
+  const x = d3.scaleLinear().domain([lo - pad, hi + pad]).range([0, w]);
+  const y = d3.scaleBand().domain(groups.map((_,i)=>"G"+(i+1))).range([0, h]).padding(0.2);
+
+  // Axis
+  g.append("g").attr("class","axis")
+    .attr("transform",`translate(0,${h})`)
+    .call(d3.axisBottom(x).ticks(6));
+  g.append("g").attr("class","axis").call(d3.axisLeft(y));
+
+  // Points (jittered)
+  groups.forEach((grp, gi) => {
+    const yc = y("G"+(gi+1)) + y.bandwidth()/2;
+    const halfBand = y.bandwidth()/2 - 4;
+    g.selectAll(`.pt-${gi}`).data(grp).enter().append("circle")
+      .attr("cx", d => x(d))
+      .attr("cy", (d,i) => yc + (Math.sin(i*2.7+gi)*halfBand*0.6))
+      .attr("r", 4).attr("fill", PALETTE[gi % PALETTE.length])
+      .attr("opacity", 0.7);
+    // Mean diamond
+    const m = mean(grp);
+    g.append("path")
+      .attr("d", d3.symbol().type(d3.symbolDiamond).size(140))
+      .attr("transform", `translate(${x(m)},${yc})`)
+      .attr("fill", "#222").attr("stroke", "white").attr("stroke-width", 1.5);
+  });
+}
+
+// F-distribution plot with rejection region and observed F line.
+function drawFPlot(selector, F, df1, df2, opts={}){
+  const el = document.querySelector(selector);
+  if (!el) return;
+  const width = el.clientWidth || 360;
+  const height = opts.height || 180;
+  const margin = {top: 16, right: 16, bottom: 30, left: 40};
+  const w = width - margin.left - margin.right;
+  const h = height - margin.top - margin.bottom;
+
+  clearSvg(selector);
+  const svg = d3.select(selector).append("svg")
+    .attr("viewBox", `0 0 ${width} ${height}`)
+    .attr("preserveAspectRatio","xMinYMin meet");
+  const g = svg.append("g").attr("transform",`translate(${margin.left},${margin.top})`);
+
+  const xMax = Math.max(8, isFinite(F) ? F * 1.2 : 8, 6);
+  const x = d3.scaleLinear().domain([0, xMax]).range([0, w]);
+
+  // Generate density
+  const N = 200;
+  const data = d3.range(N+1).map(i => {
+    const xv = (i / N) * xMax;
+    return {x: xv, y: jStat.centralF.pdf(xv, df1, df2)};
+  });
+  const yMax = d3.max(data, d => d.y) * 1.1 || 1;
+  const y = d3.scaleLinear().domain([0, yMax]).range([h, 0]);
+
+  // Critical value at α=0.05
+  const fCrit = jStat.centralF.inv(0.95, df1, df2);
+
+  // Rejection region (shaded)
+  const rejectArea = d3.area()
+    .x(d => x(d.x))
+    .y0(h)
+    .y1(d => y(d.y))
+    .curve(d3.curveMonotoneX);
+  const rejectData = data.filter(d => d.x >= fCrit);
+  if (rejectData.length){
+    g.append("path").datum(rejectData).attr("fill","#f8c0c0").attr("opacity",0.7).attr("d", rejectArea);
+  }
+
+  // Density curve
+  const line = d3.line().x(d => x(d.x)).y(d => y(d.y)).curve(d3.curveMonotoneX);
+  g.append("path").datum(data).attr("fill","none").attr("stroke","#444").attr("stroke-width",1.5).attr("d", line);
+
+  // Critical-value line
+  g.append("line").attr("x1",x(fCrit)).attr("x2",x(fCrit)).attr("y1",0).attr("y2",h)
+    .attr("stroke","#999").attr("stroke-dasharray","3,3");
+  g.append("text").attr("x",x(fCrit)+4).attr("y",10).attr("font-size",10).attr("fill","#888").text(`F crit = ${fCrit.toFixed(2)}`);
+
+  // Observed F line
+  if (isFinite(F) && F <= xMax){
+    g.append("line").attr("x1",x(F)).attr("x2",x(F)).attr("y1",0).attr("y2",h)
+      .attr("stroke","#0b4d8a").attr("stroke-width",2);
+    g.append("text").attr("x",x(F)+4).attr("y",h-6).attr("font-size",10).attr("fill","#0b4d8a")
+      .attr("font-weight",600).text(`F = ${F.toFixed(2)}`);
+  } else if (F > xMax){
+    g.append("text").attr("x",w-6).attr("y",14).attr("text-anchor","end").attr("font-size",10).attr("fill","#0b4d8a")
+      .attr("font-weight",600).text(`F = ${F.toFixed(2)} (off chart →)`);
+  }
+
+  // Axes
+  g.append("g").attr("class","axis").attr("transform",`translate(0,${h})`).call(d3.axisBottom(x).ticks(6));
+  g.append("g").attr("class","axis").call(d3.axisLeft(y).ticks(4));
+}
+
+// Stacked horizontal bar of SSB + SSW.
+function drawPartitionBar(selector, ssb, ssw){
+  const el = document.querySelector(selector);
+  if (!el) return;
+  const width = el.clientWidth || 360;
+  const height = 70;
+  const margin = {top: 24, right: 16, bottom: 16, left: 16};
+  const w = width - margin.left - margin.right;
+
+  clearSvg(selector);
+  const svg = d3.select(selector).append("svg")
+    .attr("viewBox", `0 0 ${width} ${height}`)
+    .attr("preserveAspectRatio","xMinYMin meet");
+  const g = svg.append("g").attr("transform",`translate(${margin.left},${margin.top})`);
+  const total = ssb + ssw;
+  if (total <= 0) return;
+  const ssbW = (ssb / total) * w;
+  const sswW = (ssw / total) * w;
+
+  g.append("rect").attr("x",0).attr("y",0).attr("width",ssbW).attr("height",24).attr("fill","#0b4d8a");
+  g.append("rect").attr("x",ssbW).attr("y",0).attr("width",sswW).attr("height",24).attr("fill","#bfbfbf");
+
+  g.append("text").attr("x", 0).attr("y", -8).attr("font-size", 11).attr("fill","#0b4d8a")
+    .text(`SSB = ${ssb.toFixed(1)}  (${(ssb/total*100).toFixed(0)}%)`);
+  g.append("text").attr("x", w).attr("y", -8).attr("text-anchor","end").attr("font-size", 11).attr("fill","#666")
+    .text(`SSW = ${ssw.toFixed(1)}  (${(ssw/total*100).toFixed(0)}%)`);
+}
+
+// =========================================================================
+// Hero plot (static, illustrative)
+// =========================================================================
+function buildHero(){
+  const rng = mulberry32(7);
+  const groups = [
+    Array.from({length:25}, () => 10 + 2.2*boxMuller(rng)),
+    Array.from({length:25}, () => 12 + 2.2*boxMuller(rng)),
+    Array.from({length:25}, () => 11 + 2.2*boxMuller(rng)),
+  ];
+  drawDotPlot("#heroPlot", groups, {height: 200});
+}
+
+// =========================================================================
+// Intuition side-by-side (static, illustrative)
+// =========================================================================
+function buildIntuition(){
+  const r1 = mulberry32(11), r2 = mulberry32(31);
+  const big = [
+    Array.from({length:20}, () => 5 + 0.7*boxMuller(r1)),
+    Array.from({length:20}, () => 12 + 0.7*boxMuller(r1)),
+    Array.from({length:20}, () => 19 + 0.7*boxMuller(r1)),
+  ];
+  const small = [
+    Array.from({length:20}, () => 10 + 3.5*boxMuller(r2)),
+    Array.from({length:20}, () => 11 + 3.5*boxMuller(r2)),
+    Array.from({length:20}, () => 10.5 + 3.5*boxMuller(r2)),
+  ];
+  drawDotPlot("#intuitionBig", big, {height: 170, xMin: 0, xMax: 24});
+  drawDotPlot("#intuitionSmall", small, {height: 170, xMin: 0, xMax: 24});
+}
+
+// =========================================================================
+// Sandbox
+// =========================================================================
+const sandboxState = { seed: 42 };
+
+function readControls(){
+  return {
+    means: [+document.getElementById("m1").value, +document.getElementById("m2").value, +document.getElementById("m3").value],
+    sigma: +document.getElementById("s").value,
+    n: +document.getElementById("n").value,
+  };
+}
+
+function updateSandbox(){
+  const {means, sigma, n} = readControls();
+  document.getElementById("m1Val").textContent = means[0].toFixed(1);
+  document.getElementById("m2Val").textContent = means[1].toFixed(1);
+  document.getElementById("m3Val").textContent = means[2].toFixed(1);
+  document.getElementById("sVal").textContent  = sigma.toFixed(1);
+  document.getElementById("nVal").textContent  = n;
+
+  const rng = mulberry32(sandboxState.seed);
+  const groups = means.map(m => Array.from({length: n}, () => m + sigma * boxMuller(rng)));
+
+  const r = anovaOneWay(groups);
+
+  document.getElementById("Fval").textContent = isFinite(r.F) ? r.F.toFixed(2) : "∞";
+  document.getElementById("dfVal").textContent = `${r.df1}, ${r.df2}`;
+  document.getElementById("pVal").textContent = r.p < 1e-4 ? r.p.toExponential(2) : r.p.toFixed(4);
+  document.getElementById("ratioVal").textContent = (r.ssb/r.sst).toFixed(2);
+
+  const reject = r.p < 0.05;
+  const v = document.getElementById("verdict");
+  v.textContent = reject ? "Reject H₀ (α=0.05)" : "Fail to reject H₀";
+  v.className = "verdict " + (reject ? "reject" : "fail");
+
+  // Sticky panel (wide screens)
+  document.getElementById("stickyF").textContent = isFinite(r.F) ? r.F.toFixed(2) : "∞";
+  document.getElementById("stickyMeta").textContent = `p = ${r.p < 1e-4 ? r.p.toExponential(1) : r.p.toFixed(3)} · ${reject ? "reject" : "fail to reject"}`;
+
+  // X-axis range: cover all groups + a little
+  const xMin = Math.min(...means) - 3*sigma;
+  const xMax = Math.max(...means) + 3*sigma;
+  drawDotPlot("#dotPlot", groups, {height: 200, xMin, xMax});
+  drawFPlot("#fPlot", r.F, r.df1, r.df2, {height: 200});
+  drawPartitionBar("#partPlot", r.ssb, r.ssw);
+}
+
+function bindSandbox(){
+  ["m1","m2","m3","s","n"].forEach(id => {
+    document.getElementById(id).addEventListener("input", () => {
+      requestAnimationFrame(updateSandbox);
+    });
+  });
+  document.getElementById("resampleBtn").addEventListener("click", () => {
+    sandboxState.seed = (Math.random() * 1e9) | 0;
+    updateSandbox();
+  });
+}
+
+// =========================================================================
+// Boot
+// =========================================================================
+function boot(){
+  buildHero();
+  buildIntuition();
+  bindSandbox();
+  updateSandbox();
+}
+
+// Redraw on resize (responsive SVGs handle most of it, but xMin/xMax depends on container)
+let resizeTimer;
+window.addEventListener("resize", () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => { buildHero(); buildIntuition(); updateSandbox(); }, 150);
+});
+
+if (document.readyState === "loading"){
+  document.addEventListener("DOMContentLoaded", boot);
+} else {
+  boot();
+}
+</script>
+</body>
+</html>
