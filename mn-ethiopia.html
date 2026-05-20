@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Multiplication Network Ethiopia — A Master Report Visualization</title>
+  <meta name="description" content="A scrollytelling visualization of the Providence UCLA Consulting Team's master report on Multiplication Network Ethiopia: viability, health, and reproduction of the churches planted."/>
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <style>
+    /* ============================================================
+       MN ETHIOPIA — REPORT-SPECIFIC STYLES
+       Palette: maroon #6B2C2F, cream #F5F0E6, tan #B8A57A,
+                deep-text #2b2b2b, ink #1a1310
+       ============================================================ */
+    :root{
+      --mn-maroon:#6B2C2F;
+      --mn-maroon-dark:#4a1c1e;
+      --mn-cream:#F5F0E6;
+      --mn-tan:#B8A57A;
+      --mn-tan-soft:#E8C9A0;
+      --mn-ink:#2b2b2b;
+      --mn-rule:rgba(107,44,47,.18);
+      --mn-warn:#8c2a2a;
+      --mn-positive:#3d6b3e;
+      --mn-mixed:#a07a35;
+      --mn-negative:#8c2a2a;
+      --mn-neutral:#6f6a64;
+    }
+
+    .mn{
+      font-family: 'Georgia', 'Iowan Old Style', 'Apple Garamond', serif;
+      color:var(--mn-ink);
+      line-height:1.55;
+    }
+    .mn .sans{
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    }
+    .mn h1, .mn h2, .mn h3, .mn .kicker{
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    }
+    .mn .container{ width:min(1100px, 92%); margin:0 auto; }
+
+    /* ---------- HERO ---------- */
+    .mn-hero{
+      background:var(--mn-maroon);
+      color:var(--mn-cream);
+      padding: 110px 0 90px;
+      position:relative;
+      overflow:hidden;
+      border-bottom: 14px solid var(--mn-tan);
+    }
+    .mn-hero::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(900px 500px at 110% -20%, rgba(232,201,160,.18), transparent 60%),
+        radial-gradient(700px 400px at -10% 100%, rgba(232,201,160,.10), transparent 65%);
+      pointer-events:none;
+    }
+    .mn-hero .kicker{
+      letter-spacing:.22em; font-size:.78rem;
+      color:var(--mn-tan-soft);
+      text-transform:uppercase;
+    }
+    .mn-hero .tagrow{
+      letter-spacing:.18em; font-size:.78rem;
+      color:var(--mn-tan-soft);
+      text-transform:uppercase;
+      margin-top:18px;
+    }
+    .mn-hero h1{
+      font-family:'Georgia', serif;
+      font-size: clamp(2.6rem, 6vw, 4.6rem);
+      line-height:1.02;
+      letter-spacing:-0.02em;
+      margin:18px 0 18px;
+      font-weight:700;
+    }
+    .mn-hero p.lead{
+      font-family:'Georgia', serif;
+      font-size: clamp(1.05rem, 1.6vw, 1.35rem);
+      font-style:italic;
+      color:#fff;
+      max-width:62ch;
+      margin:0;
+      line-height:1.45;
+    }
+    .mn-hero .meta{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap:28px;
+      margin-top:54px;
+      padding-top:24px;
+      border-top:1px solid rgba(232,201,160,.4);
+      max-width:780px;
+    }
+    .mn-hero .meta dt{
+      font-size:.7rem; letter-spacing:.18em; text-transform:uppercase;
+      color:var(--mn-tan-soft);
+      margin-bottom:6px;
+    }
+    .mn-hero .meta dd{
+      margin:0; font-family:'Georgia', serif; font-size:1rem;
+      color:#fff;
+    }
+    .mn-hero .basis{
+      margin-top:34px;
+      max-width:780px;
+      font-size:.84rem;
+      color:rgba(245,240,230,.78);
+      line-height:1.55;
+    }
+
+    /* ---------- SECTION SHELLS ---------- */
+    .mn-section{ padding: 72px 0; }
+    .mn-section.alt{ background:#efe9e7; }
+    .mn-section h2.section-title{
+      font-size: clamp(1.1rem, 1.8vw, 1.3rem);
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color:var(--mn-maroon);
+      border-bottom: 2px solid var(--mn-maroon);
+      padding-bottom:10px;
+      margin: 0 0 28px;
+    }
+    .mn-section .lede{
+      font-family:'Georgia', serif;
+      font-size: clamp(1.05rem, 1.5vw, 1.2rem);
+      max-width:62ch;
+      color:var(--mn-ink);
+      margin: 0 0 28px;
+    }
+    .mn-section p, .mn-section li{
+      max-width:64ch;
+    }
+    .mn-section a.cite{
+      color:var(--mn-maroon); border-bottom:1px dotted var(--mn-maroon);
+    }
+
+    /* ---------- KPI CARDS ---------- */
+    .kpi-row{
+      display:grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap:14px;
+      margin: 6px 0 0;
+    }
+    @media (max-width:880px){ .kpi-row{ grid-template-columns: repeat(2, 1fr); } }
+    .kpi-card{
+      background:var(--mn-maroon);
+      color:#fff;
+      border-radius:14px;
+      padding:22px 20px 18px;
+      position:relative;
+      overflow:hidden;
+    }
+    .kpi-card.alt{ background:var(--mn-tan); color:#2b2018; }
+    .kpi-card .num{
+      font-family:'Georgia', serif;
+      font-weight:700;
+      font-size: clamp(2.4rem, 4.6vw, 3.4rem);
+      line-height:1;
+      letter-spacing:-.02em;
+    }
+    .kpi-card .label{
+      font-size:.72rem; letter-spacing:.18em; text-transform:uppercase;
+      color:var(--mn-tan-soft);
+      margin-top:14px; margin-bottom:6px;
+      font-weight:600;
+    }
+    .kpi-card.alt .label{ color:#5b4626; }
+    .kpi-card .ctx{
+      font-size:.84rem; color:rgba(245,240,230,.88); line-height:1.45;
+      font-style:italic;
+    }
+    .kpi-card.alt .ctx{ color:#3b2d1c; }
+
+    /* ---------- LENS PANELS ---------- */
+    .lenses{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap:18px;
+      margin-top:8px;
+    }
+    @media (max-width:880px){ .lenses{ grid-template-columns: 1fr; } }
+    .lens{
+      background:#fff;
+      border:1px solid var(--mn-rule);
+      border-radius:16px;
+      padding:24px;
+      position:relative;
+    }
+    .lens::before{
+      content:"";
+      position:absolute;
+      top:0; left:24px; right:24px; height:4px;
+      background:var(--mn-maroon);
+      border-radius:0 0 4px 4px;
+    }
+    .lens .lens-kicker{
+      font-size:.68rem; letter-spacing:.22em; text-transform:uppercase;
+      color:var(--mn-maroon); font-weight:700;
+      margin-top:14px;
+    }
+    .lens h3{
+      font-family:'Georgia', serif;
+      font-size:1.45rem;
+      margin:6px 0 12px;
+      color:var(--mn-ink);
+    }
+    .lens .ask{
+      font-style:italic; color:#5b4040; margin:0 0 12px;
+    }
+    .lens .lens-num{
+      font-family:'Georgia', serif;
+      font-size: clamp(2.4rem, 4vw, 3rem);
+      font-weight:700;
+      color:var(--mn-maroon);
+      line-height:1;
+      letter-spacing:-.02em;
+      margin: 4px 0 10px;
+    }
+    .lens .lens-body{
+      font-size:.95rem; color:var(--mn-ink); line-height:1.5;
+    }
+
+    /* ---------- MULTIPLIER CASCADE ---------- */
+    .cascade-wrap{
+      background:linear-gradient(180deg, #fff 0%, #f6efe9 100%);
+      border:1px solid var(--mn-rule);
+      border-radius:16px;
+      padding: 28px 22px 18px;
+      margin-top:14px;
+    }
+    .cascade{
+      display:grid;
+      grid-template-columns: auto 1fr auto 1fr auto 1fr;
+      align-items:center;
+      gap:14px;
+      margin: 8px 0 18px;
+    }
+    @media (max-width:760px){
+      .cascade{
+        grid-template-columns: 1fr;
+        gap:8px;
+      }
+      .cascade .arrow{ transform:rotate(90deg); margin: 4px 0; }
+    }
+    .cascade .node{
+      background:var(--mn-maroon);
+      color:#fff;
+      padding:18px 16px;
+      border-radius:12px;
+      text-align:center;
+      min-width:140px;
+    }
+    .cascade .node.alt{ background:var(--mn-tan); color:#2b2018; }
+    .cascade .node .big{
+      font-family:'Georgia', serif; font-weight:700;
+      font-size: clamp(1.6rem, 3vw, 2rem);
+      line-height:1; margin-bottom:6px;
+    }
+    .cascade .node .small{
+      font-size:.72rem; letter-spacing:.14em; text-transform:uppercase;
+      color:var(--mn-tan-soft);
+    }
+    .cascade .node.alt .small{ color:#5b4626; }
+    .cascade .arrow{
+      color:var(--mn-maroon); font-size:1.4rem; text-align:center;
+    }
+    .cascade-foot{
+      font-size:.84rem; color:#5b4040; font-style:italic;
+      margin-top:6px;
+    }
+    .cascade-mid{
+      display:grid; grid-template-columns: repeat(3, 1fr); gap:18px;
+      margin-top:6px;
+    }
+    @media (max-width:760px){ .cascade-mid{ grid-template-columns: 1fr; } }
+    .cascade-mid .midcard{
+      background:#fff;
+      border-left:3px solid var(--mn-maroon);
+      padding:12px 14px;
+      font-size:.92rem;
+      border-radius: 0 8px 8px 0;
+    }
+    .cascade-mid .midcard b{ color:var(--mn-maroon); }
+
+    /* ---------- BAR CHARTS ---------- */
+    .chart{ margin: 24px 0 12px; }
+    .chart-title{
+      font-size:.78rem; letter-spacing:.16em; text-transform:uppercase;
+      color:var(--mn-maroon); margin-bottom:14px; font-weight:700;
+    }
+    .bar-row{
+      display:grid;
+      grid-template-columns: 180px 1fr 84px;
+      align-items:center;
+      gap:14px;
+      margin-bottom:10px;
+      font-size:.92rem;
+    }
+    @media (max-width:680px){
+      .bar-row{ grid-template-columns: 1fr; gap:4px; }
+      .bar-row .bar-value{ text-align:left; }
+    }
+    .bar-label{ color:var(--mn-ink); }
+    .bar-track{
+      background:#e9ddd6;
+      height:18px;
+      border-radius:4px;
+      overflow:hidden;
+    }
+    .bar-fill{
+      height:100%;
+      background:var(--mn-maroon);
+      width:0;
+      border-radius:4px;
+      transition: width 1.1s cubic-bezier(.2,.7,.2,1);
+    }
+    .bar-fill.alt{ background:var(--mn-tan); }
+    .bar-fill.pos{ background:var(--mn-positive); }
+    .bar-fill.mix{ background:var(--mn-mixed); }
+    .bar-fill.neg{ background:var(--mn-negative); }
+    .bar-fill.neu{ background:var(--mn-neutral); }
+    .bar-value{
+      text-align:right; color:var(--mn-ink); font-variant-numeric: tabular-nums;
+      font-size:.88rem;
+    }
+    .chart-source{
+      font-size:.78rem; color:#6f5f5f; font-style:italic; margin-top:8px;
+    }
+
+    /* ---------- TWO-COLUMN CHART GROUP ---------- */
+    .chart-grid{
+      display:grid; grid-template-columns: 1fr 1fr; gap:36px;
+      margin-top: 18px;
+    }
+    @media (max-width:880px){ .chart-grid{ grid-template-columns: 1fr; } }
+
+    /* ---------- SENTIMENT BAND ---------- */
+    .sent-band{
+      display:flex; height:46px;
+      border-radius:8px; overflow:hidden;
+      margin: 14px 0 8px;
+      box-shadow: 0 1px 0 rgba(0,0,0,.04);
+    }
+    .sent-band .seg{
+      display:flex; align-items:center; justify-content:center;
+      color:#fff; font-weight:700; font-size:.9rem; letter-spacing:.04em;
+      width:0; transition: width 1.3s cubic-bezier(.2,.7,.2,1);
+    }
+    .sent-band .seg.pos{ background:var(--mn-positive); }
+    .sent-band .seg.neu{ background:var(--mn-neutral); }
+    .sent-band .seg.mix{ background:var(--mn-mixed); }
+    .sent-band .seg.neg{ background:var(--mn-negative); }
+    .sent-legend{
+      display:flex; flex-wrap:wrap; gap:16px;
+      font-size:.84rem; color:#4a3030;
+    }
+    .sent-legend .sw{
+      display:inline-block; width:11px; height:11px; border-radius:3px;
+      margin-right:6px; vertical-align:middle;
+    }
+    .sw.pos{ background:var(--mn-positive); }
+    .sw.neu{ background:var(--mn-neutral); }
+    .sw.mix{ background:var(--mn-mixed); }
+    .sw.neg{ background:var(--mn-negative); }
+
+    /* ---------- CALLOUT ---------- */
+    .callout{
+      background:var(--mn-maroon);
+      color:#fff;
+      border-radius:16px;
+      padding:28px 28px 24px;
+      margin: 28px 0 0;
+      display:grid; grid-template-columns: auto 1fr; gap:28px;
+      align-items:center;
+    }
+    @media (max-width:760px){ .callout{ grid-template-columns: 1fr; gap:14px; } }
+    .callout .big{
+      font-family:'Georgia', serif; font-weight:700;
+      font-size: clamp(3rem, 6vw, 4.4rem);
+      line-height:1; color:#fff; letter-spacing:-.02em;
+    }
+    .callout .label{
+      font-size:.72rem; letter-spacing:.18em; text-transform:uppercase;
+      color:var(--mn-tan-soft); margin-top:8px;
+    }
+    .callout .body{ font-family:'Georgia', serif; font-size:1.05rem; line-height:1.55; color:#fff; }
+    .callout .body em{ color:var(--mn-tan-soft); font-style:normal; font-weight:600; }
+
+    /* ---------- QUOTE ---------- */
+    .quote{
+      border-left:3px solid var(--mn-tan);
+      background:#faf6f1;
+      padding:16px 18px;
+      margin:16px 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .quote p{
+      margin:0; font-style:italic; color:#3b2828;
+      font-family:'Georgia', serif;
+    }
+    .quote .cite{
+      display:block; margin-top:10px; font-style:normal;
+      font-size:.82rem; color:#6f5247; letter-spacing:.04em;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    }
+
+    /* ---------- RISK MATRIX ---------- */
+    .matrix{
+      display:grid;
+      grid-template-columns: 120px 1fr 1fr;
+      grid-template-rows: 40px 1fr 1fr;
+      gap:10px;
+      margin-top: 14px;
+    }
+    .matrix .axis{
+      font-size:.7rem; letter-spacing:.16em; text-transform:uppercase;
+      color:var(--mn-maroon); font-weight:700;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .matrix .qbox{
+      background:#fff; border:1px solid var(--mn-rule);
+      border-radius:12px; padding:16px 14px;
+    }
+    .matrix .qbox.q1{ background:#fbe7e7; border-color:#e8b5b5; }
+    .matrix .qbox.q4{ background:#fbeede; border-color:#e8c79c; }
+    .matrix .qbox h4{
+      margin:0 0 10px;
+      font-size:.74rem; letter-spacing:.14em; text-transform:uppercase;
+      color:var(--mn-maroon); font-weight:700;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    }
+    .matrix .qbox ul{ margin:0; padding-left:18px; font-size:.9rem; }
+    .matrix .qbox ul li{ margin-bottom:6px; line-height:1.4; }
+    .matrix .ylabel{
+      writing-mode: vertical-rl; transform: rotate(180deg);
+      font-size:.7rem; letter-spacing:.18em; text-transform:uppercase;
+      color:var(--mn-maroon); font-weight:700;
+      align-self:center; justify-self:center;
+    }
+    @media (max-width:760px){
+      .matrix{ grid-template-columns: 1fr; grid-template-rows: auto; }
+      .matrix .axis, .matrix .ylabel{ display:none; }
+    }
+
+    /* ---------- ASKS GRID ---------- */
+    .asks{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:14px; margin-top:14px;
+    }
+    @media (max-width:880px){ .asks{ grid-template-columns: 1fr 1fr; } }
+    @media (max-width:600px){ .asks{ grid-template-columns: 1fr; } }
+    .ask-card{
+      background:#fff; border:1px solid var(--mn-rule);
+      border-radius:12px; padding:16px;
+      display:flex; flex-direction:column; gap:6px;
+    }
+    .ask-card .from{
+      font-size:.7rem; letter-spacing:.16em; text-transform:uppercase;
+      color:var(--mn-maroon); font-weight:700;
+    }
+    .ask-card .what{
+      font-size:.96rem; line-height:1.45; color:var(--mn-ink);
+    }
+
+    /* ---------- RECOMMENDATIONS ---------- */
+    .recs{
+      display:flex; flex-direction:column; gap:0;
+      margin-top:14px;
+      border-left: 3px solid var(--mn-tan);
+      padding-left: 0;
+    }
+    .rec{
+      display:grid;
+      grid-template-columns: 130px 1fr;
+      gap: 18px;
+      padding: 18px 0 18px 22px;
+      border-bottom:1px solid var(--mn-rule);
+      position:relative;
+    }
+    .rec::before{
+      content:""; position:absolute; left:-7px; top:24px;
+      width:11px; height:11px; border-radius:50%;
+      background:var(--mn-maroon);
+      border:2px solid #fff;
+    }
+    .rec:last-child{ border-bottom:none; }
+    .rec .horizon{
+      font-size:.7rem; letter-spacing:.18em; text-transform:uppercase;
+      color:var(--mn-maroon); font-weight:700;
+      padding-top:2px;
+    }
+    .rec h4{
+      margin:0 0 6px; font-size:1.05rem; font-family:'Georgia', serif;
+      color:var(--mn-ink);
+    }
+    .rec p{ margin:0; font-size:.94rem; color:#3a2e2e; }
+    @media (max-width:680px){
+      .rec{ grid-template-columns: 1fr; gap:4px; }
+    }
+
+    /* ---------- CONVERGENCE BLOCK ---------- */
+    .tensions{
+      display:grid; grid-template-columns: repeat(3, 1fr); gap:14px;
+      margin-top: 14px;
+    }
+    @media (max-width:880px){ .tensions{ grid-template-columns: 1fr; } }
+    .tension{
+      background:#fff; border:1px solid var(--mn-rule);
+      border-radius:12px; padding:18px 16px;
+    }
+    .tension h4{
+      margin:0 0 6px; font-size:.94rem;
+      color:var(--mn-maroon);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      letter-spacing:.02em;
+    }
+    .tension p{ margin:0; font-size:.88rem; color:#3a2e2e; line-height:1.5; }
+
+    /* ---------- CLOSING / SOURCES ---------- */
+    .mn-closing{
+      background:var(--mn-maroon-dark); color:var(--mn-cream);
+      padding: 56px 0;
+    }
+    .mn-closing h2{
+      color:#fff;
+      font-size: clamp(1.1rem, 1.8vw, 1.3rem);
+      letter-spacing:.18em; text-transform:uppercase;
+      border-bottom:2px solid var(--mn-tan);
+      padding-bottom:10px; margin:0 0 22px;
+    }
+    .mn-closing p{ color:rgba(245,240,230,.86); max-width:64ch; }
+    .mn-closing ol{ color:rgba(245,240,230,.86); padding-left:20px; }
+    .mn-closing ol li{ margin-bottom:6px; font-size:.88rem; }
+    .mn-closing a{ color:var(--mn-tan-soft); border-bottom:1px dotted var(--mn-tan-soft); }
+
+    /* helpers */
+    .mn-spacer-sm{ height:14px; }
+    .mn-spacer{ height:28px; }
+    .pull{ font-size:1.05rem; color:#3a2e2e; }
+    .small-note{
+      font-size:.84rem; color:#6f5f5f; font-style:italic;
+      margin-top:10px;
+    }
+  </style>
+</head>
+<body class="mn">
+
+  <!-- NAV (reuses site shell) -->
+  <header class="nav">
+    <div class="container navInner">
+      <a class="brand" href="index.html">steadfastnguyen.com</a>
+      <nav class="navLinks">
+        <a href="index.html" class="navLink">Home</a>
+        <a href="blog.html" class="navLink">Blog</a>
+        <a href="mn-ethiopia.html" class="navLink navActive">MN Ethiopia</a>
+        <a href="index.html#about" class="navLink">About</a>
+        <a href="index.html#contact" class="navLink">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ========== HERO ========== -->
+    <section class="mn-hero">
+      <div class="container">
+        <div class="kicker js-rgbTitle">Providence UCLA Consulting Team</div>
+        <div class="tagrow js-subtitle">Master Report  |  Viability · Health · Reproduction  |  v7</div>
+        <h1 class="js-rgbTitle">Multiplication Network<br/>Ethiopia</h1>
+        <p class="lead js-subtitle">
+          A master synthesis of the planter, partner, and staff field research —
+          framed around the viability, health, and reproduction of the churches planted,
+          with the GRT sentiment study integrated throughout.
+        </p>
+        <dl class="meta js-ctas">
+          <div>
+            <dt>Prepared for</dt>
+            <dd>Multiplication Network</dd>
+          </div>
+          <div>
+            <dt>Prepared by</dt>
+            <dd>Providence UCLA Consulting Team</dd>
+          </div>
+          <div>
+            <dt>Date</dt>
+            <dd>Spring 2026</dd>
+          </div>
+        </dl>
+        <p class="basis js-ctas">
+          Source basis · Four research streams: 11 random church-planter (CP) interviews ·
+          19 non-random church-planter interviews · 4 denominational partner interviews ·
+          6 Multiplication Network (MN) Ethiopia staff interviews · December 2024 – April 2025.
+        </p>
+      </div>
+    </section>
+
+    <!-- ========== 1. HEADLINE NUMBERS ========== -->
+    <section class="mn-section">
+      <div class="container">
+        <h2 class="section-title">1 · Executive Summary</h2>
+        <p class="lede js-reveal">
+          MN Ethiopia is a functioning training multiplier. Its primary constraint is
+          operational capacity rather than demand or curriculum. The same system is seen from
+          three perspectives — staff, partners, and planters — and where those perspectives
+          converge, the agreement is treated as more reliable than any single voice.
+        </p>
+
+        <div class="kpi-row js-stagger">
+          <div class="kpi-card js-kpi" data-num="30">
+            <div class="num"><span class="js-num" data-target="30">0</span></div>
+            <div class="label">Planters interviewed</div>
+            <div class="ctx">11 random + 19 non-random</div>
+          </div>
+          <div class="kpi-card js-kpi" data-num="4">
+            <div class="num"><span class="js-num" data-target="4">0</span></div>
+            <div class="label">Partner denominations</div>
+            <div class="ctx">EFGC, PCE, regional Baptist, Bishuftu Presbyterian</div>
+          </div>
+          <div class="kpi-card alt js-kpi" data-num="6">
+            <div class="num"><span class="js-num" data-target="6">0</span></div>
+            <div class="label">MN Ethiopia staff</div>
+            <div class="ctx">Country Coordinator to photojournalist</div>
+          </div>
+          <div class="kpi-card js-kpi" data-num="87" data-suffix="%">
+            <div class="num"><span class="js-num" data-target="87">0</span>%</div>
+            <div class="label">Planters who started a church</div>
+            <div class="ctx">26 of 30 interviewed planters</div>
+          </div>
+        </div>
+
+        <div class="mn-spacer"></div>
+
+        <p class="js-reveal">
+          <b>Central finding.</b> MN Ethiopia operates a train-the-trainer cascade with cohorts of up
+          to 50, 19 training centres, and ~95% of activity concentrated in the Oromia region.
+          Partners confirm the institutional reception: Pastor Fikadu's Presbyterian Church
+          of Ethiopia (PCE) grew from <b>187 to 204 congregations in two years</b>, and Pastor
+          Andualem's Ethiopian Full Gospel Church (EFGC) plants ~200 churches per year. Planters,
+          at the field-level tier, report what reaches them: a "free" training delivered in heart
+          language, with mentorship coverage of 100% in the random sample.
+        </p>
+        <p class="js-reveal">
+          <b>Where the perspectives converge most strongly:</b> nearly every interviewee requested
+          an expansion or addition. Planters requested additional modules (conflict resolution,
+          marriage, youth ministry); partners requested more training cohorts and broader regional
+          reach; staff requested equipment (cameras, laptops, motorcycles) and an Oromia regional office.
+        </p>
+      </div>
+    </section>
+
+    <!-- ========== 2. THREE LENSES ========== -->
+    <section class="mn-section alt">
+      <div class="container">
+        <h2 class="section-title">2 · The Three Lenses</h2>
+        <p class="lede js-reveal">
+          Any church-planting network can be measured by three diagnostic questions: are the
+          churches still <em>active</em>, how <em>healthy</em> are they, and did they themselves
+          <em>reproduce</em> by planting daughter churches. The empirical results below sit
+          inside each of those lenses.
+        </p>
+
+        <div class="lenses">
+          <div class="lens js-reveal">
+            <div class="lens-kicker">Lens 1</div>
+            <h3>Viability</h3>
+            <p class="ask">Are the churches still active?</p>
+            <div class="lens-num"><span class="js-num" data-target="83">0</span>%</div>
+            <p class="lens-body">
+              83% of interviewed planters (25 of 30) reported their plant still active at
+              interview; partner-stated zero closures on 17 institutionally registered
+              Presbyterian plants. At least two known closures — one violence-related — sit
+              on the planter-level side.
+            </p>
+          </div>
+          <div class="lens js-reveal">
+            <div class="lens-kicker">Lens 2</div>
+            <h3>Health</h3>
+            <p class="ask">How healthy are they when active?</p>
+            <div class="lens-num"><span class="js-num" data-target="100">0</span>%</div>
+            <p class="lens-body">
+              Mentorship coverage in the random planter sample is 100%. Health is measured
+              through the Healthy Church / "Take Your Church's Pulse" diagnostic, by team
+              composition (evangelists, worship leaders, women's and children's ministries),
+              and by qualitative indicators (constitutional reform at PCE; community
+              reconciliation; doctrinal anchoring). Financial fragility is the most consistent
+              health constraint.
+            </p>
+          </div>
+          <div class="lens js-reveal">
+            <div class="lens-kicker">Lens 3</div>
+            <h3>Reproduction</h3>
+            <p class="ask">Did they multiply — daughter churches?</p>
+            <div class="lens-num"><span class="js-num" data-target="91">0</span>–<span class="js-num" data-target="95">0</span>%</div>
+            <p class="lens-body">
+              91% of random planters and 95% of non-random planters are currently mentoring
+              others; the Zenavitch cluster grew 23 → 40 (+74%) under one trainer's oversight;
+              PCE grew 187 → 204 congregations in two years. Reproduction is universal at the
+              planter level; the cohort-level multiplier remains roster-pending.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 3. THE MULTIPLIER MECHANISM ========== -->
+    <section class="mn-section">
+      <div class="container">
+        <h2 class="section-title">3 · The Multiplier Mechanism</h2>
+        <p class="lede js-reveal">
+          In the early years a trainer would directly train roughly 20 people. Faced with
+          Ethiopia's vastness and the urgency of demand, Tadde and Faye made a strategic
+          decision: rather than train church planters directly, they would prioritize training
+          trainers — and raise the per-trainer cohort size from 20 to 50.
+        </p>
+
+        <div class="cascade-wrap js-reveal">
+          <div class="cascade">
+            <div class="node">
+              <div class="big">1</div>
+              <div class="small">Master trainer</div>
+            </div>
+            <div class="arrow">→</div>
+            <div class="node alt">
+              <div class="big">50</div>
+              <div class="small">Trainees per cohort</div>
+            </div>
+            <div class="arrow">→</div>
+            <div class="node">
+              <div class="big">50×N</div>
+              <div class="small">Planters in the field</div>
+            </div>
+          </div>
+          <p class="cascade-foot">
+            Cohort sizes rose from the original 20 to today's 50 — the structural lever
+            behind the network's reach.
+          </p>
+
+          <div class="cascade-mid">
+            <div class="midcard">
+              <b>19</b> training centres nationwide
+            </div>
+            <div class="midcard">
+              <b>~95%</b> of activity concentrated in Oromia
+            </div>
+            <div class="midcard">
+              <b>176</b> leaders at one Gindeberat TOT — 18 immediately opened nine new centres
+            </div>
+          </div>
+        </div>
+
+        <div class="quote js-reveal">
+          <p>"We will not outreach the whole Oromia in near time. We've decided to give a training for trainers… We train one person and that person will train 50, and those 50 will start new groups and will train as well."</p>
+          <span class="cite">— Faye Abdi, MN Ethiopia (PDF 4)</span>
+        </div>
+
+        <div class="quote js-reveal">
+          <p>"After the training, I formed a team to train some people on the difference between healthy churches and unhealthy churches."</p>
+          <span class="cite">— Planter, non-random sample, response 2 (PDF 2) — what daughter-church reproduction looks like in practice</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 4. WHO WAS INTERVIEWED ========== -->
+    <section class="mn-section alt">
+      <div class="container">
+        <h2 class="section-title">4 · Who Was Interviewed</h2>
+        <p class="lede js-reveal">
+          Forty interviewees across four parallel research streams. The two planter sub-samples
+          (random and non-random) differ in ways that matter for any inference: the non-random
+          sample skews older, more experienced, and more male.
+        </p>
+
+        <div class="chart js-chart">
+          <div class="chart-title">Sample composition (n=40 interviewees)</div>
+          <div class="bar-row">
+            <div class="bar-label">Planters — non-random</div>
+            <div class="bar-track"><div class="bar-fill" data-w="47.5"></div></div>
+            <div class="bar-value">47.5% (19)</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Planters — random</div>
+            <div class="bar-track"><div class="bar-fill" data-w="27.5"></div></div>
+            <div class="bar-value">27.5% (11)</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">MN Ethiopia staff</div>
+            <div class="bar-track"><div class="bar-fill alt" data-w="15"></div></div>
+            <div class="bar-value">15.0% (6)</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Denominational partners</div>
+            <div class="bar-track"><div class="bar-fill alt" data-w="10"></div></div>
+            <div class="bar-value">10.0% (4)</div>
+          </div>
+          <div class="chart-source">
+            Maroon bars = field-level tier (planters); tan bars = institutional layer (staff and partners).
+          </div>
+        </div>
+
+        <div class="chart-grid">
+          <div class="chart js-chart">
+            <div class="chart-title">Language of interview (combined, n=30)</div>
+            <div class="bar-row">
+              <div class="bar-label">Oromo</div>
+              <div class="bar-track"><div class="bar-fill" data-w="53"></div></div>
+              <div class="bar-value">~53% (16)</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label">Amharic</div>
+              <div class="bar-track"><div class="bar-fill" data-w="43"></div></div>
+              <div class="bar-value">~43% (13)</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label">English</div>
+              <div class="bar-track"><div class="bar-fill" data-w="3"></div></div>
+              <div class="bar-value">~3% (1)</div>
+            </div>
+            <div class="chart-source">Confirms the rationale for an Oromifa translation push.</div>
+          </div>
+
+          <div class="chart js-chart">
+            <div class="chart-title">Generational faith — random sample (n=11)</div>
+            <div class="bar-row">
+              <div class="bar-label">First generation</div>
+              <div class="bar-track"><div class="bar-fill" data-w="72.7"></div></div>
+              <div class="bar-value">72.7% (8)</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label">Second generation</div>
+              <div class="bar-track"><div class="bar-fill" data-w="27.3"></div></div>
+              <div class="bar-value">27.3% (3)</div>
+            </div>
+            <div class="chart-source">Almost three-quarters are first-generation believers.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 5. SENTIMENT STUDY ========== -->
+    <section class="mn-section">
+      <div class="container">
+        <h2 class="section-title">5 · The Ground Research Team Sentiment Study</h2>
+        <p class="lede js-reveal">
+          Across <b>433 classified open-ended responses</b> from 37 respondents, the GRT
+          classifier tagged each on sentiment, primary emotion, and primary topic.
+          The result: a positive headline that is genuinely positive, surrounded by a
+          textured layer of "Mixed" responses that name the operational concerns the
+          field still carries.
+        </p>
+
+        <div class="sent-band js-sent" aria-label="Overall sentiment distribution">
+          <div class="seg pos"  data-w="33.3">33.3%</div>
+          <div class="seg neu"  data-w="36.7">36.7%</div>
+          <div class="seg mix"  data-w="21.7">21.7%</div>
+          <div class="seg neg"  data-w="8.3">8.3%</div>
+        </div>
+        <div class="sent-legend">
+          <span><span class="sw pos"></span>Positive (144)</span>
+          <span><span class="sw neu"></span>Neutral (159)</span>
+          <span><span class="sw mix"></span>Mixed (94)</span>
+          <span><span class="sw neg"></span>Negative (36)</span>
+        </div>
+        <p class="small-note">Source: GRT sentiment classifier · n=433 open-ended responses across all four field-research streams.</p>
+
+        <div class="chart-grid">
+          <div class="chart js-chart">
+            <div class="chart-title">Positive-sentiment share, by source</div>
+            <div class="bar-row">
+              <div class="bar-label">Random planters</div>
+              <div class="bar-track"><div class="bar-fill pos" data-w="43.3"></div></div>
+              <div class="bar-value">43.3% (n=120)</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label">Partners</div>
+              <div class="bar-track"><div class="bar-fill pos" data-w="35.0"></div></div>
+              <div class="bar-value">35.0% (n=40)</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label">All groups combined</div>
+              <div class="bar-track"><div class="bar-fill pos" data-w="33.3"></div></div>
+              <div class="bar-value">33.3% (n=433)</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label">Non-random planters</div>
+              <div class="bar-track"><div class="bar-fill pos" data-w="29.8"></div></div>
+              <div class="bar-value">29.8% (n=225)</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label">MN Ethiopia team</div>
+              <div class="bar-track"><div class="bar-fill pos" data-w="22.9"></div></div>
+              <div class="bar-value">22.9% (n=48)</div>
+            </div>
+            <div class="chart-source">Random planters are the most emotionally expressive group; the MN team is the lowest on Positive share.</div>
+          </div>
+
+          <div class="chart js-chart">
+            <div class="chart-title">Mixed-sentiment share — the "fruit-and-fragility" signal</div>
+            <div class="bar-row">
+              <div class="bar-label">MN Ethiopia team</div>
+              <div class="bar-track"><div class="bar-fill mix" data-w="43.8"></div></div>
+              <div class="bar-value">43.8% (n=48)</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label">Partners</div>
+              <div class="bar-track"><div class="bar-fill mix" data-w="22.5"></div></div>
+              <div class="bar-value">22.5% (n=40)</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label">All groups combined</div>
+              <div class="bar-track"><div class="bar-fill mix" data-w="21.7"></div></div>
+              <div class="bar-value">21.7% (n=433)</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label">Non-random planters</div>
+              <div class="bar-track"><div class="bar-fill mix" data-w="18.7"></div></div>
+              <div class="bar-value">18.7% (n=225)</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label">Random planters</div>
+              <div class="bar-track"><div class="bar-fill mix" data-w="18.3"></div></div>
+              <div class="bar-value">18.3% (n=120)</div>
+            </div>
+            <div class="chart-source">The MN team holds nearly twice the Mixed share of any other group — the only stream that consistently sees fruit and fragility together.</div>
+          </div>
+        </div>
+
+        <div class="callout js-reveal">
+          <div>
+            <div class="big"><span class="js-num" data-target="43">0</span>.<span class="js-num" data-target="8">0</span>%</div>
+            <div class="label">MN team — mixed share</div>
+          </div>
+          <div class="body">
+            The MN Ethiopia team's <em>Mixed</em> share is the loudest internal-honesty signal in
+            the dataset. It is not a denunciation of the network — it is the only stream that
+            consistently holds the positive headline and the operational worry in the same breath:
+            post-training mentoring follow-up, financial sustainability at the local-church level,
+            and trainees who complete the program without planting.
+          </div>
+        </div>
+
+        <div class="quote js-reveal">
+          <p>"One thing that bothered me is that there are trainees that did not plant a church."</p>
+          <span class="cite">— MN Ethiopia team, response 1 · Mixed</span>
+        </div>
+        <div class="quote js-reveal">
+          <p>"Even though we have faced a lot of challenges we planted this new church with no resource — no chairs or house or place to gather."</p>
+          <span class="cite">— Planter, random sample, response 7 · Negative</span>
+        </div>
+        <div class="quote js-reveal">
+          <p>"Learning about the healthy church motivated and fulfilled me to plant a new church. The information and principles in the modules motivated me to plant a church."</p>
+          <span class="cite">— Planter, random sample, response 1 · Positive</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 6. OPERATIONAL REALITIES + RISK MATRIX ========== -->
+    <section class="mn-section alt">
+      <div class="container">
+        <h2 class="section-title">6 · Operating Risks — A 2×2</h2>
+        <p class="lede js-reveal">
+          The matrix below classifies operating risks by likelihood and severity, drawing on
+          staff, planter, and partner interviews. Q1 risks (high likelihood, high severity) are
+          the immediate action priorities. Q4 risks are silent in the source documents — silent
+          is not the same as ruled out.
+        </p>
+
+        <div class="matrix js-reveal">
+          <div></div>
+          <div class="axis">Severity: Low / Medium</div>
+          <div class="axis">Severity: High</div>
+
+          <div class="ylabel">Likelihood: High</div>
+          <div class="qbox q2">
+            <h4>Q2 · High Likelihood · Low/Med Severity</h4>
+            <ul>
+              <li>Connectivity gaps for distance reporting (staff, planters)</li>
+              <li>Religious opposition and false rumours (staff, planters)</li>
+              <li>Cultural / language reach beyond Oromo regions (staff)</li>
+            </ul>
+          </div>
+          <div class="qbox q1">
+            <h4>Q1 · High Likelihood · High Severity</h4>
+            <ul>
+              <li>Armed conflict and rebel-group exposure (all three streams)</li>
+              <li>Financial fragility at the local-church level (all three streams)</li>
+              <li>Field equipment shortfall (staff)</li>
+            </ul>
+          </div>
+
+          <div class="ylabel">Likelihood: Med / Low</div>
+          <div class="qbox q3">
+            <h4>Q3 · Med/Low Likelihood · Low/Med Severity</h4>
+            <ul>
+              <li>Government registration and surveillance pressure (partners)</li>
+              <li>Curriculum cycle length, 8–18 months per planter (planters)</li>
+            </ul>
+          </div>
+          <div class="qbox q4">
+            <h4>Q4 · Med/Low Likelihood · High Severity</h4>
+            <ul>
+              <li>Donor concentration and funding mix (silent in all sources)</li>
+              <li>Closure rate of plants by cohort year (not measured)</li>
+              <li>Leadership burnout and attrition (silent in all sources)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="mn-spacer"></div>
+
+        <h3 class="sans" style="font-size:.9rem; letter-spacing:.14em; text-transform:uppercase; color:var(--mn-maroon); margin:8px 0 10px;">Cross-Source Tensions and Alignments</h3>
+        <div class="tensions">
+          <div class="tension js-reveal">
+            <h4>Financial reality</h4>
+            <p>Planters frame scarcity providentially ("by the hands of God I became comfortable"); the MN team frames the same data point as an operational sustainability risk. Partners sit in the middle — aware, often deferring action.</p>
+          </div>
+          <div class="tension js-reveal">
+            <h4>Training quality</h4>
+            <p>All four streams rate training positively. The divergence is on what happens after: planters describe durable personal change; partners acknowledge follow-up gaps; the MN team worries about trainees who never plant.</p>
+          </div>
+          <div class="tension js-reveal">
+            <h4>Security and persecution</h4>
+            <p>Planters describe it personally (jail, hostile neighbors). The MN team localizes it geographically. Denominational partners notably do not discuss persecution or security — a silence that should be probed in the next interview round.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 7. ASKS ========== -->
+    <section class="mn-section">
+      <div class="container">
+        <h2 class="section-title">7 · What Everyone Asked For</h2>
+        <p class="lede js-reveal">
+          All four denominational partners requested expansion or deeper engagement. Five of six
+          staff named concrete asks. Across the planter interviews, more than 18 distinct asks were
+          recorded. Across 37 respondents in the sentiment corpus, <b>zero were net-negative</b> overall.
+        </p>
+
+        <div class="asks">
+          <div class="ask-card js-reveal">
+            <div class="from">Pastor Andualem (EFGC)</div>
+            <div class="what">Expansion into Djibouti, Tajura, Obok, Somaliland, Sudan.</div>
+          </div>
+          <div class="ask-card js-reveal">
+            <div class="from">Pastor Fikadu (PCE)</div>
+            <div class="what">Wider mentoring curriculum; more depth inside the church-planting module.</div>
+          </div>
+          <div class="ask-card js-reveal">
+            <div class="from">Pastor Derara</div>
+            <div class="what">More cohorts; broader regional reach.</div>
+          </div>
+          <div class="ask-card js-reveal">
+            <div class="from">Tadde, Nati, Ebenezer (staff)</div>
+            <div class="what">Cameras, laptops, projectors, generators, power banks.</div>
+          </div>
+          <div class="ask-card js-reveal">
+            <div class="from">Tadde (Oromia Regional Director)</div>
+            <div class="what">Motorcycles to replace foot travel; Oromia regional office; family support.</div>
+          </div>
+          <div class="ask-card js-reveal">
+            <div class="from">Milkyas (Country Coordinator)</div>
+            <div class="what">A distance-education pathway for trainees seeking Bible-level credentials.</div>
+          </div>
+          <div class="ask-card js-reveal">
+            <div class="from">Multiple planters</div>
+            <div class="what">A conflict-resolution module; marriage/family/youth modules; Bibles and basic materials; an Oromifa translation.</div>
+          </div>
+          <div class="ask-card js-reveal">
+            <div class="from">Faye (implied)</div>
+            <div class="what">Persecution-readiness inside the curriculum.</div>
+          </div>
+          <div class="ask-card js-reveal">
+            <div class="from">Israel Kacha</div>
+            <div class="what">"Nothing." The only dissenting voice — itself a useful reference point.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 8. RECOMMENDATIONS ========== -->
+    <section class="mn-section alt">
+      <div class="container">
+        <h2 class="section-title">8 · Recommendations</h2>
+        <p class="lede js-reveal">
+          Three immediate moves, one near-term move, and a clearly named set of items that were
+          considered but deferred. The order is deliberate: <em>verify the scale</em> before
+          committing partnership capital, then fund the equipment package that closes the
+          partner-vs-staff visibility gap, then sponsor the Oromifa translation that 53% of the
+          planter sample needs in heart language.
+        </p>
+
+        <div class="recs">
+          <div class="rec js-reveal">
+            <div class="horizon">Immediate</div>
+            <div>
+              <h4>Verify the network's scale</h4>
+              <p>Review the MN Ethiopia internal database reports for 2019–2023 (which MN has
+              indicated are available) before committing partnership capital. The 1,200+/yr and
+              ~2,000 cumulative figures are staff-stated; the database is the direct source for confirmation.</p>
+            </div>
+          </div>
+          <div class="rec js-reveal">
+            <div class="horizon">Immediate</div>
+            <div>
+              <h4>Fund a field equipment package</h4>
+              <p>Cameras, laptops, projectors, and motorcycles for staff and key regional trainers.
+              Highest-priority capital investment in this report. Addresses the documented
+              partner-vs-staff visibility gap.</p>
+            </div>
+          </div>
+          <div class="rec js-reveal">
+            <div class="horizon">Near-term</div>
+            <div>
+              <h4>Sponsor a peer-reviewed Oromifa translation of the 12 modules</h4>
+              <p>Highest-leverage non-capital investment. 53% of planter interviews were in Oromo;
+              volunteer translation by a single planter is a fidelity risk and a workload tax.</p>
+            </div>
+          </div>
+          <div class="rec js-reveal">
+            <div class="horizon">Considered</div>
+            <div>
+              <h4>Bible &amp; basic-materials provision</h4>
+              <p>Supported by planter testimony, operationally simple — but not the highest-leverage
+              use of partnership capital relative to equipment and translation. Defer until after scale verification.</p>
+            </div>
+          </div>
+          <div class="rec js-reveal">
+            <div class="horizon">Considered</div>
+            <div>
+              <h4>Oromia regional office</h4>
+              <p>Supported in principle, but adds fixed cost and political exposure. Revisit once
+              scale verification and equipment funding are committed.</p>
+            </div>
+          </div>
+          <div class="rec js-reveal">
+            <div class="horizon">Considered</div>
+            <div>
+              <h4>Persecution-readiness module</h4>
+              <p>At least one church has closed after rebel violence; planters report jail time
+              and gun incidents. Recommended only with co-development by an Ethiopian peace-building organization.</p>
+            </div>
+          </div>
+          <div class="rec js-reveal">
+            <div class="horizon">Open question</div>
+            <div>
+              <h4>Funding-mix transparency</h4>
+              <p>Donor-concentration risk is flagged in Q4 of the risk matrix but cannot be priced
+              without disclosure that no source document currently provides. The single largest unpriced exposure in the file.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 9. CLOSING / SOURCES ========== -->
+    <section class="mn-closing">
+      <div class="container">
+        <h2>Reading note &amp; sources</h2>
+        <p>
+          This master report fuses four parallel field-research streams — 11 random church-planter
+          interviews, 19 non-random church-planter interviews, four denominational-partner
+          interviews, and six Multiplication Network Ethiopia staff interviews — into a single
+          triangulated picture of the network. Quantitative findings are descriptive of the
+          people interviewed; the small sample sizes and mixed sampling design preclude
+          inference about the broader planter population. The GRT sentiment classification was
+          conducted independently of the viability/health/reproduction framework, which makes
+          the convergence of signals across the two methods a more reliable basis for
+          partnership decisions.
+        </p>
+        <p>
+          Visualization on this page is a faithful re-presentation of the v7 master report
+          prepared by the Providence UCLA Consulting Team in Spring 2026. All figures are
+          drawn from the report and the GRT sentiment aggregates; quotations are verbatim
+          from the source PDFs.
+        </p>
+        <h2 style="margin-top:36px;">External source citations</h2>
+        <ol>
+          <li>DataReportal. <em>Digital 2024: Ethiopia</em>. January 2024. <a href="https://datareportal.com/reports/digital-2024-ethiopia">datareportal.com/reports/digital-2024-ethiopia</a></li>
+          <li>Human Rights Watch. <em>World Report 2025: Ethiopia</em>. January 2025. <a href="https://www.hrw.org/world-report/2025/country-chapters/ethiopia">hrw.org/world-report/2025/country-chapters/ethiopia</a></li>
+          <li>LSE Africa Blog. <em>The Pretoria Peace Agreement brought broken promises and unfulfilled hope to Tigray</em>. April 2024.</li>
+          <li>Statista. <em>Christian population in Africa by country</em>. 2024.</li>
+          <li>U.S. Department of State. <em>2023 Report on International Religious Freedom: Ethiopia</em>. May 2024.</li>
+          <li>Global Christian Relief. <em>Top 20 Countries Where Christianity Is Growing the Fastest</em>.</li>
+          <li>The Banner. <em>Church Planter Training Network Started by Former CRC Missionary Expands</em>. September 2025.</li>
+        </ol>
+        <p style="margin-top:24px; font-size:.84rem; color:rgba(245,240,230,.7);">
+          — End of report —
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER (reuses site shell) -->
+  <footer class="footer">
+    <div class="container footerInner">
+      <p class="muted">© <span id="year"></span> Steadfast Blog</p>
+      <div class="footerLinks">
+        <a href="blog.html">Blog</a>
+        <a href="mn-ethiopia.html">MN Ethiopia</a>
+        <a href="index.html#about">About</a>
+        <a href="index.html#contact">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+  <script>
+    // ============================================================
+    // MN ETHIOPIA — interactions
+    //   • count-up numbers when KPI / lens cards enter
+    //   • animate bar widths when charts enter
+    //   • animate sentiment band segments
+    //   • scroll-reveals on .js-reveal blocks (also handled by site main.js)
+    // ============================================================
+    (function(){
+      if (!window.gsap) return;
+      gsap.registerPlugin(ScrollTrigger);
+
+      // Count-up helper
+      function countUp(el){
+        const target = parseFloat(el.dataset.target);
+        if (isNaN(target)) return;
+        const dur = 1.2;
+        const obj = { v: 0 };
+        gsap.to(obj, {
+          v: target,
+          duration: dur,
+          ease: "power2.out",
+          onUpdate(){
+            const v = obj.v;
+            // integers up to 100, single-decimal otherwise
+            el.textContent = (target % 1 === 0) ? Math.round(v) : v.toFixed(1);
+          }
+        });
+      }
+
+      // Trigger count-up + bar fill when entering viewport
+      gsap.utils.toArray(".js-num").forEach(el => {
+        ScrollTrigger.create({
+          trigger: el,
+          start: "top 90%",
+          once: true,
+          onEnter: () => countUp(el)
+        });
+      });
+
+      gsap.utils.toArray(".js-chart").forEach(chart => {
+        ScrollTrigger.create({
+          trigger: chart,
+          start: "top 85%",
+          once: true,
+          onEnter: () => {
+            chart.querySelectorAll(".bar-fill").forEach((bar, i) => {
+              const w = parseFloat(bar.dataset.w);
+              if (isNaN(w)) return;
+              setTimeout(() => { bar.style.width = w + "%"; }, i * 90);
+            });
+          }
+        });
+      });
+
+      // Sentiment band — animate segments out from 0
+      gsap.utils.toArray(".js-sent").forEach(band => {
+        ScrollTrigger.create({
+          trigger: band,
+          start: "top 85%",
+          once: true,
+          onEnter: () => {
+            band.querySelectorAll(".seg").forEach((seg, i) => {
+              const w = parseFloat(seg.dataset.w);
+              if (isNaN(w)) return;
+              setTimeout(() => { seg.style.width = w + "%"; }, i * 140);
+            });
+          }
+        });
+      });
+
+      // KPI / lens card entrance
+      gsap.utils.toArray(".js-kpi, .lens, .ask-card, .tension, .rec, .midcard, .qbox").forEach(card => {
+        gsap.from(card, {
+          opacity: 0,
+          y: 26,
+          duration: 0.7,
+          ease: "power3.out",
+          scrollTrigger: { trigger: card, start: "top 92%" }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
