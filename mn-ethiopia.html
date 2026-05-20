@@ -7,6 +7,100 @@
   <meta name="description" content="A scrollytelling visualization of the Providence UCLA Consulting Team's master report on Multiplication Network Ethiopia: viability, health, and reproduction of the churches planted."/>
   <link rel="stylesheet" href="style.css" />
 
+  <!-- ============================================================
+       PASSCODE GATE — soft client-side check (not real auth).
+       The page contents are still in the source; this just keeps
+       the visualization from rendering for casual visitors.
+       ============================================================ -->
+  <style id="mn-lock-style">
+    body.mn-locked > main,
+    body.mn-locked > footer { display: none !important; }
+    body.mn-locked { overflow: hidden; }
+    .mn-gate{
+      position: fixed; inset: 0; z-index: 9999;
+      background:#6B2C2F;
+      color:#F5F0E6;
+      display:flex; align-items:center; justify-content:center;
+      padding: 32px;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    }
+    .mn-gate.is-hidden{ display:none; }
+    .mn-gate-inner{
+      max-width: 460px; width: 100%;
+      text-align: left;
+      border-top: 4px solid #B8A57A;
+      padding-top: 28px;
+    }
+    .mn-gate-kicker{
+      font-size:.72rem; letter-spacing:.22em; text-transform:uppercase;
+      color:#E8C9A0; margin-bottom:14px;
+    }
+    .mn-gate h1{
+      font-family: 'Georgia', serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+      margin: 0 0 12px; line-height:1.1; font-weight:700;
+      letter-spacing:-.01em;
+    }
+    .mn-gate p{
+      margin: 0 0 22px; color: rgba(245,240,230,.82);
+      font-family: 'Georgia', serif; font-size:1rem; line-height:1.55;
+      max-width: 42ch;
+    }
+    .mn-gate-form{
+      display:flex; gap:10px; flex-wrap:wrap;
+    }
+    .mn-gate input{
+      flex:1; min-width:200px;
+      padding: 12px 14px;
+      background: rgba(245,240,230,.08);
+      color:#fff;
+      border: 1px solid rgba(232,201,160,.5);
+      border-radius: 8px;
+      font: inherit; font-size:1rem;
+      outline:none;
+    }
+    .mn-gate input::placeholder{ color: rgba(245,240,230,.5); }
+    .mn-gate input:focus{ border-color:#E8C9A0; background: rgba(245,240,230,.12); }
+    .mn-gate button{
+      padding: 12px 20px;
+      background:#E8C9A0; color:#3a2018;
+      border: none; border-radius: 8px;
+      font: inherit; font-weight:700; font-size:.95rem;
+      cursor:pointer;
+      letter-spacing:.02em;
+    }
+    .mn-gate button:hover{ background:#f1d4ad; }
+    .mn-gate-error{
+      margin-top: 12px;
+      font-size:.85rem;
+      color:#f3b8b8;
+      min-height: 1.2em;
+    }
+    .mn-gate-shake{ animation: mn-shake .35s; }
+    @keyframes mn-shake{
+      10%, 90% { transform: translateX(-2px); }
+      20%, 80% { transform: translateX(4px); }
+      30%, 50%, 70% { transform: translateX(-6px); }
+      40%, 60% { transform: translateX(6px); }
+    }
+  </style>
+  <script>
+    // Early unlock check: if this tab is already unlocked, drop the lock class
+    // before paint so there is no flash of the gate. Body ships with the class
+    // applied by default in markup.
+    (function(){
+      try {
+        if (sessionStorage.getItem('mn-unlocked') === '1') {
+          document.addEventListener('readystatechange', () => {
+            document.body && document.body.classList.remove('mn-locked');
+            const g = document.getElementById('mn-gate');
+            if (g) g.classList.add('is-hidden');
+          });
+        }
+      } catch(e){}
+    })();
+  </script>
+
   <!-- GSAP -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
@@ -553,7 +647,67 @@
     }
   </style>
 </head>
-<body class="mn">
+<body class="mn mn-locked">
+
+  <!-- ========== PASSCODE GATE ========== -->
+  <div class="mn-gate" id="mn-gate" role="dialog" aria-labelledby="mn-gate-h" aria-modal="true">
+    <div class="mn-gate-inner">
+      <div class="mn-gate-kicker">Providence UCLA Consulting Team</div>
+      <h1 id="mn-gate-h">Multiplication Network Ethiopia — Master Report</h1>
+      <p>This is a private visualization of the v7 master report. Enter the passcode to continue.</p>
+      <form class="mn-gate-form" id="mn-gate-form" autocomplete="off">
+        <input id="mn-gate-input" type="password" placeholder="Passcode" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Passcode" required>
+        <button type="submit">Enter</button>
+      </form>
+      <div class="mn-gate-error" id="mn-gate-error" role="alert"></div>
+    </div>
+  </div>
+
+  <script>
+    // SHA-256 of the passcode. Hashing is a soft obfuscation — anyone
+    // determined can still brute-force a short word; this only deters
+    // casual source viewers.
+    (function(){
+      const PASS_HASH = "32094299ec13a9a894cd3ab9ba56d35b07b4e5372fa4e5ce584d48204bb29fe5";
+      const form  = document.getElementById('mn-gate-form');
+      const input = document.getElementById('mn-gate-input');
+      const err   = document.getElementById('mn-gate-error');
+      const gate  = document.getElementById('mn-gate');
+      if (!form) return;
+
+      async function hash(str){
+        const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+        return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2,'0')).join('');
+      }
+
+      function unlock(){
+        try { sessionStorage.setItem('mn-unlocked', '1'); } catch(e){}
+        document.body.classList.remove('mn-locked');
+        gate.classList.add('is-hidden');
+      }
+
+      function deny(){
+        err.textContent = "Incorrect passcode.";
+        gate.querySelector('.mn-gate-inner').classList.remove('mn-gate-shake');
+        // reflow to restart animation
+        void gate.offsetWidth;
+        gate.querySelector('.mn-gate-inner').classList.add('mn-gate-shake');
+        input.select();
+      }
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        err.textContent = "";
+        const val = input.value.trim();
+        if (!val) return;
+        const h = await hash(val);
+        if (h === PASS_HASH) unlock(); else deny();
+      });
+
+      // Focus the input as soon as the gate is on screen.
+      requestAnimationFrame(() => input.focus());
+    })();
+  </script>
 
   <!-- NAV (reuses site shell) -->
   <header class="nav">
