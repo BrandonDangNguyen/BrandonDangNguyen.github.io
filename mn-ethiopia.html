@@ -682,8 +682,9 @@
 
       function unlock(){
         try { sessionStorage.setItem('mn-unlocked', '1'); } catch(e){}
-        document.body.classList.remove('mn-locked');
-        gate.classList.add('is-hidden');
+        // Reload so GSAP / ScrollTrigger initialize against the real layout.
+        // The early-unlock check above bypasses the gate on this next paint.
+        window.location.reload();
       }
 
       function deny(){
