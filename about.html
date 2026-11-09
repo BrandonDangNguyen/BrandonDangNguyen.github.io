@@ -53,11 +53,11 @@ h1 span { display:block; font-style:italic; color:var(--accent); }
 .links a::after { content:'↗'; transition:transform .2s; }
 .links a:hover::after { transform:translate(3px,-3px); }
 .portrait { position:relative; margin:0 18px 18px 0; }
-.portrait::after { content:''; position:absolute; inset:24px -18px -18px 24px; background:var(--panel); z-index:-1; }
-.photo-wrap { overflow:hidden; aspect-ratio:4 / 5; background:var(--panel); }
-.portrait img { display:block; width:100%; height:100%; object-fit:cover; transform:scale(1.12); filter:saturate(.75); }
-figcaption { display:flex; justify-content:space-between; gap:16px; padding:18px 0 0; font-size:12px; color:var(--muted); font-style:italic; }
-figcaption::after { content:''; flex:1; align-self:center; height:1px; max-width:80px; background:var(--line); }
+
+.photo-wrap { overflow:hidden; aspect-ratio:4 / 5; background:var(--panel); box-shadow:18px 18px 0 var(--panel); }
+.portrait img { display:block; width:100%; height:100%; object-fit:cover; }
+figcaption { padding:36px 0 0; text-align:center; font-size:14px; line-height:1.5; color:var(--ink); }
+
 footer { max-width:1280px; width:90%; margin:auto; border-top:1px solid var(--line); padding:24px 0; display:flex; justify-content:space-between; align-items:center; gap:24px; }
 .copyright { margin:0; color:var(--muted); font-size:12px; line-height:1.6; }
 .theme-toggle { border:1px solid var(--line); border-radius:50%; width:42px; height:42px; background:transparent; color:var(--ink); cursor:pointer; font-size:20px; }
@@ -91,7 +91,7 @@ footer { max-width:1280px; width:90%; margin:auto; border-top:1px solid var(--li
 <p class="bio">I'm Brandon Nguyen, a 19 year old freshmen currently studying Statistics and Data Science at UCLA.</p>
 <div class="links"><a href="/">Read my writing</a><a href="/contact">Get in touch</a></div>
 </div>
-<figure class="portrait"><div class="photo-wrap"><img src="images/profile.jpg" alt="Brandon Nguyen" width="1125" height="1299" fetchpriority="high"></div><figcaption>Brandon Nguyen</figcaption></figure>
+<figure class="portrait"><div class="photo-wrap"><img src="images/profile-enhanced.jpg" alt="Brandon Nguyen" width="1167" height="1347" fetchpriority="high"></div><figcaption>Brandon Nguyen</figcaption></figure>
 </article></main>
 <footer><p class="copyright">&copy; 2025 Brandon Nguyen. All rights reserved.</p><button class="theme-toggle" id="darkModeToggle" type="button" aria-label="Toggle dark mode" aria-pressed="false"><span aria-hidden="true">◐</span></button></footer>
 <script>
