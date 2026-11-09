@@ -122,8 +122,11 @@ html { scroll-behavior: smooth; scroll-padding-top: 110px; }
 .passage-hint {
   margin: 18px 0 0 25px;
   color: #c3aa98;
-  font-size: 10px;
-  letter-spacing: .035em;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 13px;
+  font-style: italic;
+  line-height: 1.5;
+  letter-spacing: 0;
 }
 /* Architectural line work frames a quiet, luminous cross. */
 .hero-art { position: relative; height: 450px; max-width: 380px; width: 100%; justify-self: center; }
@@ -221,7 +224,7 @@ html { scroll-behavior: smooth; scroll-padding-top: 110px; }
   .fear-page .meta { font-size: 10px; margin-bottom: 26px; }
   .hero-art { position: absolute; width: 220px; height: 330px; right: -100px; top: 35px; opacity: .2; pointer-events: none; }
   .bible-passage { font-size: 22px; max-width: 500px; padding-left: 18px; }
-  .passage-hint { font-size: 9px; margin-left: 19px; }
+  .passage-hint { font-size: 12px; margin-left: 19px; }
   .reading-layout { width: calc(100% - 48px); padding-top: 52px; }
   .article-body h2 { font-size: 31px; margin-bottom: 22px; }
   .article-body p { font-size: 21px; line-height: 1.7; }
