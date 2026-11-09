@@ -40,7 +40,7 @@
     if (motionPreference.matches || typeof element.animate !== 'function') return;
     const animation = element.animate(
       [{ opacity: 0, transform: 'translateY(14px)' }, { opacity: 1, transform: 'translateY(0)' }],
-      { duration: 650, delay, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
+      { duration: 650, delay, fill: 'backwards', easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
     );
     activeAnimations.add(animation);
     const release = () => activeAnimations.delete(animation);
