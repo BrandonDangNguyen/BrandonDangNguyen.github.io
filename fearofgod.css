@@ -1,0 +1,290 @@
+/* Page-specific editorial styling. Shared site styles remain unchanged. */
+.fear-page {
+  --background: #f7f3eb;
+  --text: #342e2a;
+  --text-light: #72675c;
+  --border: #dbd2c3;
+  --accent: #762d34;
+  --gold: #d8b67d;
+  background: var(--background);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+html { scroll-behavior: smooth; scroll-padding-top: 110px; }
+.fear-page ::selection { background: #e7cfaa; color: #391a1e; }
+.fear-page a:focus-visible, .fear-page button:focus-visible,
+.fear-page input:focus-visible, .fear-page textarea:focus-visible {
+  outline: 2px solid #a67b40;
+  outline-offset: 6px;
+}
+.reading-progress {
+  position: fixed;
+  inset: 0 0 auto;
+  height: 3px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  z-index: 101;
+  pointer-events: none;
+}
+.fear-page .site-header {
+  background: #28171b;
+  color: #f7f3eb;
+  border-bottom: 1px solid #ffffff16;
+}
+.fear-page .header-container {
+  width: calc(100% - 96px);
+  max-width: 1280px;
+  min-height: 88px;
+  padding: 16px 0;
+  gap: 24px;
+}
+.fear-page .site-title a {
+  font-family: 'Sorts Mill Goudy', Georgia, serif;
+  font-size: 25px;
+  font-weight: 400;
+  letter-spacing: -.03em;
+  color: #f7f3eb;
+}
+.fear-page .main-nav ul { gap: 34px; }
+.fear-page .main-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: #e4d7c9;
+  font-size: 12px;
+  letter-spacing: .07em;
+}
+.fear-page .main-nav a::after { background: var(--gold); bottom: 5px; height: 1px; }
+.essay-hero {
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 85% 55%, #67333460, transparent 55%), #28171b;
+  color: #f9f3e8;
+  border-bottom: 5px solid #c7a16b;
+}
+.hero-inner {
+  max-width: 1280px;
+  width: calc(100% - 96px);
+  margin: auto;
+  padding: 82px 0 88px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(240px, 1fr);
+  gap: 60px;
+  align-items: center;
+}
+.hero-copy { position: relative; z-index: 1; }
+.fear-page .meta {
+  font-family: 'Inter', sans-serif;
+  color: var(--gold);
+  font-size: 11px;
+  letter-spacing: .19em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin: 0 0 32px;
+}
+.meta::before { content: ''; width: 40px; height: 1px; background: #d8b67d80; }
+.essay-hero h1 {
+  font-family: 'Sorts Mill Goudy', Georgia, serif;
+  font-size: clamp(58px, 6.6vw, 98px);
+  font-weight: 400;
+  letter-spacing: -.045em;
+  line-height: 1.04;
+  margin: 0 0 36px;
+  max-width: 760px;
+  text-wrap: balance;
+}
+.essay-hero h1 em { display: block; font-weight: 400; color: #dfbd87; }
+.bible-passage {
+  display: block;
+  border: 0;
+  border-left: 1px solid #d8b67d70;
+  padding: 0 0 0 24px;
+  margin: 0;
+  background: none;
+  color: #eee0cf;
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 25px;
+  line-height: 1.45;
+  text-align: left;
+  max-width: 570px;
+  cursor: pointer;
+  transition: color .2s, border-color .2s;
+}
+.bible-passage:hover { color: #fff9ed; border-color: #dfbd87; }
+.bible-passage .greek-text { display: none; }
+.bible-passage.show-greek .english-text { display: none; }
+.bible-passage.show-greek .greek-text { display: inline; }
+[lang="grc"] { font-family: 'Crimson Pro', 'Times New Roman', serif; }
+.passage-hint {
+  margin: 18px 0 0 25px;
+  color: #c3aa98;
+  font-size: 10px;
+  letter-spacing: .035em;
+}
+/* Architectural line work frames a quiet, luminous cross. */
+.hero-art { position: relative; height: 450px; max-width: 380px; width: 100%; justify-self: center; }
+.arch { position: absolute; border: 1px solid #c5a67845; border-bottom: 0; border-radius: 50% 50% 0 0 / 40% 40% 0 0; }
+.arch-outer { inset: 0 0 0; }
+.arch-middle { inset: 22px 22px 0; border-color: #c5a67825; }
+.arch-inner {
+  inset: 44px 44px 0;
+  border-color: #c5a67845;
+  background: radial-gradient(ellipse at 50% 38%, #c7975930, transparent 66%);
+}
+.cross { position: absolute; width: 1px; height: 185px; background: linear-gradient(#e8c891, #b68a5060); top: 140px; left: 50%; box-shadow: 0 0 22px #e0b97660; }
+.cross::before { content: ''; position: absolute; height: 1px; width: 110px; left: -55px; top: 52px; background: linear-gradient(90deg, #c89d5d60, #e8c891, #c89d5d60); }
+.horizon { position: absolute; bottom: 0; left: -18px; right: -18px; height: 1px; background: linear-gradient(90deg, transparent, #c5a67880, transparent); }
+.horizon::after { content: ''; position: absolute; height: 1px; background: #c5a67825; top: 14px; left: 36px; right: 36px; }
+.reading-layout {
+  display: grid;
+  grid-template-columns: 250px minmax(0, 740px);
+  gap: clamp(50px, 7vw, 110px);
+  width: calc(100% - 96px);
+  max-width: 1160px;
+  margin: auto;
+  padding: 88px 0 34px;
+  align-items: start;
+}
+.essay-rail { position: sticky; top: 126px; }
+.rail-title {
+  display: block;
+  max-width: 190px;
+  padding-bottom: 25px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+  font-family: 'Sorts Mill Goudy', Georgia, serif;
+  font-size: 23px;
+  line-height: 1.25;
+  color: #4d2c2c;
+}
+.section-nav ol { list-style: none; }
+.section-nav li a {
+  display: grid;
+  grid-template-columns: 21px 1fr;
+  gap: 9px;
+  padding: 10px 12px 10px 0;
+  font-size: 11px;
+  line-height: 1.6;
+  color: #776e64;
+  border-right: 2px solid transparent;
+  transition: color .2s, border-color .2s;
+}
+.section-nav li a span { color: #a18b70; font-size: 10px; padding-top: 1px; }
+.section-nav li a:hover, .section-nav li a[aria-current="location"] { color: #702a33; border-right-color: #98683e; }
+.article-body { min-width: 0; }
+.article-body section { padding-bottom: 48px; margin-bottom: 48px; border-bottom: 1px solid var(--border); scroll-margin-top: 24px; }
+.section-number { display: block; color: #986e43; font-size: 11px; letter-spacing: .12em; margin-bottom: 18px; }
+.article-body h2 {
+  font-family: 'Sorts Mill Goudy', Georgia, serif;
+  font-size: clamp(29px, 3vw, 39px);
+  font-weight: 400;
+  line-height: 1.22;
+  letter-spacing: -.028em;
+  color: #4b252b;
+  margin-bottom: 28px;
+  text-wrap: balance;
+}
+.article-body p {
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 22px;
+  line-height: 1.75;
+  margin: 0 0 26px;
+  color: #413933;
+}
+.article-body p:last-child { margin-bottom: 0; }
+.article-body strong { color: #642c34; font-weight: 600; }
+.article-body .latin-term { font-style: italic; }
+#introduction > p:first-of-type::first-letter {
+  float: left;
+  font-family: 'Sorts Mill Goudy', Georgia, serif;
+  font-size: 78px;
+  line-height: .8;
+  padding: 12px 10px 0 0;
+  color: #6a2d34;
+}
+.article-body #conclusion { background: #302025; padding: 40px; border: 1px solid #725040; margin-bottom: 0; }
+#conclusion .section-number { color: #cfab76; }
+#conclusion h2 { color: #f8eedf; }
+#conclusion p { color: #e0d2c4; }
+#conclusion strong { color: #f5e5cc; }
+#conclusion p > .latin-term:last-child { display: block; margin-top: 30px; font-size: 30px; color: #dfbd87; }
+.fear-page .comments-section {
+  display: grid;
+  grid-template-columns: 250px minmax(0, 740px);
+  column-gap: clamp(50px, 7vw, 110px);
+  max-width: 1160px;
+  width: calc(100% - 96px);
+  padding: 58px 0 80px;
+  margin: 0 auto;
+  border-top: 0;
+}
+.fear-page .comments-section > * { grid-column: 2; min-width: 0; }
+.fear-page .comments-section h3 { font-family: 'Sorts Mill Goudy', Georgia, serif; font-size: 36px; font-weight: 400; color: #4b252b; }
+.fear-page .comment-form { background: #eee7da; border: 1px solid #d9cfbf; padding: 32px; border-radius: 2px; margin-top: 32px; }
+.fear-page .comment-form h4 { font-family: 'Sorts Mill Goudy', Georgia, serif; font-size: 26px; font-weight: 400; color: #4b252b; }
+.fear-page .form-group label { font-size: 12px; }
+.fear-page .form-group input, .fear-page .form-group textarea { background: #fcf9f3; border-color: #cfc1af; border-radius: 2px; padding: 14px; font-size: 16px; }
+.fear-page .submit-comment { background: #652c34; min-height: 44px; padding: 12px 30px; border-radius: 2px; font-size: 12px; }
+.fear-page .submit-comment:hover { background: #442027; }
+.fear-page .comment { padding: 20px 0 30px; overflow-wrap: anywhere; }
+.fear-page .comment-avatar { background: #785447; }
+.fear-page .comment-content p { font-size: 15px; line-height: 1.8; }
+.fear-page .reply-button { min-height: 44px; }
+.fear-page .no-comments { font-size: 13px; text-align: left; padding: 0; }
+.fear-page .site-footer { padding: 28px 0; background: #28171b; color: #cbb8a4; border-top: 1px solid #654531; }
+.fear-page .site-footer .container { padding: 0; }
+.fear-page .copyright { font-size: 11px; letter-spacing: .03em; text-align: center; }
+@media (max-width: 1100px) {
+  .hero-inner { gap: 32px; grid-template-columns: minmax(0, 1.7fr) minmax(200px, 1fr); }
+  .hero-art { height: 370px; }
+  .cross { top: 120px; height: 155px; }
+  .reading-layout { display: block; max-width: 740px; }
+  .essay-rail { display: none; }
+  .fear-page .comments-section { display: block; max-width: 740px; width: calc(100% - 96px); margin: auto; }
+}
+@media (max-width: 700px) {
+  html { scroll-padding-top: 102px; }
+  .fear-page .header-container { width: calc(100% - 40px); min-height: 76px; gap: 12px; }
+  .fear-page .site-title a { font-size: 21px; }
+  .fear-page .main-nav ul { gap: 17px; }
+  .fear-page .main-nav a { font-size: 10px; letter-spacing: 0; }
+  .hero-inner { width: calc(100% - 48px); grid-template-columns: 1fr; padding: 58px 0 50px; gap: 0; }
+  .essay-hero h1 { font-size: clamp(48px, 10.5vw, 72px); letter-spacing: -.04em; max-width: 530px; margin-bottom: 30px; }
+  .fear-page .meta { font-size: 10px; margin-bottom: 26px; }
+  .hero-art { position: absolute; width: 220px; height: 330px; right: -100px; top: 35px; opacity: .2; pointer-events: none; }
+  .bible-passage { font-size: 22px; max-width: 500px; padding-left: 18px; }
+  .passage-hint { font-size: 9px; margin-left: 19px; }
+  .reading-layout { width: calc(100% - 48px); padding-top: 52px; }
+  .article-body h2 { font-size: 31px; margin-bottom: 22px; }
+  .article-body p { font-size: 21px; line-height: 1.7; }
+  .article-body section { padding-bottom: 34px; margin-bottom: 34px; }
+  .article-body #conclusion { padding: 27px 24px; margin: 0 -8px; }
+  .fear-page .comments-section { width: calc(100% - 48px); padding: 30px 0 48px; }
+  .fear-page .comment-form { padding: 24px 20px; }
+  .fear-page .comment-replies { margin-left: 18px; }
+}
+@media (max-width: 360px) {
+  .fear-page .header-container { flex-wrap: wrap; gap: 0; padding: 8px 0; }
+  .fear-page .site-title { width: 100%; }
+  .fear-page .main-nav ul { gap: 26px; }
+  .fear-page .main-nav a { min-height: 32px; }
+  .essay-hero h1 { font-size: 44px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .fear-page *, .fear-page *::before, .fear-page *::after { animation: none !important; transition: none !important; }
+}
+@media print {
+  .fear-page { background: white; color: black; }
+  .fear-page .site-header, .hero-art, .essay-rail, .reading-progress, .comments-section, .passage-hint { display: none; }
+  .essay-hero, .article-body #conclusion { background: white; color: black; border: 0; padding: 0; }
+  .hero-inner, .reading-layout { display: block; width: 100%; padding: 20px 0; }
+  .essay-hero h1 { font-size: 42px; }
+  .essay-hero h1 em, .bible-passage, .fear-page .meta, #conclusion h2, #conclusion p, #conclusion strong, #conclusion p > .latin-term:last-child { color: black; }
+  .article-body p { font-size: 12pt; }
+  .article-body h2 { font-size: 22pt; break-after: avoid; }
+}
