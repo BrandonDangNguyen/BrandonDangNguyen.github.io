@@ -233,3 +233,19 @@ html { scroll-behavior: smooth; scroll-padding-top: 110px; }
   .article-body p { font-size: 12pt; }
   .article-body h2 { font-size: 22pt; break-after: avoid; }
 }
+
+/* Small interaction cues complement native scrolling without scroll hijacking. */
+.fear-page .submit-comment {
+  transition: background-color .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+.fear-page .submit-comment:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 14px #28171b18;
+}
+.fear-page .submit-comment:active { transform: translateY(0); }
+.fear-page .form-group input, .fear-page .form-group textarea {
+  transition: border-color .2s ease, background-color .2s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .fear-page .submit-comment:hover { transform: none; }
+}
