@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -17,140 +17,101 @@
   <link rel="manifest" href="images/favicon/site.webmanifest">
   <link rel="shortcut icon" href="images/favicon/favicon.ico">
   
-  <link rel="stylesheet" href="styles.css">
+
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Sorts+Mill+Goudy:ital@0;1&display=swap" rel="stylesheet">
 
-  <!-- Content styling -->
-  <style>
-    /* Center the article within its container */
-    main.container {
-      display: flex;
-      justify-content: center;
-      padding: 4rem 2rem;
-      font-family: 'Sorts Mill Goudy', serif;
-      width: 75%;
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-    article.about-full {
-      flex: 0 1 900px;
-      font-family: 'Sorts Mill Goudy', serif;
-      padding: 0;
-    }
-    /* Profile image styling */
-    .profile-container {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-    .profile-image {
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin: 0 auto 1.5rem;
-      display: block;
-    }
-    /* Title styling */
-    .about-full h2 {
-      font-size: 3.5rem;
-      font-weight: 500;
-      margin-bottom: 1.5rem;
-      font-family: 'Sorts Mill Goudy', serif;
-      text-align: center;
-      letter-spacing: 0.02em;
-      line-height: 1.2;
-    }
-    /* Paragraph styling */
-    .about-full p {
-      font-size: 1.15rem;
-      line-height: 1.7;
-      margin: 1.5rem auto;
-      max-width: 750px;
-      font-family: 'Sorts Mill Goudy', serif;
-      text-align: left;
-      letter-spacing: 0.01em;
-    }
-    /* Footer center */
-    .site-footer {
-      font-family: 'Sorts Mill Goudy', serif;
-      margin-top: 4rem;
-    }
-    /* Header styling */
-    .site-header {
-      font-family: 'Sorts Mill Goudy', serif;
-      margin-bottom: 2rem;
-    }
-  </style>
+
+<style>
+:root { --paper:#f5f1e8; --ink:#382126; --muted:#75675d; --line:#d8cbbb; --panel:#e9dfcf; --accent:#6c3039; }
+html.dark { --paper:#281b20; --ink:#f6ecdc; --muted:#c4b29e; --line:#624b47; --panel:#39272d; --accent:#e0bb85; color-scheme:dark; }
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { margin:0; background:var(--paper); color:var(--ink); font-family:Georgia,'Times New Roman',serif; }
+a { color:inherit; text-decoration:none; }
+a:focus-visible,button:focus-visible { outline:2px solid var(--accent); outline-offset:6px; }
+::selection { background:#d9b88b; color:#281b20; }
+.site-header { padding:0 5vw; }
+.header-inner { min-height:100px; max-width:1280px; margin:auto; display:flex; align-items:center; justify-content:space-between; gap:24px; border-bottom:1px solid var(--line); }
+.brand { font-family:'Sorts Mill Goudy',Georgia,serif; font-size:25px; letter-spacing:-.04em; }
+nav ul { display:flex; align-items:center; gap:34px; list-style:none; padding:0; margin:0; }
+nav a { display:inline-flex; min-height:44px; align-items:center; font-size:14px; color:var(--muted); }
+nav a:hover,nav a[aria-current] { color:var(--ink); }
+nav a[aria-current] { text-decoration:underline; text-underline-offset:8px; text-decoration-thickness:1px; }
+main { max-width:1280px; width:90%; margin:auto; }
+.about-layout { display:grid; grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); gap:clamp(50px,8vw,130px); align-items:center; min-height:calc(100svh - 202px); padding:76px 0 88px; }
+.eyebrow { display:flex; align-items:center; gap:16px; margin:0 0 30px; color:var(--muted); font-size:14px; font-style:italic; }
+.eyebrow::before { content:''; display:block; width:38px; height:1px; background:var(--accent); }
+h1 { font-family:'Sorts Mill Goudy',Georgia,serif; font-size:clamp(66px,7.4vw,108px); line-height:.99; font-weight:400; letter-spacing:-.055em; margin:0 0 36px; }
+h1 span { display:block; font-style:italic; color:var(--accent); }
+.bio { max-width:470px; font-size:22px; line-height:1.75; color:var(--muted); margin:0; }
+.links { display:flex; gap:30px; flex-wrap:wrap; margin-top:42px; }
+.links a { min-height:44px; display:inline-flex; align-items:center; gap:20px; border-bottom:1px solid var(--accent); padding:8px 0; font-size:15px; transition:color .2s; }
+.links a::after { content:'↗'; transition:transform .2s; }
+.links a:hover::after { transform:translate(3px,-3px); }
+.portrait { position:relative; margin:0 18px 18px 0; }
+.portrait::after { content:''; position:absolute; inset:24px -18px -18px 24px; background:var(--panel); z-index:-1; }
+.photo-wrap { overflow:hidden; aspect-ratio:4 / 5; background:var(--panel); }
+.portrait img { display:block; width:100%; height:100%; object-fit:cover; transform:scale(1.12); filter:saturate(.75); }
+figcaption { display:flex; justify-content:space-between; gap:16px; padding:18px 0 0; font-size:12px; color:var(--muted); font-style:italic; }
+figcaption::after { content:''; flex:1; align-self:center; height:1px; max-width:80px; background:var(--line); }
+footer { max-width:1280px; width:90%; margin:auto; border-top:1px solid var(--line); padding:24px 0; display:flex; justify-content:space-between; align-items:center; gap:24px; }
+.copyright { margin:0; color:var(--muted); font-size:12px; line-height:1.6; }
+.theme-toggle { border:1px solid var(--line); border-radius:50%; width:42px; height:42px; background:transparent; color:var(--ink); cursor:pointer; font-size:20px; }
+@media (max-width:800px) {
+ .header-inner { min-height:80px; } nav ul { gap:20px; }
+ .about-layout { gap:40px; padding:55px 0 65px; }
+ h1 { font-size:66px; } .bio { font-size:19px; } .links { gap:20px; margin-top:28px; }
+}
+@media (max-width:600px) {
+ .brand { font-size:22px; } nav a { font-size:12px; } nav ul { gap:16px; }
+ .about-layout { grid-template-columns:1fr; padding:44px 0 54px; gap:40px; }
+ h1 { font-size:clamp(62px,17vw,88px); margin-bottom:24px; }
+ .eyebrow { margin-bottom:24px; } .bio { font-size:20px; line-height:1.65; }
+ .portrait { max-width:430px; width:calc(100% - 18px); justify-self:center; }
+ .photo-wrap { aspect-ratio:1 / 1.08; } .portrait img { object-position:center 40%; }
+ footer { gap:12px; } .copyright { font-size:11px; }
+}
+@media (max-width:360px) { .header-inner { flex-wrap:wrap; gap:0; padding:12px 0; } .brand { width:100%; } nav ul { gap:28px; } }
+@media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } *,*::after { transition:none!important; } }
+</style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="container header-container">
-      <h1 class="site-title"><a href="/">Brandon Nguyen</a></h1>
-      <nav class="main-nav" aria-label="Main navigation">
-        <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="/about" aria-current="page">About</a></li>
-          <li><a href="/contact">Contact</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-
-  <main class="container">
-    <article class="about-full animate-in">
-      <div class="profile-container">
-        <img src="images/profile.jpg" alt="Brandon Nguyen" class="profile-image">
-      </div>
-      <h2>About Me</h2>
-      <p>I'm Brandon Nguyen, a 19 year old freshmen currently studying Statistics and Data Science at UCLA.</p>
-    </article>
-  </main>
-
-  <footer class="site-footer animate-in">
-    <div class="container"> <p class="copyright">&copy; 2025 Brandon Nguyen. All rights reserved.</p> </div>
-  </footer>
-
-  <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode">
-  </button>
-
-  <script>
-    // Theme toggle
-    const html = document.documentElement;
-    const toggle = document.getElementById('darkModeToggle');
-
-    // Initialize from localStorage
-    if (localStorage.getItem('darkMode') === 'false') {
-      html.classList.remove('dark');
-    } else { // Default to dark if not set or set to true
-        html.classList.add('dark');
-    }
-
-    toggle.addEventListener('click', () => {
-      html.classList.toggle('dark');
-      localStorage.setItem('darkMode', html.classList.contains('dark'));
-    });
-
-    // IntersectionObserver for animations
-    document.addEventListener('DOMContentLoaded', () => {
-      const items = document.querySelectorAll('.animate-in');
-      const io = new IntersectionObserver(entries => {
-        entries.forEach(e => {
-          if (e.isIntersecting) {
-            e.target.classList.add('visible');
-            io.unobserve(e.target);
-          }
-        });
-      }, { 
-        threshold: 0,
-        rootMargin: '0px'
-      });
-      
-      items.forEach(el => io.observe(el));
-    });
-  </script>
-</body>
-</html>
+<header class="site-header"><div class="header-inner">
+<a class="brand" href="/">Brandon Nguyen</a>
+<nav aria-label="Main navigation"><ul><li><a href="/">Home</a></li><li><a href="/about" aria-current="page">About</a></li><li><a href="/contact">Contact</a></li></ul></nav>
+</div></header>
+<main><article class="about-layout" aria-labelledby="about-title">
+<div class="about-copy">
+<p class="eyebrow">About Me</p>
+<h1 id="about-title">Brandon <span>Nguyen</span></h1>
+<p class="bio">I'm Brandon Nguyen, a 19 year old freshmen currently studying Statistics and Data Science at UCLA.</p>
+<div class="links"><a href="/">Read my writing</a><a href="/contact">Get in touch</a></div>
+</div>
+<figure class="portrait"><div class="photo-wrap"><img src="images/profile.jpg" alt="Brandon Nguyen" width="1125" height="1299" fetchpriority="high"></div><figcaption>Brandon Nguyen</figcaption></figure>
+</article></main>
+<footer><p class="copyright">&copy; 2025 Brandon Nguyen. All rights reserved.</p><button class="theme-toggle" id="darkModeToggle" type="button" aria-label="Toggle dark mode" aria-pressed="false"><span aria-hidden="true">◐</span></button></footer>
+<script>
+const root = document.documentElement;
+const toggle = document.getElementById('darkModeToggle');
+try { root.classList.toggle('dark', localStorage.getItem('darkMode') === 'true'); } catch {}
+toggle.setAttribute('aria-pressed', String(root.classList.contains('dark')));
+toggle.addEventListener('click', () => {
+ const dark = root.classList.toggle('dark');
+ toggle.setAttribute('aria-pressed', String(dark));
+ try { localStorage.setItem('darkMode', String(dark)); } catch {}
+});
+const preference = matchMedia('(prefers-reduced-motion: reduce)');
+const entrances = [];
+if (!preference.matches && typeof Element.prototype.animate === 'function') {
+ document.querySelectorAll('.about-copy > *, .portrait').forEach((element,index) => {
+  entrances.push(element.animate([{opacity:0,transform:'translateY(18px)'},{opacity:1,transform:'translateY(0)'}],
+  {duration:800,delay:index*80,fill:'backwards',easing:'cubic-bezier(.22,1,.36,1)'}));
+ });
+}
+preference.addEventListener('change', event => { if(event.matches) entrances.forEach(animation => animation.cancel()); });
+</script>
+</body></html>
