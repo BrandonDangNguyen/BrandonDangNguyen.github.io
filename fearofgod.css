@@ -65,14 +65,10 @@ html { scroll-behavior: smooth; scroll-padding-top: 110px; }
   border-bottom: 5px solid #c7a16b;
 }
 .hero-inner {
-  max-width: 1280px;
+  max-width: 740px;
   width: calc(100% - 96px);
   margin: auto;
   padding: 82px 0 88px;
-  display: grid;
-  grid-template-columns: minmax(0, 1.65fr) minmax(240px, 1fr);
-  gap: 60px;
-  align-items: center;
 }
 .hero-copy { position: relative; z-index: 1; }
 .fear-page .meta {
@@ -128,20 +124,6 @@ html { scroll-behavior: smooth; scroll-padding-top: 110px; }
   line-height: 1.5;
   letter-spacing: 0;
 }
-/* Architectural line work frames a quiet, luminous cross. */
-.hero-art { position: relative; height: 450px; max-width: 380px; width: 100%; justify-self: center; }
-.arch { position: absolute; border: 1px solid #c5a67845; border-bottom: 0; border-radius: 50% 50% 0 0 / 40% 40% 0 0; }
-.arch-outer { inset: 0 0 0; }
-.arch-middle { inset: 22px 22px 0; border-color: #c5a67825; }
-.arch-inner {
-  inset: 44px 44px 0;
-  border-color: #c5a67845;
-  background: radial-gradient(ellipse at 50% 38%, #c7975930, transparent 66%);
-}
-.cross { position: absolute; width: 1px; height: 185px; background: linear-gradient(#e8c891, #b68a5060); top: 140px; left: 50%; box-shadow: 0 0 22px #e0b97660; }
-.cross::before { content: ''; position: absolute; height: 1px; width: 110px; left: -55px; top: 52px; background: linear-gradient(90deg, #c89d5d60, #e8c891, #c89d5d60); }
-.horizon { position: absolute; bottom: 0; left: -18px; right: -18px; height: 1px; background: linear-gradient(90deg, transparent, #c5a67880, transparent); }
-.horizon::after { content: ''; position: absolute; height: 1px; background: #c5a67825; top: 14px; left: 36px; right: 36px; }
 .reading-layout {
   width: calc(100% - 96px);
   max-width: 740px;
@@ -209,9 +191,6 @@ html { scroll-behavior: smooth; scroll-padding-top: 110px; }
 .fear-page .site-footer .container { padding: 0; }
 .fear-page .copyright { font-size: 11px; letter-spacing: .03em; text-align: center; }
 @media (max-width: 1100px) {
-  .hero-inner { gap: 32px; grid-template-columns: minmax(0, 1.7fr) minmax(200px, 1fr); }
-  .hero-art { height: 370px; }
-  .cross { top: 120px; height: 155px; }
 }
 @media (max-width: 700px) {
   html { scroll-padding-top: 102px; }
@@ -222,7 +201,6 @@ html { scroll-behavior: smooth; scroll-padding-top: 110px; }
   .hero-inner { width: calc(100% - 48px); grid-template-columns: 1fr; padding: 58px 0 50px; gap: 0; }
   .essay-hero h1 { font-size: clamp(48px, 10.5vw, 72px); letter-spacing: -.04em; max-width: 530px; margin-bottom: 30px; }
   .fear-page .meta { font-size: 10px; margin-bottom: 26px; }
-  .hero-art { position: absolute; width: 220px; height: 330px; right: -100px; top: 35px; opacity: .2; pointer-events: none; }
   .bible-passage { font-size: 22px; max-width: 500px; padding-left: 18px; }
   .passage-hint { font-size: 12px; margin-left: 19px; }
   .reading-layout { width: calc(100% - 48px); padding-top: 52px; }
@@ -247,7 +225,7 @@ html { scroll-behavior: smooth; scroll-padding-top: 110px; }
 }
 @media print {
   .fear-page { background: white; color: black; }
-  .fear-page .site-header, .hero-art, .reading-progress, .comments-section, .passage-hint { display: none; }
+  .fear-page .site-header, .reading-progress, .comments-section, .passage-hint { display: none; }
   .essay-hero, .article-body #conclusion { background: white; color: black; border: 0; padding: 0; }
   .hero-inner, .reading-layout { display: block; width: 100%; padding: 20px 0; }
   .essay-hero h1 { font-size: 42px; }
