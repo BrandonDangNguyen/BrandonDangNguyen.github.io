@@ -140,41 +140,11 @@ html { scroll-behavior: smooth; scroll-padding-top: 110px; }
 .horizon { position: absolute; bottom: 0; left: -18px; right: -18px; height: 1px; background: linear-gradient(90deg, transparent, #c5a67880, transparent); }
 .horizon::after { content: ''; position: absolute; height: 1px; background: #c5a67825; top: 14px; left: 36px; right: 36px; }
 .reading-layout {
-  display: grid;
-  grid-template-columns: 250px minmax(0, 740px);
-  gap: clamp(50px, 7vw, 110px);
   width: calc(100% - 96px);
-  max-width: 1160px;
+  max-width: 740px;
   margin: auto;
   padding: 88px 0 34px;
-  align-items: start;
 }
-.essay-rail { position: sticky; top: 126px; }
-.rail-title {
-  display: block;
-  max-width: 190px;
-  padding-bottom: 25px;
-  margin-bottom: 12px;
-  border-bottom: 1px solid var(--border);
-  font-family: 'Sorts Mill Goudy', Georgia, serif;
-  font-size: 23px;
-  line-height: 1.25;
-  color: #4d2c2c;
-}
-.section-nav ol { list-style: none; }
-.section-nav li a {
-  display: grid;
-  grid-template-columns: 21px 1fr;
-  gap: 9px;
-  padding: 10px 12px 10px 0;
-  font-size: 11px;
-  line-height: 1.6;
-  color: #776e64;
-  border-right: 2px solid transparent;
-  transition: color .2s, border-color .2s;
-}
-.section-nav li a span { color: #a18b70; font-size: 10px; padding-top: 1px; }
-.section-nav li a:hover, .section-nav li a[aria-current="location"] { color: #702a33; border-right-color: #98683e; }
 .article-body { min-width: 0; }
 .article-body section { padding-bottom: 48px; margin-bottom: 48px; border-bottom: 1px solid var(--border); scroll-margin-top: 24px; }
 .section-number { display: block; color: #986e43; font-size: 11px; letter-spacing: .12em; margin-bottom: 18px; }
@@ -213,16 +183,13 @@ html { scroll-behavior: smooth; scroll-padding-top: 110px; }
 #conclusion strong { color: #f5e5cc; }
 #conclusion p > .latin-term:last-child { display: block; margin-top: 30px; font-size: 30px; color: #dfbd87; }
 .fear-page .comments-section {
-  display: grid;
-  grid-template-columns: 250px minmax(0, 740px);
-  column-gap: clamp(50px, 7vw, 110px);
-  max-width: 1160px;
+  max-width: 740px;
   width: calc(100% - 96px);
   padding: 58px 0 80px;
   margin: 0 auto;
   border-top: 0;
 }
-.fear-page .comments-section > * { grid-column: 2; min-width: 0; }
+.fear-page .comments-section > * { min-width: 0; }
 .fear-page .comments-section h3 { font-family: 'Sorts Mill Goudy', Georgia, serif; font-size: 36px; font-weight: 400; color: #4b252b; }
 .fear-page .comment-form { background: #eee7da; border: 1px solid #d9cfbf; padding: 32px; border-radius: 2px; margin-top: 32px; }
 .fear-page .comment-form h4 { font-family: 'Sorts Mill Goudy', Georgia, serif; font-size: 26px; font-weight: 400; color: #4b252b; }
@@ -242,9 +209,6 @@ html { scroll-behavior: smooth; scroll-padding-top: 110px; }
   .hero-inner { gap: 32px; grid-template-columns: minmax(0, 1.7fr) minmax(200px, 1fr); }
   .hero-art { height: 370px; }
   .cross { top: 120px; height: 155px; }
-  .reading-layout { display: block; max-width: 740px; }
-  .essay-rail { display: none; }
-  .fear-page .comments-section { display: block; max-width: 740px; width: calc(100% - 96px); margin: auto; }
 }
 @media (max-width: 700px) {
   html { scroll-padding-top: 102px; }
@@ -280,7 +244,7 @@ html { scroll-behavior: smooth; scroll-padding-top: 110px; }
 }
 @media print {
   .fear-page { background: white; color: black; }
-  .fear-page .site-header, .hero-art, .essay-rail, .reading-progress, .comments-section, .passage-hint { display: none; }
+  .fear-page .site-header, .hero-art, .reading-progress, .comments-section, .passage-hint { display: none; }
   .essay-hero, .article-body #conclusion { background: white; color: black; border: 0; padding: 0; }
   .hero-inner, .reading-layout { display: block; width: 100%; padding: 20px 0; }
   .essay-hero h1 { font-size: 42px; }
